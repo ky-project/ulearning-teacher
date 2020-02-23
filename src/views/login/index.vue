@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">基于泛在学习的教师管理系统</h3>
       </div>
 
       <el-form-item prop="username">
@@ -13,7 +13,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
+          placeholder="用户名"
           name="username"
           type="text"
           tabindex="1"
@@ -30,7 +30,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="密码"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -41,60 +41,71 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-form-item prop="code" class="code">
+        <span class="svg-container">
+          <svg-icon icon-class="verify-code" />
+        </span>
+        <el-input
+          v-model="loginForm.code"
+          placeholder="验证码"
+          name="code"
+          type="text"
+          tabindex="3"
+        />
+        <span class="seperator">|</span>
+        <img :src="code.img" alt="" @click="getcode">
+      </el-form-item>
 
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
-      </div>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
     </el-form>
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { axiosGet } from '@/utils/axios'
+import { VCODE_URL } from '@/api/url'
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+      if (value.length < 5) {
+        callback(new Error('密码至少为5位'))
       } else {
         callback()
       }
     }
     return {
+      code: {
+        img: '',
+        uuid: ''
+      },
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: '16620216',
+        password: '123456',
+        code: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        username: [{ required: true, trigger: 'blur', message: '请输入用户名' }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        code: [{ required: true, trigger: 'blur', message: '请输入验证码' }]
       },
       loading: false,
-      passwordType: 'password',
-      redirect: undefined
+      passwordType: 'password'
     }
   },
-  watch: {
-    $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
-    }
+  created() {
+    this.getcode()
   },
   methods: {
+    getcode() {
+      axiosGet(VCODE_URL)
+        .then((res) => {
+          this.code = res.data
+          console.log(this.code)
+        })
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -109,14 +120,16 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+          this.$store.dispatch('user/login', { ...this.loginForm, uuid: this.code.uuid }).then(() => {
+            console.log('跳转到主页')
+            // this.$router.push({ path: '/' })
             this.loading = false
           }).catch(() => {
+            console.log('跳转失败')
+            this.getcode()
             this.loading = false
           })
         } else {
-          console.log('error submit!!')
           return false
         }
       })
@@ -187,7 +200,7 @@ $light_gray:#eee;
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 120px 35px 0;
     margin: 0 auto;
     overflow: hidden;
   }
@@ -232,6 +245,32 @@ $light_gray:#eee;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+
+  ::v-deep .code {
+    .el-form-item__content {
+      display: flex;
+      .el-input {
+        display: inline-block;
+        box-sizing: border-box;
+        // width: calc(100% - 30px - 85px);
+      }
+      .seperator {
+        width: 1px;
+        height: 35px;
+        margin-top: 10px;
+        margin-right: 10px;
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+      img {
+        float: right;
+        width: 85px;
+        height: 35px;
+        margin-top: 10px;
+        margin-right: 10px;
+        cursor: pointer;
+      }
+    }
   }
 }
 </style>

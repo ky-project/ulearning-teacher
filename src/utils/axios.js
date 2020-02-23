@@ -1,52 +1,42 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+import { stringify } from 'qs'
+import { getToken, getRefreshToken } from '@/utils/auth'
 
-// create an axios instance
+const baseApi = process.env.VUE_APP_BASE_API
+const key = 'Bearer '
+
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  baseURL: baseApi,
+  timeout: 5000,
+  transformRequest: [
+    function dataStringify(data) {
+      return stringify(data)
+    }
+  ]
 })
 
-// request interceptor
 service.interceptors.request.use(
   config => {
-    // do something before request is sent
-
     if (store.getters.token) {
-      // let each request carry token
-      // ['X-Token'] is a custom headers key
-      // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+      // 添加token
+      config.headers['Authorization-token'] = key + getToken()
+      config.headers['Authorization-refresh-token'] = key + getRefreshToken()
     }
     return config
   },
   error => {
-    // do something with request error
-    console.log(error) // for debug
+    console.log(error)
     return Promise.reject(error)
   }
 )
 
-// response interceptor
 service.interceptors.response.use(
-  /**
-   * If you want to get http information such as headers or status
-   * Please return  response => response
-  */
-
-  /**
-   * Determine the request status by custom code
-   * Here is just an example
-   * You can also judge the status by HTTP Status Code
-   */
   response => {
     const res = response.data
 
-    // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    if (res.code !== 200) {
       Message({
         message: res.message || 'Error',
         type: 'error',
@@ -83,3 +73,9 @@ service.interceptors.response.use(
 )
 
 export default service
+
+export const { get: axiosGet } = service
+
+export const { post: axiosPost } = service
+
+export const { delete: axiosDelete } = service

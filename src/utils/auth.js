@@ -1,15 +1,24 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'vue_admin_template_token'
+const TokenKey = 'token'
+const RefreshTokenKey = 'refresh_token'
 
 export function getToken() {
   return Cookies.get(TokenKey)
 }
 
-export function setToken(token) {
-  return Cookies.set(TokenKey, token)
-}
-
 export function removeToken() {
   return Cookies.remove(TokenKey)
+}
+
+export function getRefreshToken() {
+  return Cookies.get(RefreshTokenKey)
+}
+
+export function removeRefreshToken() {
+  return Cookies.remove(RefreshTokenKey)
+}
+
+export function removeVuex() {
+  return window.sessionStorage.removeItem('vuex')
 }

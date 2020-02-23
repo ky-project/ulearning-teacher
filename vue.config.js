@@ -6,6 +6,8 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
+const baseApi = process.env.VUE_APP_BASE_API
+const baseUrl = process.env.VUE_APP_BASE_URL
 const name = defaultSettings.title || 'vue Admin Template' // page title
 
 // If your port is set to 80,
@@ -36,11 +38,14 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    proxy: {
+      [baseApi]: {
+        target: baseUrl,
+        pathRewrite: { ['^' + baseApi]: '' }
+      }
+    }
   },
   configureWebpack: {
-    // provide the app's title in webpack's name field, so that
-    // it can be accessed in index.html to inject the correct title.
     name: name,
     resolve: {
       alias: {
@@ -83,7 +88,7 @@ module.exports = {
     config
     // https://webpack.js.org/configuration/devtool/#development
       .when(process.env.NODE_ENV === 'development',
-        config => config.devtool('cheap-source-map')
+        config => config.devtool('cheap-module-source-map')
       )
 
     config
