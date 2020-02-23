@@ -1,11 +1,19 @@
-import { LOGIN_URL, LOG_OUT_URL, INFO_URL, UPLOAD_AVATAR_URL } from '@/api/url'
-import axios, { axiosPost, axiosGet, axios2 } from '@/utils/axios'
+import {
+  LOGIN_URL,
+  LOG_OUT_URL,
+  INFO_URL,
+  UPLOAD_AVATAR_URL,
+  UPDATE_INFO_URL,
+  ROLE_INFO
+} from '@/api/url'
+import { axiosPost, axiosGet, axios2 } from '@/utils/axios'
 import { removeVuex, removeRefreshToken, removeToken } from '@/utils/auth'
 // import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
-    userInfo: ''
+    userInfo: '',
+    role: ''
   }
 }
 
@@ -26,10 +34,27 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_ROLE: (state, role) => {
+    state.role = role
   }
 }
 
 const actions = {
+  // 获取角色信息
+  getRole({ commit }) {
+    return new Promise((resolve, reject) => {
+      axiosGet(ROLE_INFO)
+        .then(response => {
+          const role = response.data[0]
+          commit('SET_ROLE', role)
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        })
+    })
+  },
   // 获取用户信息
   getInfo({ commit }) {
     return new Promise((resolve, reject) => {
@@ -50,8 +75,8 @@ const actions = {
         .then(response => {
           console.log('登录成功')
           resolve()
-          // 获取用户信息
-          dispatch('getInfo')
+          // 获取用户,角色信息
+          Promise.all([dispatch('getInfo'), dispatch('getRole')])
         })
         .catch(error => {
           reject(error)
@@ -97,6 +122,26 @@ const actions = {
         .then(response => {
           dispatch('getInfo')
           resolve()
+        })
+        .catch(error => {
+          reject(error)
+        })
+    })
+  },
+
+  setInfo({ commit, dispatch }, data) {
+    return new Promise((resolve, reject) => {
+      // 更新用户信息
+      axiosPost(UPDATE_INFO_URL, data)
+        .then(response => {
+          // 成功，重新获取用户信息
+          dispatch('getInfo')
+            .then(() => {
+              resolve()
+            })
+            .catch(error => {
+              reject(error)
+            })
         })
         .catch(error => {
           reject(error)
