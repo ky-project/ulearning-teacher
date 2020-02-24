@@ -5,13 +5,13 @@
       <el-select
         v-model="listQuery.teachingTaskId"
         placeholder="教学任务"
-        style="width: 200px;"
+        style="width: 225px;"
         class="filter-item"
       >
         <el-option
           v-for="item in teachingTaskList"
           :key="item.id"
-          :label="item.teachingTaskAlias"
+          :label="'[' + item.term + ']' + item.teachingTaskAlias"
           :value="item.id"
         />
       </el-select>
