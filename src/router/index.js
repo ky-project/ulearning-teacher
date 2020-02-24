@@ -43,6 +43,19 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/student-manage',
+    component: Layout,
+    redirect: '/student-manage/index',
+    children: [
+      {
+        path: 'index',
+        name: 'student-manage',
+        component: () => import('@/views/studentManage/index'),
+        meta: { title: '学生选课管理', icon: 'yonghu' }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

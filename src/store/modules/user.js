@@ -4,7 +4,7 @@ import {
   INFO_URL,
   UPLOAD_AVATAR_URL,
   UPDATE_INFO_URL,
-  ROLE_INFO
+  ROLE_INFO_URL
 } from '@/api/url'
 import { axiosPost, axiosGet, axios2 } from '@/utils/axios'
 import { removeVuex, removeRefreshToken, removeToken } from '@/utils/auth'
@@ -44,7 +44,7 @@ const actions = {
   // 获取角色信息
   getRole({ commit }) {
     return new Promise((resolve, reject) => {
-      axiosGet(ROLE_INFO)
+      axiosGet(ROLE_INFO_URL)
         .then(response => {
           const role = response.data[0]
           commit('SET_ROLE', role)
