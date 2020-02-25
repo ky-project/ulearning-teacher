@@ -4,7 +4,8 @@ import {
   INFO_URL,
   UPLOAD_AVATAR_URL,
   UPDATE_INFO_URL,
-  ROLE_INFO_URL
+  ROLE_INFO_URL,
+  GET_ALL_TEACHING_TASK_URL
 } from '@/api/url'
 import { axiosPost, axiosGet, axios2 } from '@/utils/axios'
 import { removeVuex, removeRefreshToken, removeToken } from '@/utils/auth'
@@ -13,7 +14,8 @@ import { removeVuex, removeRefreshToken, removeToken } from '@/utils/auth'
 const getDefaultState = () => {
   return {
     userInfo: '',
-    role: ''
+    role: '',
+    teachingTask: []
   }
 }
 
@@ -37,6 +39,9 @@ const mutations = {
   },
   SET_ROLE: (state, role) => {
     state.role = role
+  },
+  SET_TEACHING_TASK: (state, teachingTask) => {
+    state.teachingTask = teachingTask
   }
 }
 
@@ -68,15 +73,29 @@ const actions = {
         ))
     })
   },
+  // 获取教学任务
+  getTeachingTask({ commit }) {
+    return new Promise((resolve, reject) => {
+      axiosGet(GET_ALL_TEACHING_TASK_URL)
+        .then((response) => {
+          const teachingTask = response.data
+          console.log('teachingTask', teachingTask)
+          commit('SET_TEACHING_TASK', teachingTask)
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        })
+    })
+  },
   // 登录
   login({ commit, dispatch }, userInfo) {
     return new Promise((resolve, reject) => {
       axiosPost(LOGIN_URL, userInfo)
         .then(response => {
-          console.log('登录成功')
+          // 获取用户,角色信息,教学任务
+          Promise.all([dispatch('getInfo'), dispatch('getRole'), dispatch('getTeachingTask')])
           resolve()
-          // 获取用户,角色信息
-          Promise.all([dispatch('getInfo'), dispatch('getRole')])
         })
         .catch(error => {
           reject(error)

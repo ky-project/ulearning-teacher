@@ -11,5 +11,13 @@ export const ROLE_INFO_URL = '/auth/roleInfo' // 获取个人角色信息
 export const GET_ALL_TEACHING_TASK_URL = '/teacher/teachingTask/getAll' // 获取教师所有的教学任务
 // 学生选课管理
 export const GET_TEACHING_TASK_PAGE_URL = '/teacher/studentTeachingTask/pageList' // 分页查询选课学生信息
-export const DELETE_SELECTED_STUDENT = '/teacher/studentTeachingTask/remove' // 移除选课学生信息
-
+export const DELETE_SELECTED_STUDENT_URL = '/teacher/studentTeachingTask/remove' // 移除选课学生信息
+// 试题管理
+export const GET_QUESTION_PAGE_URL = '/teacher/courseQuestion/pageList' // 分页查询课程试题
+export const ADD_QUESTION_URL = '/teacher/courseQuestion/save' // 添加试题
+// 文件资料管理
+export const GET_ROOT_FOLDER_URL = '/teacher/courseDocumentation/getRootFolder' // 查询文件资料根节点
+export const GET_DOCUMENTATION_LIST_URL = '/teacher/courseDocumentation/list' // 查询文件资料列表
+export const ADD_FOLDER_URL = '/teacher/courseDocumentation/saveFolder' // 添加文件夹
+export const DELETE_DOCUMENTATION_URL = '/teacher/courseDocumentation/delete' // 删除文件资料
+export const UPDATE_DOCUMENTATION_URL = '/teacher/courseDocumentation/update' // 更新文件资料

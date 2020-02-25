@@ -10,7 +10,6 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
   {
     path: '/404',
     component: () => import('@/views/404'),
@@ -50,9 +49,42 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'student-manage',
+        name: 'StudentManage',
         component: () => import('@/views/studentManage/index'),
         meta: { title: '学生选课管理', icon: 'yonghu' }
+      }
+    ]
+  },
+  {
+    path: '/question-bank',
+    component: Layout,
+    redirect: '/question-bank/index',
+    children: [
+      {
+        path: 'index',
+        name: 'QuestionBank',
+        component: () => import('@/views/questionBank/index'),
+        meta: { title: '题库管理', icon: 'tiku' }
+      }
+    ]
+  },
+  {
+    path: '/file-manage',
+    component: Layout,
+    meta: { title: '文件管理', icon: 'wenjian' },
+    children: [
+      {
+        path: 'document-manage',
+        name: 'DocumentManage',
+        component: () => import('@/views/fileManage/documentManage/index'),
+        meta: { title: '文件资料管理', icon: 'ziliao' }
+      },
+      {
+        path: 'resource-manage',
+        name: 'ResourceManage',
+        component: () =>
+                 import('@/views/fileManage/resourceManage/index'),
+        meta: { title: '教学资源管理', icon: 'ziyuan' }
       }
     ]
   },

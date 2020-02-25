@@ -37,7 +37,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="学号" prop="stuNumber" align="center" width="120">
+      <el-table-column label="学号" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.stuNumber }}</span>
         </template>
@@ -96,7 +96,7 @@
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import { axiosGet, axiosPost } from '@/utils/axios'
-import { GET_ALL_TEACHING_TASK_URL, GET_TEACHING_TASK_PAGE_URL, DELETE_SELECTED_STUDENT } from '@/api/url'
+import { GET_ALL_TEACHING_TASK_URL, GET_TEACHING_TASK_PAGE_URL, DELETE_SELECTED_STUDENT_URL } from '@/api/url'
 
 export default {
   name: 'StudentManage',
@@ -172,7 +172,7 @@ export default {
         // 发送请求
         console.log('stuId', row.id)
         console.log('teachingTaskId', this.currentTeachingTaskId)
-        axiosPost(DELETE_SELECTED_STUDENT, { stuId: row.id, teachingTaskId: this.currentTeachingTaskId })
+        axiosPost(DELETE_SELECTED_STUDENT_URL, { stuId: row.id, teachingTaskId: this.currentTeachingTaskId })
           .then(response => {
             this.$message({
               type: 'success',
