@@ -94,7 +94,7 @@
         </template>
       </el-table-column>
     </el-table>
-    </file-nav></div>
+  </div>
 </template>
 
 <script>
