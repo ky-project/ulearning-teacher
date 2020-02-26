@@ -7,7 +7,7 @@ import Layout from '@/layout'
 export const constantRoutes = [
   {
     path: '/login',
-    component: () => import('@/views/login/index'),
+    component: () => import('@/views/login'),
     hidden: true
   },
   {
@@ -23,7 +23,7 @@ export const constantRoutes = [
       {
         path: 'dashboard',
         name: 'Dashboard',
-        component: () => import('@/views/dashboard/index'),
+        component: () => import('@/views/dashboard'),
         meta: { title: 'Dashboard', icon: 'dashboard' }
       }
     ]
@@ -37,7 +37,7 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'Personal',
-        component: () => import('@/views/personal/index'),
+        component: () => import('@/views/personal'),
         meta: { title: '个人信息' }
       }
     ]
@@ -50,7 +50,7 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'StudentManage',
-        component: () => import('@/views/studentManage/index'),
+        component: () => import('@/views/studentManage'),
         meta: { title: '学生选课管理', icon: 'yonghu' }
       }
     ]
@@ -63,7 +63,7 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'QuestionBank',
-        component: () => import('@/views/questionBank/index'),
+        component: () => import('@/views/questionBank'),
         meta: { title: '题库管理', icon: 'tiku' }
       }
     ]
@@ -76,17 +76,23 @@ export const constantRoutes = [
       {
         path: 'document-manage',
         name: 'DocumentManage',
-        component: () => import('@/views/fileManage/documentManage/index'),
+        component: () => import('@/views/fileManage/documentManage'),
         meta: { title: '文件资料管理', icon: 'ziliao' }
       },
       {
         path: 'resource-manage',
         name: 'ResourceManage',
         component: () =>
-                 import('@/views/fileManage/resourceManage/index'),
+                 import('@/views/fileManage/resourceManage'),
         meta: { title: '教学资源管理', icon: 'ziyuan' }
       }
     ]
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: () => import('@/views/test'),
+    hidden: true
   },
   { path: '*', redirect: '/404', hidden: true }
 ]

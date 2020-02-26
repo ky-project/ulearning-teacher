@@ -21,3 +21,4 @@ export const GET_DOCUMENTATION_LIST_URL = '/teacher/courseDocumentation/list' //
 export const ADD_FOLDER_URL = '/teacher/courseDocumentation/saveFolder' // 添加文件夹
 export const DELETE_DOCUMENTATION_URL = '/teacher/courseDocumentation/delete' // 删除文件资料
 export const UPDATE_DOCUMENTATION_URL = '/teacher/courseDocumentation/update' // 更新文件资料
+export const UPLOAD_DOCUMENTATION_URL = '/teacher/courseDocumentation/saveFile' // 上传文件

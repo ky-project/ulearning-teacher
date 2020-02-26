@@ -1,5 +1,5 @@
 <template>
-  <div class="document-manage">
+  <div class="document-manage" @contextmenu.prevent="()=>{}">
     <!-- 操作栏 -->
     <div class="operator-bar">
       <ul class="operator-bar__list clear-fix">
@@ -56,6 +56,7 @@
       size="mini"
       class="file-zone"
       :height="tableHeight"
+      @row-contextmenu="rightClick"
       @row-dblclick="handleDbclick"
       @selection-change="handleSelectionChange"
     >
@@ -69,7 +70,13 @@
       >
         <template slot-scope="scope">
           <svg-icon icon-class="wenjian" class-name="icon" />
-          <span>{{ scope.row.fileName }}</span>
+          <input
+            v-if="scope.row.nameModify"
+            v-model="fileName"
+            v-focus
+            @blur="blurHandler(scope.row)"
+          >
+          <span v-else>{{ scope.row.fileName }}</span>
           <div class="operator fr">
             <svg-icon icon-class="gongxiang" class-name="item-icon" />
             <svg-icon v-if="scope.row.fileType === 1" icon-class="xiazai" class-name="item-icon" />
@@ -94,6 +101,13 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 右键菜单 -->
+    <right-menu
+      :visible.sync="visible"
+      :data="menuList"
+      el="tbody"
+      @click="rightMenuItemClick"
+    />
   </div>
 </template>
 
@@ -104,14 +118,17 @@ import {
   GET_DOCUMENTATION_LIST_URL, // 查询文件资料列表
   ADD_FOLDER_URL, // 添加文件夹
   DELETE_DOCUMENTATION_URL, // 删除文件资料
-  UPDATE_DOCUMENTATION_URL // 更新文件资料
+  UPDATE_DOCUMENTATION_URL, // 更新文件资料
+  UPLOAD_DOCUMENTATION_URL // 上传文件
 } from '@/api/url'
+import { isFile } from '@/utils/validate'
 import FileNav from '@/views/fileManage/components/FileNav'
+import RightMenu from '@/views/fileManage/components/RightMenu/index'
 import { axiosGet, axiosPost } from '@/utils/axios'
 export default {
   // 文件资料管理
   name: 'DocumentManage',
-  components: { FileNav },
+  components: { FileNav, RightMenu },
   props: [''],
   data() {
     return {
@@ -119,7 +136,15 @@ export default {
       fileParentId: '', // 父文件id
       currentFileList: [], // 当前文件列表
       navList: [], // 导航列表
-      loading: false
+      loading: false,
+      // 右键菜单相关
+      menuList: [
+        { icon: 'rename', content: '重命名' }
+      ],
+      visible: false,
+      currentRowData: {},
+      // 重命名相关
+      fileName: ''
     }
   },
   computed: {
@@ -155,6 +180,48 @@ export default {
   methods: {
     handleSelectionChange() {
 
+    },
+    // 重命名
+    blurHandler(item) {
+      // 判空
+      this.fileName = this.fileName.trim()
+      if (this.fileName === '') {
+        item.nameModify = false
+        return false
+      }
+      // 判断格式
+      if (!isFile(this.fileName)) {
+        this.$message.error('文件名不能包含以下任何字符: \ / : * ? " < > |')
+        item.nameModify = false
+        return false
+      }
+      // 发送请求
+      const data = {
+        fileName: this.fileName,
+        id: item.id
+      }
+      axiosPost(UPDATE_DOCUMENTATION_URL, data)
+        .then(response => {
+          item.fileName = this.fileName
+          item.nameModify = false
+          this.fileName = ''
+        })
+        .catch(error => {
+          this.$message.error(error.message || '出错')
+          item.nameModify = false
+          this.fileName = ''
+        })
+    },
+    // 右键菜单项点击事件
+    rightMenuItemClick(index) {
+      switch (index) {
+        case 0: this.currentRowData.nameModify = true // 切换文件名状态
+      }
+    },
+    // 右键事件
+    rightClick(row, column, event) {
+      console.log('当前行', row)
+      this.currentRowData = row
     },
     // 导航点击事件
     handleUpdate(navList) {
@@ -197,6 +264,10 @@ export default {
           })
       })
     },
+    // 格式化文件资料列表
+    formatFileList(fileList) {
+      return fileList.map(item => { item.nameModify = false; return item }) // 添加修改名称状态属性
+    },
     // 查询文件资料列表
     getFileList() {
       return new Promise((resolve, reject) => {
@@ -205,10 +276,10 @@ export default {
           teachingTaskId: this.teachingTaskId
         }
         this.loading = true
-        console.log('request', data)
         axiosGet(GET_DOCUMENTATION_LIST_URL, { params: data })
           .then(response => {
-            this.currentFileList = response.data
+            this.currentFileList = this.formatFileList(response.data)
+            console.log(this.currentFileList)
             this.loading = false
             resolve()
           })
@@ -219,11 +290,27 @@ export default {
           })
       })
     },
+    getNewFileName() {
+      let findNewName = false
+      const baseName = '新建文件夹'
+      let count = 1
+      let currentName = baseName
+      while (!findNewName) {
+        const result = this.currentFileList.findIndex(item => item.fileName === currentName)
+        if (result === -1) {
+          findNewName = true
+        } else {
+          currentName = baseName + count
+          count++
+        }
+      }
+      return currentName
+    },
     // 新建文件夹
     addFolder() {
       const data = {
         fileParentId: this.fileParentId,
-        fileName: '新建文件夹',
+        fileName: this.getNewFileName(),
         teachingTaskId: this.teachingTaskId
       }
       axiosPost(ADD_FOLDER_URL, data)

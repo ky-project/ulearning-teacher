@@ -49,6 +49,10 @@ div:focus {
   outline: none;
 }
 
+.flex {
+  display: flex;
+}
+
 .clearfix {
   &:after {
     visibility: hidden;

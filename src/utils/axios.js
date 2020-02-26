@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import { stringify } from 'qs'
-import router from '@/router'
+import router from '@/layout/router'
 import store from '@/store'
 import { getToken, getRefreshToken } from '@/utils/auth'
 

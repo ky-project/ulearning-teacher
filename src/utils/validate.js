@@ -26,3 +26,7 @@ export function isPhone(path) {
 export function isEmail(path) {
   return /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/.test(path)
 }
+
+export function isFile(path) {
+  return /^[^\\/:\*\?""<>|]{1,120}$/.test(path)
+}
