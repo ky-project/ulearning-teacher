@@ -1,10 +1,14 @@
 <template>
   <div>
-    <input ref="input" type="file">
+    <Upload />
   </div>
 </template>
 
 <script>
+/**
+ * 1. props: [ url, validate]
+ *
+ */
 export default {
   name: '',
 

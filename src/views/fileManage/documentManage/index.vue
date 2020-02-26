@@ -5,7 +5,17 @@
       <ul class="operator-bar__list clear-fix">
         <li class="operator-bar__list-item fl">
           <svg-icon icon-class="shangchuan" />
-          <span>上传</span>
+          <upload
+            :url="uploadUrl"
+            file-key="file"
+            :data="uploadData"
+            class-name="upload"
+            :on-uploading="onUploading"
+            :on-success="onSuccess"
+            :on-error="onError"
+          >
+            <span>上传</span>
+          </upload>
         </li>
         <li class="operator-bar__list-item fl">
           <svg-icon icon-class="xiazai" />
@@ -123,12 +133,13 @@ import {
 } from '@/api/url'
 import { isFile } from '@/utils/validate'
 import FileNav from '@/views/fileManage/components/FileNav'
-import RightMenu from '@/views/fileManage/components/RightMenu/index'
+import RightMenu from '@/components/RightMenu/index'
+import Upload from '@/components/Upload/index'
 import { axiosGet, axiosPost } from '@/utils/axios'
 export default {
   // 文件资料管理
   name: 'DocumentManage',
-  components: { FileNav, RightMenu },
+  components: { FileNav, RightMenu, Upload },
   props: [''],
   data() {
     return {
@@ -151,6 +162,17 @@ export default {
     ...mapGetters(['teachingTask']),
     tableHeight() {
       return window.innerHeight - 126
+    },
+    uploadData() {
+      return {
+        fileParentId: this.fileParentId,
+        teachingTaskId: this.teachingTaskId,
+        documentationShared: false,
+        documentationCategory: 1 // 暂时不用
+      }
+    },
+    uploadUrl() {
+      return UPLOAD_DOCUMENTATION_URL
     }
   },
   watch: {
@@ -193,6 +215,7 @@ export default {
       if (!isFile(this.fileName)) {
         this.$message.error('文件名不能包含以下任何字符: \ / : * ? " < > |')
         item.nameModify = false
+        this.fileName = ''
         return false
       }
       // 发送请求
@@ -290,6 +313,7 @@ export default {
           })
       })
     },
+    // 获取新的文件名
     getNewFileName() {
       let findNewName = false
       const baseName = '新建文件夹'
@@ -331,6 +355,20 @@ export default {
         .catch(error => {
           this.$message(error.message || '出错')
         })
+    },
+    // 上传中
+    onLoading() {
+      this.loading = true
+    },
+    // 上传成功
+    onSuccess() {
+      this.getFileList()
+      this.loading = false
+    },
+    // 上传失败
+    onError(msg) {
+      this.$message.error(msg)
+      this.loading = false
     }
   }
 
@@ -349,6 +387,9 @@ export default {
       border-radius: 3px;
       margin-right: 10px;
       box-sizing: border-box;
+      .upload {
+        display: inline-block;
+      }
       span {
         font-size: 14px;
       }
@@ -377,7 +418,7 @@ export default {
   }
   .file-zone {
     .icon {
-      font-size: 14px;
+      font-size: 18px;
       margin-right: 5px;
     }
     .operator {
