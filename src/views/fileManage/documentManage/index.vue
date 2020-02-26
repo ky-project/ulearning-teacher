@@ -79,14 +79,14 @@
         min-width="300px"
       >
         <template slot-scope="scope">
-          <svg-icon icon-class="wenjian" class-name="icon" />
+          <svg-icon :icon-class="setFileIcon(scope.row.fileExt)" class-name="icon" />
           <input
             v-if="scope.row.nameModify"
             v-model="fileName"
             v-focus
             @blur="blurHandler(scope.row)"
           >
-          <span v-else>{{ scope.row.fileName }}</span>
+          <span v-else>{{ setFileName(scope.row) }}</span>
           <div class="operator fr">
             <svg-icon icon-class="gongxiang" class-name="item-icon" />
             <svg-icon v-if="scope.row.fileType === 1" icon-class="xiazai" class-name="item-icon" />
@@ -107,7 +107,7 @@
         min-width="100px"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.fileSize || '--' }}</span>
+          <span>{{ setFileSize(scope.row.fileSize) }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -202,6 +202,49 @@ export default {
   methods: {
     handleSelectionChange() {
 
+    },
+    // 设置图标
+    setFileIcon(ext) {
+      if (!ext) {
+        return 'wenjian'
+      }
+      const map = {
+        txt: ['txt'],
+        wendang: ['doc', 'docx'],
+        excel: ['xls', 'xlsx'],
+        ppt: ['ppt', 'pptx'],
+        tupian: ['jpg', 'jpeg', 'png'],
+        pdf: ['pdf'],
+        shiping: ['flv', 'rmvb', 'mp4', 'mvb'],
+        yinping: ['wma', 'mp3'],
+        yasuobao: ['rar', 'zip']
+      }
+      const result = Object.keys(map).find(key => map[key].includes(ext))
+      if (!result) {
+        return 'weizhi'
+      }
+      return result
+    },
+    // 设置文件名
+    setFileName(item) {
+      let fileName = item.fileName
+      if (item.fileExt) {
+        fileName += '.' + item.fileExt
+      }
+      return fileName
+    },
+    // 设置文件大小
+    setFileSize(size) {
+      if (!size) {
+        return '--'
+      }
+      const level = ['B', 'KB', 'MB', 'GB', 'TB']
+      let num = 0
+      while (Math.floor(size / 1024) > 0) {
+        size = size / 1024
+        num++
+      }
+      return size.toFixed(2) + level[num]
     },
     // 重命名
     blurHandler(item) {
@@ -357,7 +400,7 @@ export default {
         })
     },
     // 上传中
-    onLoading() {
+    onUploading() {
       this.loading = true
     },
     // 上传成功
@@ -425,7 +468,7 @@ export default {
       display: none;
       .item-icon {
         margin-right: 10px;
-        font-size: 14px;
+        font-size: 16px;
         cursor: pointer;
         &:hover {
           color: #409EFF;
