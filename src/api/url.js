@@ -22,3 +22,4 @@ export const ADD_FOLDER_URL = '/teacher/courseDocumentation/saveFolder' // 添�
 export const DELETE_DOCUMENTATION_URL = '/teacher/courseDocumentation/delete' // 删除文件资料
 export const UPDATE_DOCUMENTATION_URL = '/teacher/courseDocumentation/update' // 更新文件资料
 export const UPLOAD_DOCUMENTATION_URL = '/teacher/courseDocumentation/saveFile' // 上传文件
+export const DOWNLOAD_DOCUMENTAION_URL = '/teacher/courseDocumentation/download' // 下载文件资料

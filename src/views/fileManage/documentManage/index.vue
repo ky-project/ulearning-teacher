@@ -89,7 +89,12 @@
           <span v-else>{{ setFileName(scope.row) }}</span>
           <div class="operator fr">
             <svg-icon icon-class="gongxiang" class-name="item-icon" />
-            <svg-icon v-if="scope.row.fileType === 1" icon-class="xiazai" class-name="item-icon" />
+            <svg-icon
+              v-if="scope.row.fileType === 1"
+              icon-class="xiazai"
+              class-name="item-icon"
+              @click="downloadFile(setFileName(scope.row), scope.row.id)"
+            />
             <svg-icon icon-class="shanchu" class-name="item-icon" @click="deleteFolder(scope.row.id)" />
           </div>
         </template>
@@ -129,7 +134,8 @@ import {
   ADD_FOLDER_URL, // 添加文件夹
   DELETE_DOCUMENTATION_URL, // 删除文件资料
   UPDATE_DOCUMENTATION_URL, // 更新文件资料
-  UPLOAD_DOCUMENTATION_URL // 上传文件
+  UPLOAD_DOCUMENTATION_URL, // 上传文件
+  DOWNLOAD_DOCUMENTAION_URL // 下载文件
 } from '@/api/url'
 import { isFile } from '@/utils/validate'
 import FileNav from '@/views/fileManage/components/FileNav'
@@ -178,20 +184,14 @@ export default {
   watch: {
     teachingTaskId() {
       if (this.fileParentId) {
-        this.getFileList()
+        this.initialFileList()
       }
     }
   },
   created() {
-    // 设置默认教学任务
     if (this.teachingTask.length) {
       this.teachingTaskId = this.teachingTask[0].id
-      // 获取根文件
-      this.getRoot()
-        .then(() => {
-          // 获取文件列表
-          this.getFileList()
-        })
+      this.initialFileList()
     }
   },
 
@@ -202,6 +202,26 @@ export default {
   methods: {
     handleSelectionChange() {
 
+    },
+    // 下载
+    downloadFile(fileName, id) {
+      var a = document.createElement('a')
+      a.download = fileName
+      a.style.display = 'none'
+      const fileurl = process.env.VUE_APP_BASE_API + DOWNLOAD_DOCUMENTAION_URL + '?id=' + id
+      a.href = fileurl
+      document.body.appendChild(a)
+      a.click() // 触发点击
+      document.body.removeChild(a) // 然后移除
+    },
+    // 初始化文件列表
+    initialFileList() {
+      // 获取根文件
+      this.getRoot()
+        .then(() => {
+          // 获取文件列表
+          this.getFileList()
+        })
     },
     // 设置图标
     setFileIcon(ext) {
