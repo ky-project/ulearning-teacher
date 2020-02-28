@@ -27,3 +27,5 @@ export const DOWNLOAD_DOCUMENTAION_URL = '/teacher/courseDocumentation/download'
 export const GET_EXPERIMENT_PAGE_URL = '/teacher/teachingTaskExperiment/pageList' // 分页查询实验信息
 export const ADD_ATTACHMENT_URL = '/teacher/teachingTaskExperiment/uploadAttachment' // 添加附件
 export const ADD_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/save' // 添加实验
+export const UPDATE_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/update' // 更新实验
+export const DELETE_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/delete' // 删除实验

@@ -52,7 +52,19 @@
     >
       <el-table-column label="实验编号" align="center" width="120">
         <template slot-scope="{row}">
-          <span>{{ '实验'+row.experimentOrder }}</span>
+          <el-input-number
+            v-if="row.state"
+            v-model="row.experimentOrder"
+            controls-position="right"
+            size="mini"
+            type="number"
+            :step="1"
+            width="100"
+            class="input-number"
+            :step-strictly="true"
+            @blur="setSort(row)"
+          />
+          <span v-else>{{ '实验'+row.experimentOrder }}</span>
         </template>
       </el-table-column>
       <el-table-column label="标题" min-width="120" align="center">
@@ -66,28 +78,44 @@
         </template>
       </el-table-column>
 
-      <!-- <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
+          <el-button
+            :style="{color: '#409EFF'}"
+            size="mini"
+            type="text"
+            @click="handleUpdate(row)"
+          >
+            <i class="el-icon-edit" />
+          </el-button>
           <el-button
             :style="{color: '#F56C6C'}"
             size="mini"
             type="text"
-            @click="handleDelete(row,$index)"
+            @click="handleDelete(row)"
           >
             <i class="el-icon-delete" />
           </el-button>
+          <el-button
+            :style="{color: '#F56C6C'}"
+            size="mini"
+            type="text"
+            @click="handleSort(row)"
+          >
+            <svg-icon icon-class="xulie" class-name="icon" />
+          </el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
     <!-- 分页器 -->
-    <!-- <pagination
+    <pagination
       v-show="total>0"
       :total="total"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
       @pagination="setPagination"
-    /> -->
+    />
   </div>
 </template>
 
@@ -95,7 +123,7 @@
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import { axiosGet, axiosPost } from '@/utils/axios'
-import { GET_EXPERIMENT_PAGE_URL } from '@/api/url'
+import { GET_EXPERIMENT_PAGE_URL, UPDATE_EXPERIMENT_URL, DELETE_EXPERIMENT_URL } from '@/api/url'
 import { mapGetters } from 'vuex'
 export default {
   name: 'ExperimentList',
@@ -112,6 +140,7 @@ export default {
       total: 0,
       tableKey: 0,
       listLoading: false,
+      currentTeachingTaskId: '',
       listQuery: {
         currentPage: 1,
         pageSize: 5,
@@ -128,6 +157,38 @@ export default {
     this.getList()
   },
   methods: {
+
+    handleSort(row) {
+      if (row.state) {
+        this.setSort(row)
+      } else {
+        row.state = !row.state
+      }
+    },
+    // 设置序列
+    setSort(row) {
+      // 获取参数
+      const data = {
+        teachingTaskId: this.currentTeachingTaskId,
+        experimentOrder: row.experimentOrder,
+        id: row.id
+      }
+      // 发送请求
+      axiosPost(UPDATE_EXPERIMENT_URL, data)
+        .then(response => {
+          this.getList()
+            .then(() => {
+              row.state = false
+            })
+        })
+        .catch(error => {
+          this.getList()
+            .then(() => {
+              row.state = false
+            })
+          this.$message.error(error.message || '出错')
+        })
+    },
     handleCreate() {
       this.$router.push('/experiment-manage/experiment-content')
     },
@@ -137,7 +198,10 @@ export default {
         this.listLoading = true
         axiosGet(GET_EXPERIMENT_PAGE_URL, { params: this.listQuery })
           .then(response => {
-            this.list = response.data.content
+            const { data } = response
+            this.total = data.total
+            this.list = data.content.map(item => { item.state = false; return item })
+            this.currentTeachingTaskId = this.listQuery.teachingTaskId
             this.listLoading = false
             resolve()
           })
@@ -180,20 +244,18 @@ export default {
     handleFilter() {
       this.listQuery.currentPage = 1
       this.getList()
-    }
-    /* setPagination(currentPage, pageSize) {
+    },
+    setPagination(currentPage, pageSize) {
       this.getList()
     },
-    handleDelete(row, index) {
-      this.$confirm('确定退选该学生, 是否继续?', '提示', {
+    handleDelete(row) {
+      this.$confirm('确定删除该实验, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         // 发送请求
-        console.log('stuId', row.id)
-        console.log('teachingTaskId', this.currentTeachingTaskId)
-        axiosPost(DELETE_SELECTED_STUDENT_URL, { stuId: row.id, teachingTaskId: this.currentTeachingTaskId })
+        axiosGet(DELETE_EXPERIMENT_URL, { params: { id: row.id }})
           .then(response => {
             this.$message({
               type: 'success',
@@ -201,8 +263,19 @@ export default {
             })
             this.getList()
           })
+          .catch(error => {
+            this.$message.error(error.message || '出错')
+          })
       })
-    }  */
+    },
+    handleUpdate(row) {
+      this.$router.push({
+        path: '/experiment-manage/experiment-content',
+        query: {
+          row: JSON.stringify(row)
+        }
+      })
+    }
   }
 }
 </script>
@@ -214,6 +287,7 @@ export default {
     vertical-align: middle;
     margin-bottom: 10px;
   }
+
 }
 </style>
 <style lang="scss">
@@ -224,5 +298,15 @@ export default {
   .el-select {
     width: 100%;
   }
+  .icon {
+    color: #E6A23C;
+  }
+  .input-number {
+    width: 100px;
+  }
+  .el-input-number.is-controls-right .el-input__inner {
+      padding: 0;
+    }
+
 }
 </style>

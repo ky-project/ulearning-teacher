@@ -47,7 +47,7 @@
 import { mapGetters } from 'vuex'
 import UploadAttachment from '@/components/UploadAttachment'
 import Tinymce from '@/components/Tinymce'
-import { ADD_ATTACHMENT_URL, ADD_EXPERIMENT_URL } from '@/api/url.js'
+import { ADD_ATTACHMENT_URL, ADD_EXPERIMENT_URL, UPDATE_EXPERIMENT_URL } from '@/api/url.js'
 import { axios2, axiosPost } from '@/utils/axios'
 export default {
   name: 'ExperimentContent',
@@ -62,6 +62,8 @@ export default {
       experimentAttachment: '',
       experimentAttachmentName: '',
       attachment: '',
+      id: '',
+      data: '',
       toolbar: ['undo redo | fontselect fontsizeselect bold italic underline strikethrough | alignleft aligncenter alignright | bullist numlist indent outdent | image table link | hr emoticons']
     }
   },
@@ -69,12 +71,23 @@ export default {
     ...mapGetters(['teachingTask'])
   },
 
-  watch: {},
+  watch: {
+  },
 
   created() {
-    if (this.teachingTask.length) {
-      this.teachingTaskId = this.teachingTask[0].id
-      // this.initialFileList()
+    if (this.$route.query.row) {
+      this.data = JSON.parse(this.$route.query.row)
+      const { teachingTaskId, experimentTitle, experimentContent, id } = this.data
+      this.teachingTaskId = teachingTaskId
+      this.experimentTitle = experimentTitle
+      this.experimentContent = experimentContent
+      this.id = id
+      this.state = 'update'
+    } else {
+      this.state = 'add'
+      if (this.teachingTask.length) {
+        this.teachingTaskId = this.teachingTask[0].id
+      }
     }
   },
 
@@ -128,6 +141,26 @@ export default {
           })
       })
     },
+    updateExperiment() {
+      return new Promise((resolve, reject) => {
+        const { experimentAttachment, experimentAttachmentName, experimentContent, experimentTitle, id, teachingTaskId } = this
+        const data = {
+          experimentAttachment,
+          experimentAttachmentName,
+          experimentContent,
+          experimentTitle,
+          id,
+          teachingTaskId
+        }
+        axiosPost(UPDATE_EXPERIMENT_URL, data)
+          .then(response => {
+            resolve()
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
     submit() {
       // 1. 验证
       if (!this.experimentTitle) {
@@ -139,28 +172,41 @@ export default {
         return false
       }
       this.isLoading = true
-      if (this.attachment) {
-        this.getAttachmentUrl()
+      if (this.state === 'add') {
+        if (this.attachment) {
+          this.getAttachmentUrl()
+            .then(() => {
+              this.addExperiment()
+                .then(() => {
+                  this.$message.success('实验添加成功')
+                  this.isLoading = false
+                })
+                .catch(error => {
+                  console.log('报错')
+                  this.$message.error(error.message || '出错')
+                  this.isLoading = false
+                })
+            })
+        } else {
+          this.addExperiment()
+            .then(() => {
+              this.$message.success('实验添加成功')
+              this.isLoading = false
+            })
+            .catch(error => {
+              console.log('报错')
+              this.$message.error(error.message || '出错')
+              this.isLoading = false
+            })
+        }
+      } else if (this.state === 'update') {
+        this.updateExperiment()
           .then(() => {
-            this.addExperiment()
-              .then(() => {
-                this.$message.success('实验添加成功')
-                this.isLoading = false
-              })
-              .catch(error => {
-                console.log('报错')
-                this.$message.error(error.message || '出错')
-                this.isLoading = false
-              })
-          })
-      } else {
-        this.addExperiment()
-          .then(() => {
-            this.$message.success('实验添加成功')
+            this.$message.success('实验更新成功')
             this.isLoading = false
+            // this.back()
           })
           .catch(error => {
-            console.log('报错')
             this.$message.error(error.message || '出错')
             this.isLoading = false
           })
