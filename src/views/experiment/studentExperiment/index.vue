@@ -1,21 +1,19 @@
 <template>
   <div>
-    <UploadAttachment v-model="value" />
+    学生实验批改
   </div>
 </template>
 
 <script>
-import UploadAttachment from '@/components/UploadAttachment'
+
 export default {
   name: '',
 
-  components: { UploadAttachment },
-  props: {
-
-  },
+  components: {},
+  props: [''],
   data() {
     return {
-      value: ''
+
     }
   },
 
@@ -27,8 +25,7 @@ export default {
 
   mounted() {},
 
-  methods: {
-  }
+  methods: {}
 
 }
 

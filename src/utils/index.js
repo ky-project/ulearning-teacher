@@ -119,3 +119,40 @@ export function filterObj(obj, arr) {
     return result
   }
 }
+
+// 设置图标
+export function setFileIcon(ext) {
+  if (!ext) {
+    return 'wenjian'
+  }
+  const map = {
+    txt: ['txt'],
+    wendang: ['doc', 'docx'],
+    excel: ['xls', 'xlsx'],
+    ppt: ['ppt', 'pptx'],
+    tupian: ['jpg', 'jpeg', 'png'],
+    pdf: ['pdf'],
+    shiping: ['flv', 'rmvb', 'mp4', 'mvb'],
+    yinping: ['wma', 'mp3'],
+    yasuobao: ['rar', 'zip']
+  }
+  const result = Object.keys(map).find(key => map[key].includes(ext))
+  if (!result) {
+    return 'weizhi'
+  }
+  return result
+}
+
+// 设置文件大小
+export function setFileSize(size) {
+  if (!size) {
+    return '--'
+  }
+  const level = ['B', 'KB', 'MB', 'GB', 'TB']
+  let num = 0
+  while (Math.floor(size / 1024) > 0) {
+    size = size / 1024
+    num++
+  }
+  return size.toFixed(2) + level[num]
+}

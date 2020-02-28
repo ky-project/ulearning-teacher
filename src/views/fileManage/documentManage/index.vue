@@ -68,7 +68,6 @@
       :height="tableHeight"
       @row-contextmenu="rightClick"
       @row-dblclick="handleDbclick"
-      @selection-change="handleSelectionChange"
     >
       <el-table-column
         type="selection"
@@ -142,6 +141,7 @@ import FileNav from '@/views/fileManage/components/FileNav'
 import RightMenu from '@/components/RightMenu/index'
 import Upload from '@/components/Upload/index'
 import { axiosGet, axiosPost } from '@/utils/axios'
+import { setFileIcon, setFileSize } from '@/utils/index'
 export default {
   // 文件资料管理
   name: 'DocumentManage',
@@ -200,8 +200,11 @@ export default {
   mounted() {},
 
   methods: {
-    handleSelectionChange() {
-
+    setFileIcon(ext) {
+      return setFileIcon(ext)
+    },
+    setFileSize(size) {
+      return setFileSize(size)
     },
     // 下载
     downloadFile(fileName, id) {
@@ -223,28 +226,7 @@ export default {
           this.getFileList()
         })
     },
-    // 设置图标
-    setFileIcon(ext) {
-      if (!ext) {
-        return 'wenjian'
-      }
-      const map = {
-        txt: ['txt'],
-        wendang: ['doc', 'docx'],
-        excel: ['xls', 'xlsx'],
-        ppt: ['ppt', 'pptx'],
-        tupian: ['jpg', 'jpeg', 'png'],
-        pdf: ['pdf'],
-        shiping: ['flv', 'rmvb', 'mp4', 'mvb'],
-        yinping: ['wma', 'mp3'],
-        yasuobao: ['rar', 'zip']
-      }
-      const result = Object.keys(map).find(key => map[key].includes(ext))
-      if (!result) {
-        return 'weizhi'
-      }
-      return result
-    },
+
     // 设置文件名
     setFileName(item) {
       let fileName = item.fileName
@@ -253,19 +235,7 @@ export default {
       }
       return fileName
     },
-    // 设置文件大小
-    setFileSize(size) {
-      if (!size) {
-        return '--'
-      }
-      const level = ['B', 'KB', 'MB', 'GB', 'TB']
-      let num = 0
-      while (Math.floor(size / 1024) > 0) {
-        size = size / 1024
-        num++
-      }
-      return size.toFixed(2) + level[num]
-    },
+
     // 重命名
     blurHandler(item) {
       // 判空

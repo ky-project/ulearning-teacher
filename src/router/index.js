@@ -82,9 +82,34 @@ export const constantRoutes = [
       {
         path: 'resource-manage',
         name: 'ResourceManage',
-        component: () =>
-                 import('@/views/fileManage/resourceManage'),
+        component: () => import('@/views/fileManage/resourceManage'),
         meta: { title: '教学资源管理', icon: 'ziyuan' }
+      }
+    ]
+  },
+  {
+    path: '/experiment-manage',
+    component: Layout,
+    meta: { title: '实验管理', icon: 'shiyan' },
+    children: [
+      {
+        path: 'experiment-list',
+        name: 'ExperimentList',
+        component: () => import('@/views/experiment/experimentList'),
+        meta: { title: '实验内容管理', icon: 'shiyanneirong' }
+      },
+      {
+        path: 'experiment-content',
+        name: 'ExperimentContent',
+        hidden: true,
+        component: () => import('@/views/experiment/experimentContent'),
+        meta: { title: '添加修改实验' }
+      },
+      {
+        path: 'student-experiment',
+        name: 'StudentExperiment',
+        component: () => import('@/views/experiment/studentExperiment'),
+        meta: { title: '学生实验管理', icon: 'xueshengshiyan' }
       }
     ]
   },

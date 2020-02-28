@@ -23,3 +23,7 @@ export const DELETE_DOCUMENTATION_URL = '/teacher/courseDocumentation/delete' //
 export const UPDATE_DOCUMENTATION_URL = '/teacher/courseDocumentation/update' // 更新文件资料
 export const UPLOAD_DOCUMENTATION_URL = '/teacher/courseDocumentation/saveFile' // 上传文件
 export const DOWNLOAD_DOCUMENTAION_URL = '/teacher/courseDocumentation/download' // 下载文件资料
+// 实验管理
+export const GET_EXPERIMENT_PAGE_URL = '/teacher/teachingTaskExperiment/pageList' // 分页查询实验信息
+export const ADD_ATTACHMENT_URL = '/teacher/teachingTaskExperiment/uploadAttachment' // 添加附件
+export const ADD_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/save' // 添加实验

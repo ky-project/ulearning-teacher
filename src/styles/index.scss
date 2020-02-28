@@ -53,6 +53,11 @@ div:focus {
   display: flex;
 }
 
+.flex,
+.justify-between {
+  justify-content: space-between;
+}
+
 .clearfix {
   &:after {
     visibility: hidden;
