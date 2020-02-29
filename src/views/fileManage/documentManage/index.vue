@@ -87,7 +87,11 @@
           >
           <span v-else>{{ setFileName(scope.row) }}</span>
           <div class="operator fr">
-            <svg-icon icon-class="gongxiang" class-name="item-icon" />
+            <svg-icon
+              :icon-class="scope.row.documentationShared ? 'quxiaogongxiang' : 'gongxiang'"
+              class-name="item-icon"
+              @click="share(scope.row)"
+            />
             <svg-icon
               v-if="scope.row.fileType === 1"
               icon-class="xiazai"
@@ -200,6 +204,17 @@ export default {
   mounted() {},
 
   methods: {
+    share(item) {
+      console.log(item.documentationShared)
+      const data = {
+        documentationShared: !item.documentationShared,
+        id: item.id
+      }
+      this.updateFile(data)
+        .then((data) => {
+          this.getFileList()
+        })
+    },
     setFileIcon(ext) {
       return setFileIcon(ext)
     },
@@ -226,7 +241,6 @@ export default {
           this.getFileList()
         })
     },
-
     // 设置文件名
     setFileName(item) {
       let fileName = item.fileName
@@ -235,7 +249,6 @@ export default {
       }
       return fileName
     },
-
     // 重命名
     blurHandler(item) {
       // 判空
@@ -256,17 +269,30 @@ export default {
         fileName: this.fileName,
         id: item.id
       }
-      axiosPost(UPDATE_DOCUMENTATION_URL, data)
-        .then(response => {
+      this.updateFile(data)
+        .then(() => {
           item.fileName = this.fileName
           item.nameModify = false
           this.fileName = ''
         })
-        .catch(error => {
-          this.$message.error(error.message || '出错')
+        .catch(() => {
           item.nameModify = false
           this.fileName = ''
         })
+    },
+    // 修改文件
+    updateFile(data) {
+      return new Promise((resolve, reject) => {
+        axiosPost(UPDATE_DOCUMENTATION_URL, data)
+          .then(response => {
+            console.log(response)
+            resolve(response.data)
+          })
+          .catch(error => {
+            this.$message.error(error.message || '出错')
+            reject(error)
+          })
+      })
     },
     // 右键菜单项点击事件
     rightMenuItemClick(index) {
