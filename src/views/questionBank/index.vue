@@ -239,7 +239,7 @@ export default {
         rawOption: [],
         questionOption: ''
       },
-      optionMap: { 1: '选择题', 2: '判断题', 3: '多选题', 4: '填空天' },
+      optionMap: { 1: '选择题', 2: '判断题', 3: '多选题', 4: '填空题' },
       previewImg: '', // 预览图片
       previewImgUrl: '', // 预览图片url
       dialogFormVisible: false,
