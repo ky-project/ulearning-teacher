@@ -114,6 +114,31 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/exam',
+    component: Layout,
+    meta: { title: '测试管理', icon: 'ceshi' },
+    children: [
+      {
+        path: 'exam-list',
+        name: 'ExamList',
+        component: () => import('@/views/exam/examList'),
+        meta: { title: '测试任务管理', icon: 'renwu' }
+      },
+      {
+        path: 'exam-monitor',
+        name: 'ExamMonitor',
+        component: () => import('@/views/exam/examMonitor'),
+        meta: { title: '监控学生测试', icon: 'jiankong' }
+      },
+      {
+        path: 'exam-statistic',
+        name: 'ExamStatistic',
+        component: () => import('@/views/exam/examStatistic'),
+        meta: { title: '统计学生成绩', icon: 'tongji' }
+      }
+    ]
+  },
+  {
     path: '/test',
     name: 'Test',
     component: () => import('@/views/test'),

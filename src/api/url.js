@@ -20,15 +20,23 @@ export const DELETE_QUESTION_URL = '/teacher/courseQuestion/delete' // 删除试
 export const UPDATE_QUESTION_URL = '/teacher/courseQuestion/update' // 更新试题
 // 文件资料管理
 export const GET_ROOT_FOLDER_URL = '/teacher/courseDocumentation/getRootFolder' // 查询文件资料根节点
+export const GET_SHAREROOT_FOLDER_URL = '/teacher/courseDocumentation/getSharedRootFolder' // 查询文件资料分享区根节点
 export const GET_DOCUMENTATION_LIST_URL = '/teacher/courseDocumentation/list' // 查询文件资料列表
+export const GET_DOCUMENTATION_SHARELIST_URL = '/teacher/courseDocumentation/sharedList' // 查询分享区列表
 export const ADD_FOLDER_URL = '/teacher/courseDocumentation/saveFolder' // 添加文件夹
 export const DELETE_DOCUMENTATION_URL = '/teacher/courseDocumentation/delete' // 删除文件资料
+export const BATCHDELETE_DOCUMENTATION_URL = '/teacher/courseDocumentation/batchDelete' // 批量删除文件资料
 export const UPDATE_DOCUMENTATION_URL = '/teacher/courseDocumentation/update' // 更新文件资料
 export const UPLOAD_DOCUMENTATION_URL = '/teacher/courseDocumentation/saveFile' // 上传文件
 export const DOWNLOAD_DOCUMENTAION_URL = '/teacher/courseDocumentation/download' // 下载文件资料
+export const SHARE_DOCUMENTATION_URL = '/teacher/courseDocumentation/updateShared' // 分享文件资料
+export const BATCHSHARE_DOCUMENTATION_URL = '/teacher/courseDocumentation/batchUpdateShared' // 批量分享文件资料
 // 实验管理
 export const GET_EXPERIMENT_PAGE_URL = '/teacher/teachingTaskExperiment/pageList' // 分页查询实验信息
 export const ADD_ATTACHMENT_URL = '/teacher/teachingTaskExperiment/uploadAttachment' // 添加附件
 export const ADD_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/save' // 添加实验
 export const UPDATE_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/update' // 更新实验
 export const DELETE_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/delete' // 删除实验
+// 测试管理
+export const GET_EXAM_PAGE = '/teacher/examinationTask/pageList' // 删除实验
+
