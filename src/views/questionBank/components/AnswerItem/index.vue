@@ -16,14 +16,14 @@
         @change="(newValue)=>{$emit('update',newValue)}"
       >
         <el-option
-          :key="0"
+          key="错误"
           label="错误"
-          :value="0"
+          value="错误"
         />
         <el-option
-          :key="1"
+          key="正确"
           label="正确"
-          :value="1"
+          value="正确"
         />
       </el-select>
       <!-- 多选题, 单选题 -->
@@ -41,21 +41,6 @@
           :value="item"
         />
       </el-select>
-      <!-- 单选题 -->
-      <!-- <el-select
-        v-else-if="type === 1"
-        :value="value"
-        size="mini"
-        @change="(newValue)=>{$emit('update',newValue)}"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item"
-          :label="item"
-          :value="item"
-        />
-      </el-select>
- -->
     </el-form-item>
   </div>
 </template>

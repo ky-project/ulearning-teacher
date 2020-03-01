@@ -110,6 +110,11 @@ export default {
     },
     // 添加选项
     addOption() {
+      console.log('addOption')
+      if (this.options.length === 6) {
+        this.$message.warning('最多添加6个选项')
+        return false
+      }
       const options = [...this.options]
       options.push({ label: this.keys[this.options.length], value: '' })
       this.$emit('update:options', options)

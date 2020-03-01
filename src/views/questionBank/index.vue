@@ -82,16 +82,29 @@
       </el-table-column>
       <el-table-column label="试题选项" min-width="120" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.questionOption }}</span>
+          <span>{{ row.questionOption || '--' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="试题答案" min-width="120" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.questionKey }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
+        <template slot-scope="{row}">
+          <el-button
+            :style="{color: '#409EFF'}"
+            size="mini"
+            type="text"
+            @click="handleUpdate(row)"
+          >
+            <i class="el-icon-edit" />
+          </el-button>
           <el-button
             :style="{color: '#F56C6C'}"
             size="mini"
             type="text"
-            @click="handleDelete(row,$index)"
+            @click="handleDelete(row)"
           >
             <i class="el-icon-delete" />
           </el-button>
@@ -117,7 +130,7 @@
         label-width="80px"
       >
         <el-form-item label="教学任务" prop="teachingTaskId">
-          <el-select v-model="temp.teachingTaskId" size="mini">
+          <el-select v-model="temp.teachingTaskId" size="mini" :disabled="dialogStatus === 'update'">
             <el-option
               v-for="item in teachingTaskList"
               :key="item.id"
@@ -156,6 +169,11 @@
           >
             <img v-if="previewImgUrl" :src="previewImgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon" />
+            <i
+              v-if="previewImgUrl"
+              class="el-icon-close avatar-uploader-delete"
+              @click.stop="deleteImgUrl"
+            />
           </el-upload>
         </el-form-item>
       </el-form>
@@ -180,7 +198,9 @@ import {
   GET_ALL_TEACHING_TASK_URL,
   GET_QUESTION_PAGE_URL,
   ADD_QUESTION_URL,
-  ADD_QUESTION_IMG_URL
+  ADD_QUESTION_IMG_URL,
+  DELETE_QUESTION_URL,
+  UPDATE_QUESTION_URL
 } from '@/api/url'
 
 export default {
@@ -194,6 +214,7 @@ export default {
       tableKey: 0,
       listLoading: true,
       teachingTaskList: [],
+      oldTeachingTaskId: '',
       typeList: [
         { label: '选择题', value: 1 },
         { label: '判断题', value: 2 },
@@ -220,6 +241,7 @@ export default {
       },
       optionMap: { 1: '选择题', 2: '判断题', 3: '多选题', 4: '填空天' },
       previewImg: '', // 预览图片
+      previewImgUrl: '', // 预览图片url
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -236,11 +258,7 @@ export default {
       }
     }
   },
-  computed: {
-    previewImgUrl() {
-      return this.previewImg ? this.getObjectURL(this.previewImg) : ''
-    }
-  },
+  computed: {},
   created() {
     this.getTeachingTaskList()
       .then(() => {
@@ -248,8 +266,36 @@ export default {
       })
   },
   methods: {
-    getType(type) {
-
+    // 更新试题
+    updateQuestion() {
+      return new Promise((resolve, reject) => {
+        axiosPost(UPDATE_QUESTION_URL, this.temp)
+          .then(() => {
+            resolve()
+          })
+          .catch(error => {
+            this.$message.error(error.message || '出错')
+            reject(error)
+          })
+      })
+    },
+    // 删除图片url
+    deleteImgUrl() {
+      this.previewImgUrl = ''
+      this.temp.questionUrl = ''
+    },
+    // 删除试题
+    deleteQuestion(id) {
+      return new Promise((resolve, reject) => {
+        axiosGet(DELETE_QUESTION_URL, { params: { id }})
+          .then(() => {
+            resolve()
+          })
+          .catch(error => {
+            this.$message.error(error.message || '出错')
+            reject(error)
+          })
+      })
     },
     // 获取本地图片url
     getObjectURL(file) {
@@ -277,6 +323,7 @@ export default {
       // 预览本地图片
       if (isIMG && isLt4M) {
         this.previewImg = file
+        this.previewImgUrl = this.getObjectURL(this.previewImg)
       }
       return false
     },
@@ -285,6 +332,20 @@ export default {
       const tempArr = this.temp.rawOption.map(option => { return `${option.label}=${option.value}` })
       this.temp.questionOption = tempArr.join('|#|')
       // console.log(this.temp.questionOption)
+    },
+    // 逆格式化选项 A=2|#|B=3 => [{label: A, value: 2}]
+    reverseFormatOptions() {
+      const option = this.temp.questionOption
+      if (option !== [] && option !== '') {
+        const tempArr = option.split('|#|')
+        return tempArr.map(item => {
+          const tempArr2 = item.split('=')
+          return {
+            label: tempArr2[0],
+            value: tempArr2[1]
+          }
+        })
+      }
     },
     // 添加试题请求
     addQuestion(data) {
@@ -332,6 +393,7 @@ export default {
                   .then(response => {
                     this.$message.success('试题添加成功')
                     this.dialogFormVisible = false
+                    this.getList()
                   })
               })
           } else {
@@ -344,6 +406,15 @@ export default {
           }
         }
       })
+    },
+    // 修改
+    updateData() {
+      this.updateQuestion()
+        .then(() => {
+          this.$message.success('试题修改成功')
+          this.dialogFormVisible = false
+          this.getList()
+        })
     },
     // 重置添加修改表单
     resetTemp() {
@@ -396,6 +467,7 @@ export default {
         this.listLoading = true
         axiosGet(GET_QUESTION_PAGE_URL, { params: this.listQuery })
           .then(response => {
+            this.oldTeachingTaskId = this.listQuery.teachingTaskId // 同步teachingTaskId
             const { content, total } = response.data
             this.list = content
             this.total = total
@@ -409,26 +481,28 @@ export default {
     },
     setPagination(currentPage, pageSize) {
       this.getList()
-    }
-    /* handleDelete(row, index) {
-      this.$confirm('确定退选该试题, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        // 发送请求
-        console.log('stuId', row.id)
-        console.log('teachingTaskId', this.currentTeachingTaskId)
-        axiosPost(DELETE_SELECTED_STUDENT, { stuId: row.id, teachingTaskId: this.currentTeachingTaskId })
-          .then(response => {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            this.getList()
-          })
+    },
+
+    // 删除试题
+    handleDelete(row) {
+      this.deleteQuestion(row.id)
+        .then(() => {
+          this.$message.success('试题删除成功')
+          this.getList()
+        })
+    },
+    // 修改试题点击事件
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      this.temp.rawOption = this.reverseFormatOptions()
+      this.temp.teachingTaskId = this.oldTeachingTaskId
+      this.previewImgUrl = this.temp.questionUrl
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
       })
-    } */
+    }
   }
 }
 </script>
@@ -469,6 +543,19 @@ export default {
       height: 178px;
       line-height: 178px;
       text-align: center;
+    }
+    ::v-deep .avatar-uploader-delete {
+      display: block;
+      width: 15px;
+      height: 15px;
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      z-index: 999;
+      font-style: normal;
+      font-weight: bold;
+      color: #F56C6C;
+      cursor: pointer;
     }
     .avatar {
       width: 178px;
