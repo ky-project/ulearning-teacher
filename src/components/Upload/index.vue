@@ -12,6 +12,10 @@ import { axios2 } from '@/utils/axios'
 export default {
   name: 'Upload',
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     className: {
       type: String,
       default: ''
@@ -54,6 +58,7 @@ export default {
   },
   methods: {
     clickHandler() {
+      if (this.disabled) return
       this.$refs.input.click()
     },
     changeHandler() {
@@ -96,6 +101,8 @@ export default {
 }
 
 </script>
-<style lang='' scoped>
-
+<style lang='scss' scoped>
+.disabled {
+  color: #ccc;
+}
 </style>

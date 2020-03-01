@@ -15,6 +15,7 @@ export const DELETE_SELECTED_STUDENT_URL = '/teacher/studentTeachingTask/remove'
 // 试题管理
 export const GET_QUESTION_PAGE_URL = '/teacher/courseQuestion/pageList' // 分页查询课程试题
 export const ADD_QUESTION_URL = '/teacher/courseQuestion/save' // 添加试题
+export const ADD_QUESTION_IMG_URL = '/teacher/courseQuestion/saveQuestionFile' // 添加试题图片
 // 文件资料管理
 export const GET_ROOT_FOLDER_URL = '/teacher/courseDocumentation/getRootFolder' // 查询文件资料根节点
 export const GET_DOCUMENTATION_LIST_URL = '/teacher/courseDocumentation/list' // 查询文件资料列表

@@ -15,7 +15,7 @@ const store = new Vuex.Store({
     user
   },
   getters,
-  plugins: [new VuexPersistence({ storage: window.sessionStorage }).plugin]
+  plugins: [new VuexPersistence().plugin]
 })
 
 export default store

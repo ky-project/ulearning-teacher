@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container question-bank">
     <!-- 查询 -->
     <div class="filter-container">
       <el-select
@@ -60,7 +60,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="题目" align="center" width="200">
+      <el-table-column label="试题内容" align="center" min-width="120">
         <template slot-scope="{row}">
           <span>{{ row.questionText }}</span>
         </template>
@@ -70,19 +70,19 @@
           <span>{{ row.questionKnowledge }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="题型" min-width="50" align="center">
+      <el-table-column label="试题类型" min-width="120" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.questionType }}</span>
+          <span>{{ optionMap[row.questionType] }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="图片" min-width="120" align="center">
+      <el-table-column label="试题类型" min-width="120" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.questionUrl }}</span>
+          <span>{{ optionMap[row.questionType] }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="参考答案" min-width="120" align="center">
+      <el-table-column label="试题选项" min-width="120" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.questionKey }}</span>
+          <span>{{ row.questionOption }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
@@ -108,7 +108,7 @@
       @pagination="setPagination"
     />
     <!-- 弹窗 -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog class="question-bank__dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -117,7 +117,7 @@
         label-width="80px"
       >
         <el-form-item label="教学任务" prop="teachingTaskId">
-          <el-select v-model="temp.teachingTaskId">
+          <el-select v-model="temp.teachingTaskId" size="mini">
             <el-option
               v-for="item in teachingTaskList"
               :key="item.id"
@@ -126,33 +126,38 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="题目" prop="questionText">
-          <el-input v-model="temp.questionText" />
-        </el-form-item>
-        <el-form-item label="知识模块" prop="questionKnowledge">
-          <el-input v-model="temp.questionKnowledge" />
-        </el-form-item>
-        <el-form-item label="试题类型" prop="questionType">
-          <el-select
-            v-model="temp.questionType"
-          >
-            <el-option
-              v-for="item in typeList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="参考答案" prop="questionKey">
+        <el-form-item label="试题内容" prop="questionText">
           <el-input
-            v-model="temp.questionKey"
-            type="textarea"
-            autosize
-            :style="{resize: 'none'}"
+            v-model="temp.questionText"
+            size="mini"
           />
         </el-form-item>
-
+        <el-form-item label="知识模块" prop="questionKnowledge">
+          <el-input
+            v-model="temp.questionKnowledge"
+            size="mini"
+          />
+        </el-form-item>
+        <SelectQuestoinType
+          :type.sync="temp.questionType"
+          :options.sync="temp.rawOption"
+          :answer.sync="temp.questionKey"
+          option-prop="rawOption"
+          :option-rule="rules.value"
+          type-prop="questionType"
+          answer-prop="questionKey"
+        />
+        <el-form-item label="试题图片">
+          <el-upload
+            class="avatar-uploader"
+            action=""
+            :show-file-list="false"
+            :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="previewImgUrl" :src="previewImgUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+          </el-upload>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -169,16 +174,18 @@
 <script>
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
-import { axiosGet, axiosPost } from '@/utils/axios'
+import SelectQuestoinType from './components/SelectQuestoinType'
+import { axiosGet, axiosPost, axios2 } from '@/utils/axios'
 import {
   GET_ALL_TEACHING_TASK_URL,
   GET_QUESTION_PAGE_URL,
-  ADD_QUESTION_URL
+  ADD_QUESTION_URL,
+  ADD_QUESTION_IMG_URL
 } from '@/api/url'
 
 export default {
-  name: 'StudentManage',
-  components: { Pagination },
+  name: 'QuestionBank',
+  components: { Pagination, SelectQuestoinType },
   directives: { waves },
   data() {
     return {
@@ -207,8 +214,12 @@ export default {
         questionType: '',
         questionText: '',
         questionKnowledge: '',
-        questionKey: ''
+        questionKey: '',
+        rawOption: [],
+        questionOption: ''
       },
+      optionMap: { 1: '选择题', 2: '判断题', 3: '多选题', 4: '填空天' },
+      previewImg: '', // 预览图片
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -220,8 +231,14 @@ export default {
         questionType: [{ required: true, message: '请选择试题类型', trigger: 'change' }],
         questionText: [{ required: true, message: '请输入试题内容', trigger: 'blur' }],
         questionKnowledge: [{ required: true, message: '请输入知识模块', trigger: 'blur' }],
-        questionKey: [{ required: true, message: '请输入参考答案', trigger: 'blur' }]
+        questionKey: [{ required: true, message: '请输入参考答案', trigger: 'blur' }],
+        value: [{ required: true, message: '请输入选项内容', trigger: 'blur' }]
       }
+    }
+  },
+  computed: {
+    previewImgUrl() {
+      return this.previewImg ? this.getObjectURL(this.previewImg) : ''
     }
   },
   created() {
@@ -231,22 +248,104 @@ export default {
       })
   },
   methods: {
+    getType(type) {
+
+    },
+    // 获取本地图片url
+    getObjectURL(file) {
+      let url = null
+      if (window.createObjectURL) {
+        url = window.createObjectURL(file)
+      } else if (window.URL) {
+        url = window.URL.createObjectURL(file)
+      } else if (window.webkitURL) {
+        url = window.webkitURL.createObjectURL(file)
+      }
+      return url
+    },
+    // 图片校验及预览
+    beforeAvatarUpload(file) {
+      // 校验格式
+      const isIMG = file.type === 'image/jpeg' || file.type === 'image/png'
+      const isLt4M = file.size / 1024 / 1024 < 4
+      if (!isIMG) {
+        this.$message.error('题目图片只能是 JPG或png 格式!')
+      }
+      if (!isLt4M) {
+        this.$message.error('上传题目图片大小不能超过 4MB!')
+      }
+      // 预览本地图片
+      if (isIMG && isLt4M) {
+        this.previewImg = file
+      }
+      return false
+    },
+    // 格式化选项 [{label: A, value: 2}] => A=2|#|B=3
+    formatOptions() {
+      const tempArr = this.temp.rawOption.map(option => { return `${option.label}=${option.value}` })
+      this.temp.questionOption = tempArr.join('|#|')
+      // console.log(this.temp.questionOption)
+    },
+    // 添加试题请求
+    addQuestion(data) {
+      return new Promise((resolve, reject) => {
+        axiosPost(ADD_QUESTION_URL, data)
+          .then(response => {
+            resolve()
+          })
+          .catch(error => {
+            this.$message.error(error.message || '出错')
+            reject(error)
+          })
+      })
+    },
+    // 获取图片url请求
+    addQuestionImg(imgFile) {
+      return new Promise((resolve, reject) => {
+        const formData = new FormData()
+        formData.append('questionFile', imgFile)
+        axios2({
+          url: ADD_QUESTION_IMG_URL,
+          method: 'POST',
+          data: formData,
+          header: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+          resolve(response.data.questionUrl)
+        }).catch(error => {
+          this.$message.error(error.message || '出错')
+          reject(error)
+        })
+      })
+    },
+    // 添加试题
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          // 1. 添加试题
-          axiosPost(ADD_QUESTION_URL, this.temp)
-            .then(response => {
-              this.$message({
-                type: 'success',
-                message: '试题添加成功'
+          // 格式化选项
+          this.formatOptions()
+          // 获取图片url
+          if (this.previewImg) {
+            this.addQuestionImg((this.previewImg))
+              .then(imgUrl => {
+                this.temp.questionUrl = imgUrl
+                this.addQuestion(this.temp)
+                  .then(response => {
+                    this.$message.success('试题添加成功')
+                    this.dialogFormVisible = false
+                  })
               })
-              this.getList()
-              this.dialogFormVisible = false
-            })
+          } else {
+            // 发送请求
+            this.addQuestion(this.temp)
+              .then(response => {
+                this.$message.success('试题添加成功')
+                this.dialogFormVisible = false
+              })
+          }
         }
       })
     },
+    // 重置添加修改表单
     resetTemp() {
       this.temp = {
         id: '',
@@ -257,6 +356,7 @@ export default {
         questionKnowledge: '',
         questionKey: ''
       }
+      this.previewImg = ''
     },
     // 添加
     handleCreate() {
@@ -333,22 +433,56 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.filter-container {
-  padding-bottom: 10px;
-  .filter-item {
-    display: inline-block;
-    vertical-align: middle;
-    margin-bottom: 10px;
+.question-bank {
+  .filter-container {
+    padding-bottom: 10px;
+    .filter-item {
+      display: inline-block;
+      vertical-align: middle;
+      margin-bottom: 10px;
+    }
+  }
+  &__dialog {
+    ::v-deep .el-input {
+      width: calc(100% - 50px);
+    }
+    ::v-deep .el-select {
+      width: calc(100% - 50px);
+      .el-input {
+        width: 100%;
+      }
+    }
+    ::v-deep .avatar-uploader .el-upload {
+      border: 2px dashed #eeeeee;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    ::v-deep .avatar-uploader .el-upload:hover {
+      border-color: #409EFF;
+    }
+    ::v-deep .avatar-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      width: 178px;
+      height: 178px;
+      line-height: 178px;
+      text-align: center;
+    }
+    .avatar {
+      width: 178px;
+      height: 178px;
+      display: block;
+    }
   }
 }
+
 </style>
 <style lang="scss">
 .app-container {
   .el-dialog__body {
     padding-bottom: 0;
-  }
-  .el-select {
-    width: 100%;
   }
   textarea {
     resize: none;

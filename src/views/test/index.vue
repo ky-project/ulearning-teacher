@@ -1,21 +1,26 @@
 <template>
   <div>
-    <UploadAttachment v-model="value" />
+    <el-form ref="form" :model="form" label-width="80px">
+      <SelectQuestoinType :type.sync="type" :options.sync="options" :answer.sync="answer" />
+    </el-form>
   </div>
 </template>
 
 <script>
-import UploadAttachment from '@/components/UploadAttachment'
+import SelectQuestoinType from '@/views/questionBank/components/SelectQuestoinType'
 export default {
   name: '',
 
-  components: { UploadAttachment },
+  components: { SelectQuestoinType },
   props: {
 
   },
   data() {
     return {
-      value: ''
+      form: {},
+      type: '',
+      options: [],
+      answer: ''
     }
   },
 
@@ -27,8 +32,7 @@ export default {
 
   mounted() {},
 
-  methods: {
-  }
+  methods: {}
 
 }
 

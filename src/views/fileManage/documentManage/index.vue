@@ -3,7 +3,7 @@
     <!-- 操作栏 -->
     <div class="operator-bar">
       <ul class="operator-bar__list clear-fix">
-        <li class="operator-bar__list-item fl">
+        <li :class="['operator-bar__list-item', 'fl', {disabled: zone}]">
           <svg-icon icon-class="shangchuan" />
           <upload
             :url="uploadUrl"
@@ -13,33 +13,52 @@
             :on-uploading="onUploading"
             :on-success="onSuccess"
             :on-error="onError"
+            :disabled="!!zone"
           >
             <span>上传</span>
           </upload>
         </li>
-        <li class="operator-bar__list-item fl">
+        <li :class="['operator-bar__list-item', 'fl']">
           <svg-icon icon-class="xiazai" />
           <span>下载</span>
         </li>
-        <li class="operator-bar__list-item fl">
+        <li :class="['operator-bar__list-item', 'fl', {disabled: zone}]">
           <svg-icon icon-class="gongxiang" />
           <span>共享</span>
         </li>
-        <li class="operator-bar__list-item fl">
+        <li :class="['operator-bar__list-item', 'fl', {disabled: zone}]">
           <svg-icon icon-class="shanchu" />
           <span>删除</span>
         </li>
-        <li class="operator-bar__list-item fl" @click="addFolder">
+        <li :class="['operator-bar__list-item', 'fl', {disabled: zone}]" @click="addFolder">
           <svg-icon icon-class="xinjian" />
           <span>新建文件夹</span>
         </li>
       </ul>
+      <el-button class="zone fr" type="text" @click="changeZone">{{ zone ? '个人区' : '共享区' }}</el-button>
     </div>
     <!-- 二级导航 -->
     <div class="sub-nav">
       <file-nav :data="navList" @update="handleUpdate" />
       <div class="filter fr">
         <el-select
+          v-if="zone"
+          v-model="teachingTaskId"
+          placeholder="课程"
+          style="width: 200px;"
+          class="filter-item"
+          size="mini"
+          :style="{marginTop: '5px'}"
+        >
+          <el-option
+            v-for="item in teachingTask"
+            :key="item.id"
+            :label="item.teachingTaskAlias"
+            :value="item.id"
+          />
+        </el-select>
+        <el-select
+          v-else
           v-model="teachingTaskId"
           placeholder="教学任务"
           style="width: 200px;"
@@ -118,6 +137,14 @@
           <span>{{ setFileSize(scope.row.fileSize) }}</span>
         </template>
       </el-table-column>
+      <el-table-column
+        label="更新时间"
+        min-width="100px"
+      >
+        <template slot-scope="scope">
+          <span>{{ scope.row.updateTime }}</span>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 右键菜单 -->
     <right-menu
@@ -153,6 +180,7 @@ export default {
   props: [''],
   data() {
     return {
+      zone: 0, // 0-personal , 1-share
       teachingTaskId: '', // 教学任务id
       fileParentId: '', // 父文件id
       currentFileList: [], // 当前文件列表
@@ -204,6 +232,9 @@ export default {
   mounted() {},
 
   methods: {
+    changeZone() {
+      this.zone = this.zone ? 0 : 1
+    },
     share(item) {
       console.log(item.documentationShared)
       const data = {
@@ -391,6 +422,7 @@ export default {
     },
     // 新建文件夹
     addFolder() {
+      if (this.zone) { return }
       const data = {
         fileParentId: this.fileParentId,
         fileName: this.getNewFileName(),
@@ -452,11 +484,20 @@ export default {
       span {
         font-size: 14px;
       }
+      span.disabled {
+        color: #ccc;
+      }
       &:hover {
         color:#409EFF;
         // border: 1px solid #409EFF;
         cursor: pointer;
       }
+    }
+    .zone {
+      padding: 8px 10px;
+    }
+    .disabled {
+      color: #ccc;
     }
   }
   .sub-nav {
