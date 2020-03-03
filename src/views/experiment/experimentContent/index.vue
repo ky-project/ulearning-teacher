@@ -38,7 +38,7 @@
         </div>
       </div>
       <upload-attachment v-model="attachment" />
-      <tinymce v-model="experimentContent" :toolbar="toolbar" menubar="" />
+      <tinymce v-model="experimentContent" height="280px" :toolbar="toolbar" menubar="" />
     </div>
   </div>
 </template>

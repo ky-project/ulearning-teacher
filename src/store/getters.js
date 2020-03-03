@@ -10,6 +10,7 @@ const getters = {
   exam: state => state.exam.exam,
   questionKnowledges: state => state.exam.exam.examinationParameters.questionKnowledges,
   questionDifficulty: state => state.exam.exam.examinationParameters.questionDifficulty,
+  quantity: state => state.exam.exam.examinationParameters.quantity,
   quantity: state => state.exam.exam.examinationParameters.quantity
 }
 export default getters

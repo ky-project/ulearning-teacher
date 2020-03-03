@@ -140,17 +140,20 @@ export const constantRoutes = [
         path: 'exam-initial',
         name: 'ExamInitial',
         hidden: true,
-        component: () => import('@/views/exam/examInitial')
+        component: () => import('@/views/exam/examInitial'),
+        meta: { title: '基本信息' }
       },
       {
         path: 'exam-parameter',
         name: 'ExamParameter',
-        component: () => import('@/views/exam/examParameter')
+        component: () => import('@/views/exam/examParameter'),
+        meta: { title: '参数设置' }
       },
       {
         path: 'exam-state',
         name: 'ExamState',
-        component: () => import('@/views/exam/examState')
+        component: () => import('@/views/exam/examState'),
+        meta: { title: '状态设置' }
       }
     ]
   },

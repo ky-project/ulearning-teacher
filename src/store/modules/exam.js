@@ -1,5 +1,8 @@
 
 import { noneDuplicate } from '@/utils'
+import { ADD_EXAM_URL } from '@/api/url'
+import { axiosPost } from '@/utils/axios'
+import { Message } from 'element-ui'
 function getDefaultExam() {
   return {
     examinationDuration: '',
@@ -30,8 +33,8 @@ function getDefaultExam() {
         }
       ]
     },
-    examinationShowResult: '',
-    examinationState: '',
+    examinationShowResult: 1,
+    examinationState: 1, // 1：未发布 2：未开始 3：进行中 4：已结束
     teachingTaskId: ''
   }
 }
@@ -78,10 +81,29 @@ const mutations = {
   },
   CLEAR_KNOWLEDGE: state => {
     state.exam.examinationParameters.questionKnowledges = []
+  },
+  RESET_EXAM: state => {
+    state.exam = getDefaultExam()
   }
 }
 
 const actions = {
+  addExam({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      const data = Object.assign({}, state.exam)
+      data.examinationParameters = JSON.stringify(data.examinationParameters)
+      axiosPost(ADD_EXAM_URL, data)
+        .then(response => {
+          commit('RESET_EXAM')
+          this.$message.success('测试添加成功')
+          resolve()
+        })
+        .catch(error => {
+          Message.error(error.message || '出错')
+          reject(error)
+        })
+    })
+  }
 }
 
 export default {
