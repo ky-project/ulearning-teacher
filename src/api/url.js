@@ -36,16 +36,16 @@ export const BATCHSHARE_DOCUMENTATION_URL = '/teacher/courseDocumentation/batchU
 // 教学资源管理
 export const GET_ROOT_FOLDER_URL2 = '/teacher/courseResource/getRootFolder' // 查询教学资源根节点
 export const GET_SHAREROOT_FOLDER_URL2 = '/teacher/courseResource/getSharedRootFolder' // 查询教学资源分享区根节点
-export const GET_DOCUMENTATION_LIST_URL2 = '/teacher/courseResource/list' // 查询教学资源列表
-export const GET_DOCUMENTATION_SHARELIST_URL2 = '/teacher/courseResource/sharedList' // 查询分享区列表
+export const GET_RESOURCE_LIST_URL2 = '/teacher/courseResource/list' // 查询教学资源列表
+export const GET_RESOURCE_SHARELIST_URL2 = '/teacher/courseResource/sharedList' // 查询分享区列表
 export const ADD_FOLDER_URL2 = '/teacher/courseResource/saveFolder' // 添加文件夹
-export const DELETE_DOCUMENTATION_URL2 = '/teacher/courseResource/delete' // 删除教学资源
-export const BATCHDELETE_DOCUMENTATION_URL2 = '/teacher/courseResource/batchDelete' // 批量删除教学资源
-export const UPDATE_DOCUMENTATION_URL2 = '/teacher/courseResource/update' // 更新教学资源
-export const UPLOAD_DOCUMENTATION_URL2 = '/teacher/courseResource/saveFile' // 上传文件
+export const DELETE_RESOURCE_URL2 = '/teacher/courseResource/delete' // 删除教学资源
+export const BATCHDELETE_RESOURCE_URL2 = '/teacher/courseResource/batchDelete' // 批量删除教学资源
+export const UPDATE_RESOURCE_URL2 = '/teacher/courseResource/update' // 更新教学资源
+export const UPLOAD_RESOURCE_URL2 = '/teacher/courseResource/saveFile' // 上传文件
 export const DOWNLOAD_DOCUMENTAION_URL2 = '/teacher/courseResource/download' // 下载教学资源
-export const SHARE_DOCUMENTATION_URL2 = '/teacher/courseResource/updateShared' // 分享教学资源
-export const BATCHSHARE_DOCUMENTATION_URL2 = '/teacher/courseResource/batchUpdateShared' // 批量分享教学资源
+export const SHARE_RESOURCE_URL2 = '/teacher/courseResource/updateShared' // 分享教学资源
+export const BATCHSHARE_RESOURCE_URL2 = '/teacher/courseResource/batchUpdateShared' // 批量分享教学资源
 // 实验管理
 export const GET_EXPERIMENT_PAGE_URL = '/teacher/teachingTaskExperiment/pageList' // 分页查询实验信息
 export const ADD_ATTACHMENT_URL = '/teacher/teachingTaskExperiment/uploadAttachment' // 添加附件

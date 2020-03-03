@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import Card from '@/views/exam/components/Card'
+// import Card from '@/views/exam/components/Card'
 export default {
   name: '',
 
-  components: { Card },
+  components: { },
   props: {
 
   },

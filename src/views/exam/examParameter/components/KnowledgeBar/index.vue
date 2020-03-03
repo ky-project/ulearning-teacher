@@ -8,19 +8,19 @@
         </div>
       </template>
       <div class="knowledge-bar__body">
-        <!-- <el-scrollbar style="height:100%"> -->
-        <ul class="list">
-          <li
-            v-for="item in knowledgeList"
-            :key="item.key"
-            class="item"
-            @click="() => {addKnowledge(item)}"
-          >
-            <svg-icon icon-class="jia" class="icon" />
-            <span>{{ item.label }}</span>
-          </li>
-        </ul>
-        <!-- </el-scrollbar> -->
+        <el-scrollbar style="height:100%">
+          <ul class="list">
+            <li
+              v-for="item in knowledgeList"
+              :key="item.key"
+              class="item"
+              @click="() => {addKnowledge(item)}"
+            >
+              <svg-icon icon-class="jia" class="icon" />
+              <span>{{ item.label }}</span>
+            </li>
+          </ul>
+        </el-scrollbar>
       </div>
     </el-card>
   </div>
@@ -35,11 +35,7 @@ export default {
   data() {
     return {
       teachingTaskAlias: '',
-      knowledgeList: [
-        { key: '集合与常用逻辑用语', label: '集合与常用逻辑用语' },
-        { key: '一元一次方程', label: '一元一次方程' },
-        { key: '代数运算', label: '代数运算' }
-      ]
+      knowledgeList: []
     }
   },
 
@@ -111,7 +107,7 @@ export default {
     }
   }
   &__body {
-    // height: calc(100vh - 205px);
+    height: calc(100vh - 205px);
     padding-bottom: 20px;
     ::v-deep .el-scrollbar__wrap {
       overflow-x: hidden;

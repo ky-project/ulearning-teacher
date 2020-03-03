@@ -73,8 +73,7 @@ export default {
     // width: calc(100% - 200px);
     height: calc(100vh - 110px);
     overflow-y: auto;
-    background: #ccc;
-
+    background: #eee;
     .el-main {
       overflow: unset;
     }
@@ -84,6 +83,7 @@ export default {
   }
   &__aside {
     // width: 200px;
+    padding-right: 20px;
     padding-top: 20px;
     background-color: #eee;
   }

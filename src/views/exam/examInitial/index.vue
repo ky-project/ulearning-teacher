@@ -58,6 +58,13 @@ export default {
   components: { Step },
   props: [''],
   data() {
+    var validateDuration = (rule, value, callback) => {
+      if (value === 0) {
+        callback(new Error('请输入考试时长'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
         teachingTaskId: '',
@@ -72,7 +79,7 @@ export default {
           { required: true, message: '请输入试卷名称', trigger: 'blur' }
         ],
         'examinationDuration': [
-          { required: true, message: '请输入考试时长', trigger: ['blur', 'change'] }
+          { validator: validateDuration, trigger: ['blur', 'change'] }
         ]
       }
       // teachingTask: []

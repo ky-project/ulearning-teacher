@@ -115,7 +115,7 @@
           <div class="operator fr">
             <svg-icon
               v-if="!zone"
-              :icon-class="scope.row.documentationShared ? 'quxiaogongxiang' : 'gongxiang'"
+              :icon-class="scope.row.resourceShared ? 'quxiaogongxiang' : 'gongxiang'"
               class-name="item-icon"
               @click="share(scope.row)"
             />
@@ -173,17 +173,17 @@
 import { mapGetters } from 'vuex'
 import {
   GET_ROOT_FOLDER_URL2, // 查询教学资源根节点
-  GET_DOCUMENTATION_LIST_URL2, // 查询教学资源列表
+  GET_RESOURCE_LIST_URL2, // 查询教学资源列表
   ADD_FOLDER_URL2, // 添加文件夹
-  DELETE_DOCUMENTATION_URL2, // 删除教学资源
-  UPDATE_DOCUMENTATION_URL2, // 更新教学资源
-  UPLOAD_DOCUMENTATION_URL2, // 上传文件
-  DOWNLOAD_DOCUMENTAION_URL2, // 下载文件
-  SHARE_DOCUMENTATION_URL2, // 分享教学资源
-  BATCHSHARE_DOCUMENTATION_URL2, // 批量分享教学资源
-  BATCHDELETE_DOCUMENTATION_URL2, // 批量删除教学资源
+  DELETE_RESOURCE_URL2, // 删除教学资源
+  UPDATE_RESOURCE_URL2, // 更新教学资源
+  UPLOAD_RESOURCE_URL2, // 上传文件
+  DOWNLOAD_RESOURCE_URL2, // 下载文件
+  SHARE_RESOURCE_URL2, // 分享教学资源
+  BATCHSHARE_RESOURCE_URL2, // 批量分享教学资源
+  BATCHDELETE_RESOURCE_URL2, // 批量删除教学资源
   GET_SHAREROOT_FOLDER_URL2, // 查询教学资源分享区根节点
-  GET_DOCUMENTATION_SHARELIST_URL2 // 查询教学资源分享区列表
+  GET_RESOURCE_SHARELIST_URL2 // 查询教学资源分享区列表
 } from '@/api/url'
 import { isFile } from '@/utils/validate'
 import FileNav from '@/views/fileManage/components/FileNav'
@@ -223,12 +223,12 @@ export default {
       return {
         fileParentId: this.fileParentId,
         teachingTaskId: this.teachingTaskId,
-        documentationShared: false,
-        documentationCategory: 1 // 暂时不用
+        resourceShared: false,
+        resourceType: 1 // 暂时不用
       }
     },
     uploadUrl() {
-      return UPLOAD_DOCUMENTATION_URL2
+      return UPLOAD_RESOURCE_URL2
     }
   },
   watch: {
@@ -258,16 +258,16 @@ export default {
     },
     // 格式化分享列
     isShare(item) {
-      return item.documentationShared ? '是' : '否'
+      return item.resourceShared ? '是' : '否'
     },
     // 行选择事件
     handleSelectionChange(val) {
       this.multipleSelection = val
     },
     // 批量删除文件
-    batchDeleteDocumentation(data) {
+    batchDeleteResource(data) {
       return new Promise((resolve, reject) => {
-        axiosGet(BATCHDELETE_DOCUMENTATION_URL2, { params: data })
+        axiosGet(BATCHDELETE_RESOURCE_URL2, { params: data })
           .then(response => {
             resolve()
           })
@@ -278,9 +278,9 @@ export default {
       })
     },
     // 批量分享文件
-    batchShareDocumentation(data) {
+    batchShareResource(data) {
       return new Promise((resolve, reject) => {
-        axiosPost(BATCHSHARE_DOCUMENTATION_URL2, data)
+        axiosPost(BATCHSHARE_RESOURCE_URL2, data)
           .then(response => {
             resolve()
           })
@@ -294,7 +294,7 @@ export default {
     batchDelete() {
       const tempArr = this.multipleSelection.map(item => item.id)
       const ids = tempArr.join(',')
-      this.batchDeleteDocumentation({ ids })
+      this.batchDeleteResource({ ids })
         .then(() => {
           this.getFileList()
         })
@@ -307,27 +307,27 @@ export default {
         ids,
         resourceShared: true
       }
-      this.batchShareDocumentation(data)
+      this.batchShareResource(data)
         .then(() => {
           this.getFileList()
         })
     },
     // 分享/取消事件
     share(item) {
-      // console.log(item.documentationShared)
+      // console.log(item.resourceShared)
       const data = {
         resourceShared: !item.resourceShared,
         id: item.id
       }
-      this.shareDocumentation(data)
+      this.shareResource(data)
         .then(() => {
           this.getFileList()
         })
     },
     // 分享文件
-    shareDocumentation(data) {
+    shareResource(data) {
       return new Promise((resolve, reject) => {
-        axiosPost(SHARE_DOCUMENTATION_URL2, data)
+        axiosPost(SHARE_RESOURCE_URL2, data)
           .then(response => {
             resolve()
           })
@@ -350,7 +350,7 @@ export default {
       var a = document.createElement('a')
       a.download = fileName
       a.style.display = 'none'
-      const fileurl = process.env.VUE_APP_BASE_API + DOWNLOAD_DOCUMENTAION_URL2 + '?id=' + id
+      const fileurl = process.env.VUE_APP_BASE_API + DOWNLOAD_RESOURCE_URL2 + '?id=' + id
       a.href = fileurl
       document.body.appendChild(a)
       a.click() // 触发点击
@@ -419,7 +419,7 @@ export default {
     // 修改文件
     updateFile(data) {
       return new Promise((resolve, reject) => {
-        axiosPost(UPDATE_DOCUMENTATION_URL2, data)
+        axiosPost(UPDATE_RESOURCE_URL2, data)
           .then(response => {
             console.log(response)
             resolve(response.data)
@@ -504,7 +504,7 @@ export default {
         }
         if (!this.zone) {
           this.loading = true
-          axiosGet(GET_DOCUMENTATION_LIST_URL2, { params: data })
+          axiosGet(GET_RESOURCE_LIST_URL2, { params: data })
             .then(response => {
               this.currentFileList = this.formatFileList(response.data)
               this.loading = false
@@ -516,9 +516,9 @@ export default {
               reject(error)
             })
         } else {
-          // GET_DOCUMENTATION_SHARELIST_URL2
+          // GET_RESOURCE_SHARELIST_URL2
           this.loading = true
-          axiosGet(GET_DOCUMENTATION_SHARELIST_URL2, { params: data })
+          axiosGet(GET_RESOURCE_SHARELIST_URL2, { params: data })
             .then(response => {
               this.currentFileList = this.formatFileList(response.data)
               this.loading = false
@@ -568,7 +568,7 @@ export default {
     },
     // 删除文件/文件夹
     deleteFolder(fileId) {
-      axiosGet(DELETE_DOCUMENTATION_URL2, { params: { id: fileId }})
+      axiosGet(DELETE_RESOURCE_URL2, { params: { id: fileId }})
         .then(response => {
           this.getFileList()
         })
