@@ -50,7 +50,7 @@
         class="filter-item fr"
         style="margin-left: 10px;"
         type="primary"
-        @click="handleCreate"
+        @click="() => { $router.push('/exam/exam-initial')}"
       >
         组卷
       </el-button>
@@ -168,7 +168,7 @@ import { mapGetters } from 'vuex'
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 // import { isEmail, isPhone } from '@/utils/validate'
-import { GET_EXAM_PAGE } from '@/api/url'
+import { GET_EXAM_PAGE_URL } from '@/api/url'
 import { axiosGet } from '@/utils/axios'
 
 export default {
@@ -261,7 +261,7 @@ export default {
     },*/
     getExamPage() {
       return new Promise((resolve, reject) => {
-        axiosGet(GET_EXAM_PAGE, { params: this.listQuery })
+        axiosGet(GET_EXAM_PAGE_URL, { params: this.listQuery })
           .then(response => {
             resolve(response)
           })

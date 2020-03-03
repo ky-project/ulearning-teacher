@@ -65,6 +65,7 @@
 <script>
 import { axiosGet } from '@/utils/axios'
 import { VCODE_URL } from '@/api/url'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Login',
@@ -99,6 +100,9 @@ export default {
     this.getcode()
   },
   methods: {
+    ...mapActions({
+      'login': 'user/login'
+    }),
     getcode() {
       axiosGet(VCODE_URL)
         .then((res) => {
@@ -119,15 +123,15 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', { ...this.loginForm, uuid: this.code.uuid }).then(() => {
-            this.$router.push({ path: '/' })
-            this.loading = false
-          }).catch(() => {
-            this.getcode()
-            this.loading = false
-          })
-        } else {
-          return false
+          this.login({ ...this.loginForm, uuid: this.code.uuid })
+            .then(() => {
+              this.loading = false
+              this.$router.push({ path: '/' })
+            }).catch((error) => {
+              this.$message.error(error.message || '出错')
+              this.getcode()
+              this.loading = false
+            })
         }
       })
     }

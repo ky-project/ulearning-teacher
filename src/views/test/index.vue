@@ -1,26 +1,26 @@
 <template>
   <div>
-    <el-form ref="form" :model="form" label-width="80px">
-      <SelectQuestoinType :type.sync="type" :options.sync="options" :answer.sync="answer" />
-    </el-form>
+    <Card />
+    <!-- <div class="wrapper">
+      <div class="box1" />
+      <div class="box2" />
+      x
+    </div> -->
   </div>
 </template>
 
 <script>
-import SelectQuestoinType from '@/views/questionBank/components/SelectQuestoinType'
+import Card from '@/views/exam/components/Card'
 export default {
   name: '',
 
-  components: { SelectQuestoinType },
+  components: { Card },
   props: {
 
   },
   data() {
     return {
-      form: {},
-      type: '',
-      options: [],
-      answer: ''
+
     }
   },
 
@@ -37,6 +37,24 @@ export default {
 }
 
 </script>
-<style lang='' scoped>
-
+<style lang='scss' scoped>
+/* .wrapper {
+  line-height: 40px;
+  font-size: 0;
+  background-color: #ccc;
+  .box1 {
+    vertical-align: middle;
+    display: inline-block;
+    width: 5px;
+    height: 20px;
+    background-color: red;
+  }
+  .box2 {
+    vertical-align: middle;
+    display: inline-block;
+    width: 5px;
+    height: 10px;
+    background: green;
+  }
+} */
 </style>

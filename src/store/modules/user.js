@@ -94,7 +94,7 @@ const actions = {
       axiosPost(LOGIN_URL, userInfo)
         .then(response => {
           // 获取用户,角色信息,教学任务
-          Promise.all([dispatch('getInfo'), dispatch('getRole'), dispatch('getTeachingTask')])
+          // Promise.all([dispatch('getInfo'), dispatch('getRole'), dispatch('getTeachingTask')])
           resolve()
         })
         .catch(error => {

@@ -1,0 +1,118 @@
+<template>
+  <div class="exam-quantity">
+    <card title="设置题型及数量" class="condition" width="100%">
+      <template v-slot:body>
+        <div class="line flex justify-between">
+          <quantity-picker
+            v-for="item in quantity"
+            :key="item.questionType"
+            :value="item"
+            @update-amount="setAmount"
+            @update-grade="setGrade"
+          />
+        </div>
+        <div class="next">
+          <el-button
+            type="primary"
+            :style="{width: '100%'}"
+            size="mini"
+            @click="next"
+          >
+            下一步
+          </el-button>
+        </div>
+      </template>
+    </card>
+  </div>
+</template>
+
+<script>
+import { mapGetters, mapMutations } from 'vuex'
+import Card from './../Card'
+import QuantityPicker from './../QuantityPicker'
+export default {
+  name: 'ExamQuantity',
+
+  components: { Card, QuantityPicker },
+  props: [''],
+  data() {
+    return {
+      typeMap: {
+        '1': '选择题',
+        '2': '判断题',
+        '3': '多选题',
+        '4': '填空题'
+      }
+    }
+  },
+
+  computed: {
+    ...mapGetters(['quantity', 'exam'])
+  },
+
+  watch: {},
+
+  beforeMount() {},
+
+  mounted() {},
+
+  methods: {
+    ...mapMutations({
+      'setAmount': 'exam/SET_AMOUNT',
+      'setGrade': 'exam/SET_GRADE',
+      'validateParameters': 'exam/VALIDATE_PARAMETERS'
+    }),
+    next() {
+      const result = this.validateParameters()
+      if (result === true) {
+        this.$confirm('请确保试题发布时，试题库数量充足，否则按最大题目数量出题（全部学生题目一样）', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$router.push('/exam/exam-state')
+        }).catch(() => {
+          this.$router.push('/exam/exam-state')
+        })
+      } else {
+        this.$message.warning(result)
+      }
+    },
+    validateParameters() {
+      const { questionKnowledges, quantity } = this.exam.examinationParameters
+      if (questionKnowledges.length === 0) {
+        return '你还没有选择考试范围'
+      } else {
+        const result = quantity.findIndex(item => item.amount !== 0)
+        // console.log(result)
+        if (result === -1) {
+          return '你还没有设置题型及数量'
+        } else {
+          for (let i = 0; i < quantity.length; i++) {
+            const item = quantity[i]
+            if (item.amount !== 0 && item.grade === 0) {
+              return `你还没有设置${this.typeMap[item.questionType]}的分数`
+            }
+          }
+        }
+      }
+      return true
+    }
+  }
+
+}
+
+</script>
+<style lang='scss' scoped>
+.exam-quantity {
+  .line {
+
+  }
+  .next {
+    margin-top: 20px;
+    border-top: 1px dashed #ccc;
+    padding: 20px 0 0 0;
+    text-align: center;
+  }
+}
+</style>

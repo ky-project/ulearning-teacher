@@ -135,6 +135,22 @@ export const constantRoutes = [
         name: 'ExamStatistic',
         component: () => import('@/views/exam/examStatistic'),
         meta: { title: '统计学生成绩', icon: 'tongji' }
+      },
+      {
+        path: 'exam-initial',
+        name: 'ExamInitial',
+        hidden: true,
+        component: () => import('@/views/exam/examInitial')
+      },
+      {
+        path: 'exam-parameter',
+        name: 'ExamParameter',
+        component: () => import('@/views/exam/examParameter')
+      },
+      {
+        path: 'exam-state',
+        name: 'ExamState',
+        component: () => import('@/views/exam/examState')
       }
     ]
   },
