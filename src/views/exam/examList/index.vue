@@ -50,7 +50,7 @@
         class="filter-item fr"
         style="margin-left: 10px;"
         type="primary"
-        @click="() => { $router.push('/exam/exam-initial')}"
+        @click="generateExam"
       >
         组卷
       </el-button>
@@ -65,29 +65,85 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="测试名称" align="center" width="120">
+      <el-table-column align="center" type="expand">
         <template slot-scope="{row}">
-          <span>{{ row.examinationName }}</span>
+          <div class="row">
+            <div class="item">
+              <label>难度:</label>
+              <div>{{ difficultyMap[row.examinationParameters.questionDifficulty] }}</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="item">
+              <label>题型及数量:</label>
+              <div>
+                <span v-for="item in row.examinationParameters.quantity" :key="item.questionType">
+                  {{ `${typeMap[item.questionType]}${item.grade}分/道 共${item.amount}道` }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="item">
+              <label>知识点:</label>
+              <div>
+                <el-tag
+                  v-for="item in row.examinationParameters.questionKnowledges"
+                  :key="item.key"
+                  size="mini"
+                >
+                  {{ item.key }}
+                </el-tag>
+              </div>
+            </div>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column label="测试时间" min-width="120" align="center">
+      <el-table-column label="测试名称" align="center" min-width="100">
         <template slot-scope="{row}">
-          <span>{{ row.examinationDuration }}</span>
+          <el-input v-if="row.state" v-model="row.examinationName" type="text" size="mini" />
+          <span v-else>{{ row.examinationName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="测试状态" min-width="50" align="center">
+      <el-table-column label="测试时间" min-width="100" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.examinationState }}</span>
+          <el-input-number
+            v-if="row.state"
+            v-model="row.examinationDuration"
+            controls-position="right"
+            :min="0"
+            :step="5"
+            step-strictly
+            size="mini"
+          />
+          <span v-else>{{ row.examinationDuration }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结果反馈" min-width="120" align="center">
+      <el-table-column label="测试状态" min-width="100" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.examinationShowResult }}</span>
+          <el-select v-if="row.state" v-model="row.examinationState" placeholder="请选择" size="mini">
+            <el-option
+              v-for="item in stateOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <span v-else>{{ stateMap[row.examinationState] }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="结果反馈" min-width="100" align="center">
+        <template slot-scope="{row}">
+          <el-select v-if="row.state" v-model="row.examinationShowResult" size="mini" placeholder="请选择">
+            <el-option label="是" :value="true" />
+            <el-option label="否" :value="false" />
+          </el-select>
+          <span v-else>{{ row.examinationShowResult ? '是' : '否' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="修改时间" min-width="120" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.stuPhone }}</span>
+          <span>{{ row.updateTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
@@ -96,9 +152,10 @@
             :style="{color: '#409EFF'}"
             type="text"
             size="mini"
-            @click="handleUpdate(row)"
+            @click="() => {handleChange(row)}"
           >
-            <i class="el-icon-edit" />
+            <svg-icon v-if="row.state" icon-class="baocun" />
+            <i v-else class="el-icon-edit" />
           </el-button>
           <el-button
             :style="{color: '#F56C6C'}"
@@ -107,6 +164,14 @@
             @click="handleDelete(row,$index)"
           >
             <i class="el-icon-delete" />
+          </el-button>
+          <el-button
+            :style="{color: '#E6A23C'}"
+            size="mini"
+            type="text"
+            @click="parameterUpdate(row)"
+          >
+            <svg-icon icon-class="canshu" />
           </el-button>
         </template>
       </el-table-column>
@@ -164,12 +229,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
+import { filterObj } from '@/utils/index.js'
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 // import { isEmail, isPhone } from '@/utils/validate'
-import { GET_EXAM_PAGE_URL } from '@/api/url'
-import { axiosGet } from '@/utils/axios'
+import { GET_EXAM_PAGE_URL, UPDATE_EXAM_URL } from '@/api/url'
+import { axiosGet, axiosPost } from '@/utils/axios'
 
 export default {
   name: 'ExamList',
@@ -211,7 +277,29 @@ export default {
         { label: '未开始', value: 2 },
         { label: '进行中', value: 3 },
         { label: '已结束', value: 4 }
-      ]
+      ],
+      stateMap: {
+        // 1：未发布 2：未开始 3：进行中 4：已结束
+        1: '未发布',
+        2: '未开始',
+        3: '进行中',
+        4: '已结束'
+      },
+      typeMap: {
+        '1': '选择题',
+        '2': '判断题',
+        '3': '多选题',
+        '4': '填空题'
+      },
+      difficultyMap: {
+        0: '不限',
+        1: '容易',
+        2: '较易',
+        3: '一般',
+        4: '较难',
+        5: '困难'
+      }
+
       /* temp: {
         id: '',
         stuDept: '',
@@ -248,6 +336,40 @@ export default {
     this.getList()
   },
   methods: {
+    ...mapMutations({
+      'resetExam': 'exam/RESET_EXAM',
+      'setMode': 'exam/SET_MODE',
+      'setExam': 'exam/SET_EXAM'
+    }),
+    // 参数修改按钮点击事件
+    parameterUpdate(row) {
+      this.resetExam()
+      const data = filterObj(row, ['examinationParameters', 'teachingTaskId', 'id'])
+      this.setExam(data)
+      this.setMode('update')
+      this.$router.push('/exam/exam-parameter')
+    },
+    // 组卷按钮点击事件
+    generateExam() {
+      // 清空exam
+      this.resetExam()
+      this.setMode('add')
+      this.$router.push('/exam/exam-initial')
+    },
+    // 更新测试任务
+    updateExam(data) {
+      return new Promise((resolve, reject) => {
+        axiosPost(UPDATE_EXAM_URL, data)
+          .then(response => {
+            this.$message.success('测试任务更新成功')
+            resolve()
+          })
+          .catch(error => {
+            this.$message.error(error.message || '出错')
+            reject(error)
+          })
+      })
+    },
     // 重置
     handleReset() {
       this.listQuery.teachingTaskId = this.teachingTask.length && this.teachingTask[0].id
@@ -275,8 +397,13 @@ export default {
       this.listLoading = true
       this.getExamPage()
         .then(response => {
-          const { content, total } = response.data
-          // console.log('list', content)
+          const { total, content } = response.data
+          // 解析试题参数
+          content.forEach(item => {
+            // eslint-disable-next-line no-eval
+            item.examinationParameters = eval('(' + item.examinationParameters + ')')
+            item.state = 0 // 0-保存, 1-修改
+          })
           this.list = content
           this.total = total
           this.listLoading = false
@@ -291,7 +418,7 @@ export default {
     handleFilter() {
       this.listQuery.currentPage = 1
       this.getList()
-    }
+    },
     /* resetTemp() {
       this.temp = {
         'id': '',
@@ -327,16 +454,33 @@ export default {
             })
         }
       })
-    },
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
+    },*/
+    handleChange(row) {
+      /* this.temp = Object.assign({}, row) // copy obj
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
-      })
-    },
-    updateData() {
+      }) */
+      if (!row.state) {
+        row.state = 1
+        return
+      } else {
+        const data = filterObj(row, [
+          'examinationDuration',
+          'examinationName',
+          'examinationShowResult',
+          'examinationState',
+          'id'
+        ])
+        this.updateExam(data)
+          .then(() => {
+            row.state = 0
+            this.getList()
+          })
+      }
+    }
+    /* updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           console.log('校验成功')
@@ -390,6 +534,21 @@ export default {
   }
   .el-select {
     width: 100%;
+  }
+  .row {
+    line-height: 20px;
+    .item {
+      label {
+        margin-right: 10px;
+        font-weight: normal;
+      }
+      div {
+        display: inline-block;
+        span {
+          margin-right: 5px;
+        }
+      }
+    }
   }
 }
 </style>

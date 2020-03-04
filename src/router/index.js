@@ -146,12 +146,14 @@ export const constantRoutes = [
       {
         path: 'exam-parameter',
         name: 'ExamParameter',
+        hidden: true,
         component: () => import('@/views/exam/examParameter'),
         meta: { title: '参数设置' }
       },
       {
         path: 'exam-state',
         name: 'ExamState',
+        hidden: true,
         component: () => import('@/views/exam/examState'),
         meta: { title: '状态设置' }
       }

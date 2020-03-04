@@ -16,9 +16,9 @@
             type="primary"
             :style="{width: '100%'}"
             size="mini"
-            @click="next"
+            @click="mode === 'add' ? next() : update()"
           >
-            下一步
+            {{ mode === 'add' ? '下一步' : '修 改' }}
           </el-button>
         </div>
       </template>
@@ -30,6 +30,8 @@
 import { mapGetters, mapMutations } from 'vuex'
 import Card from './../Card'
 import QuantityPicker from './../QuantityPicker'
+import { UPDATE_EXAM_URL } from '@/api/url'
+import { axiosPost } from '@/utils/axios'
 export default {
   name: 'ExamQuantity',
 
@@ -47,7 +49,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['quantity', 'exam'])
+    ...mapGetters(['quantity', 'exam', 'mode'])
   },
 
   watch: {},
@@ -62,6 +64,29 @@ export default {
       'setGrade': 'exam/SET_GRADE',
       'validateParameters': 'exam/VALIDATE_PARAMETERS'
     }),
+    // 更新测试任务
+    updateExam(data) {
+      return new Promise((resolve, reject) => {
+        axiosPost(UPDATE_EXAM_URL, data)
+          .then(response => {
+            this.$message.success('测试任务更新成功')
+            resolve()
+          })
+          .catch(error => {
+            this.$message.error(error.message || '出错')
+            reject(error)
+          })
+      })
+    },
+    update() {
+      this.updateExam({
+        id: this.exam.id,
+        examinationParameters: JSON.stringify(this.exam.examinationParameters),
+        teachingTaskId: this.teachingTaskId
+      }).then(() => {
+        this.$router.push('/exam/exam-list')
+      })
+    },
     next() {
       const result = this.validateParameters()
       if (result === true) {
@@ -105,9 +130,6 @@ export default {
 </script>
 <style lang='scss' scoped>
 .exam-quantity {
-  .line {
-
-  }
   .next {
     margin-top: 20px;
     border-top: 1px dashed #ccc;

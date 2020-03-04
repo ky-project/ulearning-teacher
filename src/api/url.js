@@ -55,4 +55,5 @@ export const DELETE_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/delete' //
 // 测试管理
 export const GET_EXAM_PAGE_URL = '/teacher/examinationTask/pageList' // 分页查询测试任务
 export const ADD_EXAM_URL = '/teacher/examinationTask/save' // 添加测试任务
+export const UPDATE_EXAM_URL = '/teacher/examinationTask/update' // 添加测试任务
 

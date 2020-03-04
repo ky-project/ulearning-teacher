@@ -106,6 +106,7 @@ export function param2Obj(url) {
   )
 }
 
+// 复制对象中的指定属性
 export function filterObj(obj, arr) {
   if (typeof obj !== 'object' || !Array.isArray(arr)) {
     throw new Error('filterObj 参数格式不正确！')

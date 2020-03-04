@@ -5,6 +5,7 @@ import { axiosPost } from '@/utils/axios'
 import { Message } from 'element-ui'
 function getDefaultExam() {
   return {
+    id: '',
     examinationDuration: '',
     examinationName: '',
     examinationParameters: {
@@ -40,10 +41,14 @@ function getDefaultExam() {
 }
 
 const state = {
-  exam: getDefaultExam()
+  exam: getDefaultExam(),
+  mode: 'add' // add or update
 }
 
 const mutations = {
+  SET_MODE: (state, data) => {
+    state.mode = data
+  },
   SET_EXAM: (state, data) => {
     state.exam = Object.assign({}, state.exam, data)
   },
@@ -95,7 +100,7 @@ const actions = {
       axiosPost(ADD_EXAM_URL, data)
         .then(response => {
           commit('RESET_EXAM')
-          this.$message.success('测试添加成功')
+          Message.success('测试添加成功')
           resolve()
         })
         .catch(error => {

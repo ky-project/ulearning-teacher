@@ -1,6 +1,6 @@
 <template>
   <el-container class="exam-parameter">
-    <el-header class="exam-parameter__header">
+    <el-header v-if="mode === 'add'" class="exam-parameter__header">
       <Step :active="1" :back="() => { $router.push('/exam/exam-initial')}" />
     </el-header>
     <el-container class="exam-parameter__main">
@@ -34,7 +34,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['exam'])
+    ...mapGetters(['exam', 'mode'])
   },
 
   watch: {},

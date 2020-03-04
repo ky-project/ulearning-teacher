@@ -669,6 +669,7 @@ export default {
     }
     &::v-deep .el-table__row {
       &:hover {
+        cursor: pointer;
         .operator {
           display: inline-block;
         }
