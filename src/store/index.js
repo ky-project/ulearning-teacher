@@ -5,10 +5,13 @@ import app from './modules/app'
 import settings from './modules/settings'
 import user from './modules/user'
 import exam from './modules/exam'
-// import VuexPersistence from 'vuex-persist' // 持久化存储
+import VuexPersistence from 'vuex-persist' // 持久化存储
 
 Vue.use(Vuex)
-
+const vuexLocal = new VuexPersistence({
+  storage: window.sessionStorage,
+  modules: ['exam']
+})
 const store = new Vuex.Store({
   modules: {
     app,
@@ -16,8 +19,8 @@ const store = new Vuex.Store({
     user,
     exam
   },
-  getters
-  // plugins: [new VuexPersistence().plugin]
+  getters,
+  plugins: [vuexLocal.plugin]
 })
 
 export default store

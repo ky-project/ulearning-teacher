@@ -177,14 +177,14 @@
       </el-table-column>
     </el-table>
     <!-- 分页器 -->
-    <!-- <pagination
+    <pagination
       v-show="total>0"
       :total="total"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
       @pagination="setPagination"
-    /> -->
+    />
     <!-- 弹窗 -->
     <!-- <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form
@@ -412,9 +412,9 @@ export default {
           this.listLoading = false
         })
     },
-    /* setPagination(currentPage, pageSize) {
+    setPagination(currentPage, pageSize) {
       this.getList()
-    },*/
+    },
     handleFilter() {
       this.listQuery.currentPage = 1
       this.getList()
