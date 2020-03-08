@@ -135,6 +135,7 @@ export default {
         default_link_target: '_blank',
         link_title: false,
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
+        editor_css: '/myeditor.css',
         // 每次初始化编辑器实例时调用
         init_instance_callback: editor => {
           // 1. 初始化内容

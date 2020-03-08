@@ -28,7 +28,7 @@ export default {
   components: { UploadBase },
   props: {
     value: {
-      type: [File, String],
+      type: [File, String, Object],
       required: true
     }
   },
@@ -47,7 +47,7 @@ export default {
 
   methods: {
     deleteHandle() {
-      this.$emit('input', '')
+      this.$emit('delete')
       this.$refs.upload.clear()
     },
     setFileIcon(ext) {
@@ -87,6 +87,10 @@ export default {
       h4 {
         margin-top: 5px;
         color: #666;
+        overflow: hidden;
+        text-overflow: ellipsis; //超出部分以省略号显示
+        white-space: nowrap;
+        width: 120px;
       }
       p {
         font-size: 12px;

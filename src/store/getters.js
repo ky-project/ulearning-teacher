@@ -12,7 +12,10 @@ const getters = {
   mode: state => state.exam.mode,
   questionKnowledges: state => state.exam.exam.examinationParameters.questionKnowledges,
   questionDifficulty: state => state.exam.exam.examinationParameters.questionDifficulty,
-  quantity: state => state.exam.exam.examinationParameters.quantity
+  quantity: state => state.exam.exam.examinationParameters.quantity,
+  // 实验相关
+  experiment: state => state.experiment.experiment,
+  experimentMode: state => state.experiment.mode
   // quantity: state => state.exam.exam.examinationParameters.quantity
 }
 export default getters

@@ -124,13 +124,13 @@ import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import { axiosGet, axiosPost } from '@/utils/axios'
 import { GET_EXPERIMENT_PAGE_URL, UPDATE_EXPERIMENT_URL, DELETE_EXPERIMENT_URL } from '@/api/url'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'ExperimentList',
   components: { Pagination },
   directives: { waves },
   computed: {
-    ...mapGetters(['teachingTask'])
+    ...mapGetters(['teachingTask', 'experiment'])
   },
   data() {
     return {
@@ -157,7 +157,11 @@ export default {
     this.getList()
   },
   methods: {
-
+    ...mapMutations({
+      'setMode': 'experiment/SET_MODE',
+      'resetExperiment': 'experiment/RESET_EXPERIMENT',
+      'setExperiment': 'experiment/SET_EXPERIMENT'
+    }),
     handleSort(row) {
       if (row.state) {
         this.setSort(row)
@@ -190,6 +194,10 @@ export default {
         })
     },
     handleCreate() {
+      // 1. 重置
+      this.resetExperiment()
+      this.setMode('add')
+      // 2. 跳转
       this.$router.push('/experiment-manage/experiment-content')
     },
     // 查询实验信息
@@ -269,12 +277,13 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.$router.push({
-        path: '/experiment-manage/experiment-content',
-        query: {
-          row: JSON.stringify(row)
-        }
-      })
+      // 1. 重置
+      this.resetExperiment()
+      this.setMode('update')
+      // 2. 设置
+      this.setExperiment(row)
+      // 3. 跳转
+      this.$router.push('/experiment-manage/experiment-content')
     }
   }
 }

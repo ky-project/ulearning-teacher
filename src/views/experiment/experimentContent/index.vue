@@ -12,12 +12,13 @@
         <div class="line">
           <label for="">教学任务：</label>
           <el-select
-            v-model="teachingTaskId"
+            :value="experiment.teachingTaskId"
             placeholder="教学任务"
             style="width: 200px;"
             class="filter-item"
             size="mini"
             :style="{marginTop: '5px'}"
+            @change="(teachingTaskId)=>{setExperiment({teachingTaskId })}"
           >
             <el-option
               v-for="item in teachingTask"
@@ -30,25 +31,33 @@
         <div class="line">
           <label for="">实验标题：</label>
           <el-input
-            v-model="experimentTitle"
+            :value="experiment.experimentTitle"
             style="width: 200px;"
             class="filter-item"
             size="mini"
+            @input="(experimentTitle) => { setExperiment({experimentTitle})}"
           />
         </div>
       </div>
-      <upload-attachment v-model="attachment" />
-      <tinymce v-model="experimentContent" height="280px" :toolbar="toolbar" menubar="" />
+      <upload-attachment v-model="attachment" @delete="deleteHandler" />
+      <tinymce
+        :value="experiment.experimentContent"
+        height="280px"
+        :toolbar="toolbar"
+        menubar=""
+        @input="(experimentContent) => { setExperiment({experimentContent})}"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import UploadAttachment from '@/components/UploadAttachment'
 import Tinymce from '@/components/Tinymce'
 import { ADD_ATTACHMENT_URL, ADD_EXPERIMENT_URL, UPDATE_EXPERIMENT_URL } from '@/api/url.js'
 import { axios2, axiosPost } from '@/utils/axios'
+import experiment from '../../../store/modules/experiment'
 export default {
   name: 'ExperimentContent',
   components: { UploadAttachment, Tinymce },
@@ -56,37 +65,35 @@ export default {
   data() {
     return {
       isLoading: false,
-      experimentTitle: '',
-      teachingTaskId: '',
-      experimentContent: '',
-      experimentAttachment: '',
-      experimentAttachmentName: '',
       attachment: '',
-      id: '',
-      data: '',
+      hasDelete: false, // 是否删除过(更新用)
+      initialAttachment: false, // 初始是否含有附件(更新用)
       toolbar: ['undo redo | fontselect fontsizeselect bold italic underline strikethrough | alignleft aligncenter alignright | bullist numlist indent outdent | image table link | hr emoticons']
     }
   },
   computed: {
-    ...mapGetters(['teachingTask'])
+    ...mapGetters(['teachingTask', 'experiment', 'experimentMode']),
+    needRequired() {
+      // 删除过且存在附件 或 初始不含附件后新增
+      return (this.hasDelete && this.attachment) || (!this.initialAttachment && this.attachment)
+    }
   },
 
   watch: {
   },
 
   created() {
-    if (this.$route.query.row) {
-      this.data = JSON.parse(this.$route.query.row)
-      const { teachingTaskId, experimentTitle, experimentContent, id } = this.data
-      this.teachingTaskId = teachingTaskId
-      this.experimentTitle = experimentTitle
-      this.experimentContent = experimentContent
-      this.id = id
-      this.state = 'update'
-    } else {
-      this.state = 'add'
-      if (this.teachingTask.length) {
-        this.teachingTaskId = this.teachingTask[0].id
+    // 初始化教学任务
+    if (this.experimentMode === 'add' && this.teachingTask.length) {
+      this.setExperiment({ teachingTaskId: this.teachingTask[0].id })
+    }
+    // 初始化附件
+    if (this.experimentMode === 'update' && this.experiment.experimentAttachmentName) {
+      this.initialAttachment = true
+      const { experimentAttachmentName, experimentAttachmentSize } = this.experiment
+      this.attachment = {
+        name: experimentAttachmentName,
+        size: experimentAttachmentSize
       }
     }
   },
@@ -96,120 +103,56 @@ export default {
   mounted() {},
 
   methods: {
+    ...mapMutations({
+      'setExperiment': 'experiment/SET_EXPERIMENT',
+      'deleteAttachment': 'experiment/DELETE_ATTACHMENT'
+    }),
+    ...mapActions({
+      'getAttachmentUrl': 'experiment/getAttachmentUrl',
+      'addExperiment': 'experiment/addExperiment',
+      'updateExperiment': 'experiment/updateExperiment'
+    }),
+    // 删除附件
+    deleteHandler() {
+      this.attachment = ''
+      this.hasDelete = true
+      this.deleteAttachment()
+    },
+    // 回退
     back() {
       this.$router.push('/experiment-manage/experiment-list')
     },
-    getAttachmentUrl() {
-      return new Promise((resolve, reject) => {
-        const formData = new FormData()
-        formData.append('attachment', this.attachment)
-        // 2. 获取附件url
-        axios2({
-          method: 'POST',
-          url: ADD_ATTACHMENT_URL,
-          data: formData,
-          headers: { 'Content-Type': 'multipart/form-data' }
-        }).then(response => {
-          console.log('response', response)
-          const { data } = response
-          console.log('附件url', data)
-          this.experimentAttachment = data.experimentAttachment
-          this.experimentAttachmentName = data.experimentAttachment
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    addExperiment(attachment) {
-      return new Promise((resolve, reject) => {
-        const data = {
-          experimentAttachment: this.experimentAttachment,
-          experimentAttachmentName: this.experimentAttachmentName,
-          experimentContent: this.experimentContent,
-          experimentOrder: 0,
-          experimentTitle: this.experimentTitle,
-          teachingTaskId: this.teachingTaskId
-        }
-        axiosPost(ADD_EXPERIMENT_URL, data)
-          .then(response => {
-            console.log('添加成功')
-            resolve()
-          })
-          .catch(error => {
-            reject(error)
-          })
-      })
-    },
-    updateExperiment() {
-      return new Promise((resolve, reject) => {
-        const { experimentAttachment, experimentAttachmentName, experimentContent, experimentTitle, id, teachingTaskId } = this
-        const data = {
-          experimentAttachment,
-          experimentAttachmentName,
-          experimentContent,
-          experimentTitle,
-          id,
-          teachingTaskId
-        }
-        axiosPost(UPDATE_EXPERIMENT_URL, data)
-          .then(response => {
-            resolve()
-          })
-          .catch(error => {
-            reject(error)
-          })
-      })
-    },
-    submit() {
+    // 提交
+    async submit() {
+      const { experimentTitle, experimentContent } = this.experiment
       // 1. 验证
-      if (!this.experimentTitle) {
+      if (!experimentTitle) {
         this.$message.warning('请输入实验标题')
         return false
       }
-      if (!this.experimentContent) {
+      if (!experimentContent) {
         this.$message.warning('请输入实验内容')
         return false
       }
-      this.isLoading = true
-      if (this.state === 'add') {
+      // 2. 添加请求
+      if (this.experimentMode === 'add') {
+        // 2.1 获取附件url
         if (this.attachment) {
-          this.getAttachmentUrl()
-            .then(() => {
-              this.addExperiment()
-                .then(() => {
-                  this.$message.success('实验添加成功')
-                  this.isLoading = false
-                })
-                .catch(error => {
-                  console.log('报错')
-                  this.$message.error(error.message || '出错')
-                  this.isLoading = false
-                })
-            })
-        } else {
-          this.addExperiment()
-            .then(() => {
-              this.$message.success('实验添加成功')
-              this.isLoading = false
-            })
-            .catch(error => {
-              console.log('报错')
-              this.$message.error(error.message || '出错')
-              this.isLoading = false
-            })
+          await this.getAttachmentUrl(this.attachment)
         }
-      } else if (this.state === 'update') {
-        this.updateExperiment()
-          .then(() => {
-            this.$message.success('实验更新成功')
-            this.isLoading = false
-            // this.back()
-          })
-          .catch(error => {
-            this.$message.error(error.message || '出错')
-            this.isLoading = false
-          })
+        // 2.2 添加实验
+        await this.addExperiment()
+        this.back()
+      }
+      // 3. 更新请求
+      if (this.experimentMode === 'update') {
+        // 3.1 获取附件url
+        if (this.needRequired) {
+          await this.getAttachmentUrl(this.attachment)
+        }
+        // 3.2 更新实验
+        await this.updateExperiment()
+        this.back()
       }
     }
   }
@@ -232,9 +175,6 @@ export default {
       }
     }
   }
-  /* &__container {
-    overflow: scroll;
-  } */
   &__title {
     .line {
       margin-bottom: 10px;
