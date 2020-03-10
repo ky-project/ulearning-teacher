@@ -90,7 +90,7 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis; //超出部分以省略号显示
         white-space: nowrap;
-        width: 120px;
+        width: 110px;
       }
       p {
         font-size: 12px;

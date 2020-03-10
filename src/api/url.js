@@ -56,4 +56,10 @@ export const DELETE_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/delete' //
 export const GET_EXAM_PAGE_URL = '/teacher/examinationTask/pageList' // 分页查询测试任务
 export const ADD_EXAM_URL = '/teacher/examinationTask/save' // 添加测试任务
 export const UPDATE_EXAM_URL = '/teacher/examinationTask/update' // 添加测试任务
+// 通告管理
+export const GET_NOTICE_PAGE_URL = '/teacher/teachingTaskNotice/pageList' // 分页查询通告
+export const ADD_ATTACHMENT_URL2 = '/teacher/teachingTaskNotice/saveAttachments' // 添加附件
+export const ADD_NOTICE_URL = '/teacher/teachingTaskNotice/save' // 添加通告
+export const UPDATE_NOTICE_URL = '/teacher/teachingTaskNotice/update' // 修改通告
+export const DELETE_NOTICE_URL = '/teacher/teachingTaskNotice/delete' // 删除通告
 

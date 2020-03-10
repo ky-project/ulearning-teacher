@@ -10,12 +10,17 @@ const getters = {
   // 测试相关
   exam: state => state.exam.exam,
   mode: state => state.exam.mode,
-  questionKnowledges: state => state.exam.exam.examinationParameters.questionKnowledges,
-  questionDifficulty: state => state.exam.exam.examinationParameters.questionDifficulty,
+  questionKnowledges: state =>
+    state.exam.exam.examinationParameters.questionKnowledges,
+  questionDifficulty: state =>
+    state.exam.exam.examinationParameters.questionDifficulty,
   quantity: state => state.exam.exam.examinationParameters.quantity,
   // 实验相关
   experiment: state => state.experiment.experiment,
-  experimentMode: state => state.experiment.mode
+  experimentMode: state => state.experiment.mode,
   // quantity: state => state.exam.exam.examinationParameters.quantity
+  // 通告相关
+  notice: state => state.notice.notice,
+  noticeMode: state => state.notice.mode
 }
 export default getters

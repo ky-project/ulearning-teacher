@@ -160,6 +160,28 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/notice',
+    component: Layout,
+    meta: { title: '通告管理', icon: 'gonggao' },
+    redirect: '/notice/notice-list',
+    children: [
+      {
+        path: 'notice-list',
+        name: 'NoticeList',
+        component: () => import('@/views/notice/noticeList'),
+        hidden: true,
+        meta: { title: '通告管理' }
+      },
+      {
+        path: 'notice-content',
+        name: 'NoticeContent',
+        component: () => import('@/views/notice/noticeContent'),
+        hidden: true,
+        meta: { title: '通告内容' }
+      }
+    ]
+  },
+  {
     path: '/test',
     name: 'Test',
     component: () => import('@/views/test'),

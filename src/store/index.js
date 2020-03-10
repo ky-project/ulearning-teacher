@@ -6,12 +6,13 @@ import settings from './modules/settings'
 import user from './modules/user'
 import exam from './modules/exam'
 import experiment from './modules/experiment'
+import notice from './modules/notice'
 import VuexPersistence from 'vuex-persist' // 持久化存储
 
 Vue.use(Vuex)
 const vuexLocal = new VuexPersistence({
   storage: window.sessionStorage,
-  modules: ['exam', 'experiment']
+  modules: ['exam', 'experiment', 'notice']
 })
 const store = new Vuex.Store({
   modules: {
@@ -19,7 +20,8 @@ const store = new Vuex.Store({
     settings,
     user,
     exam,
-    experiment
+    experiment,
+    notice
   },
   getters,
   plugins: [vuexLocal.plugin]

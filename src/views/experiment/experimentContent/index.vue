@@ -55,9 +55,9 @@
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import UploadAttachment from '@/components/UploadAttachment'
 import Tinymce from '@/components/Tinymce'
-import { ADD_ATTACHMENT_URL, ADD_EXPERIMENT_URL, UPDATE_EXPERIMENT_URL } from '@/api/url.js'
-import { axios2, axiosPost } from '@/utils/axios'
-import experiment from '../../../store/modules/experiment'
+// import { ADD_ATTACHMENT_URL, ADD_EXPERIMENT_URL, UPDATE_EXPERIMENT_URL } from '@/api/url.js'
+// import { axios2, axiosPost } from '@/utils/axios'
+// import experiment from '../../../store/modules/experiment'
 export default {
   name: 'ExperimentContent',
   components: { UploadAttachment, Tinymce },
@@ -78,10 +78,9 @@ export default {
       return (this.hasDelete && this.attachment) || (!this.initialAttachment && this.attachment)
     }
   },
-
   watch: {
-  },
 
+  },
   created() {
     // 初始化教学任务
     if (this.experimentMode === 'add' && this.teachingTask.length) {
