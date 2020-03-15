@@ -121,7 +121,7 @@
 import { mapGetters, mapMutations } from 'vuex'
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
-import { axiosGet, axiosPost } from '@/utils/axios'
+import { axiosGet } from '@/utils/axios'
 import { GET_NOTICE_PAGE_URL, DELETE_NOTICE_URL } from '@/api/url'
 
 export default {

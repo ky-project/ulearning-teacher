@@ -79,7 +79,7 @@
       </el-table-column>
 
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
+        <template slot-scope="{row}">
           <el-button
             :style="{color: '#409EFF'}"
             size="mini"
@@ -97,12 +97,20 @@
             <i class="el-icon-delete" />
           </el-button>
           <el-button
-            :style="{color: '#F56C6C'}"
+            :style="{color: '#E6A23C'}"
             size="mini"
             type="text"
             @click="handleSort(row)"
           >
             <svg-icon icon-class="xulie" class-name="icon" />
+          </el-button>
+          <el-button
+            :style="{color: '#67C23A'}"
+            size="mini"
+            type="text"
+            @click="handleResult(row)"
+          >
+            <svg-icon icon-class="jieguo" class-name="icon" />
           </el-button>
         </template>
       </el-table-column>
@@ -152,9 +160,9 @@ export default {
   created() {
     if (this.teachingTask.length) {
       this.listQuery.teachingTaskId = this.teachingTask[0].id
+      // 请求表格数据
+      this.getList()
     }
-    // 请求表格数据
-    this.getList()
   },
   methods: {
     ...mapMutations({
@@ -162,6 +170,12 @@ export default {
       'resetExperiment': 'experiment/RESET_EXPERIMENT',
       'setExperiment': 'experiment/SET_EXPERIMENT'
     }),
+    // 结果事件
+    handleResult(row) {
+      console.log('实验id', row.id)
+      this.$router.push('/experiment-manage/experiment-result?experimentId=' + row.id)
+    },
+    // 排序事件
     handleSort(row) {
       if (row.state) {
         this.setSort(row)
@@ -306,9 +320,6 @@ export default {
   }
   .el-select {
     width: 100%;
-  }
-  .icon {
-    color: #E6A23C;
   }
   .input-number {
     width: 100px;

@@ -91,12 +91,21 @@ export const constantRoutes = [
     path: '/experiment-manage',
     component: Layout,
     meta: { title: '实验管理', icon: 'shiyan' },
+    redirect: '/experiment-manage/experiment-list',
     children: [
       {
         path: 'experiment-list',
         name: 'ExperimentList',
         component: () => import('@/views/experiment/experimentList'),
-        meta: { title: '实验内容管理', icon: 'shiyanneirong' }
+        hidden: true,
+        meta: { title: '实验内容管理' }
+      },
+      {
+        path: 'experiment-result',
+        name: 'ExperimentResult',
+        hidden: true,
+        component: () => import('@/views/experiment/experimentResult'),
+        meta: { title: '实验结果' }
       },
       {
         path: 'experiment-content',
@@ -106,10 +115,11 @@ export const constantRoutes = [
         meta: { title: '添加修改实验' }
       },
       {
-        path: 'student-experiment',
-        name: 'StudentExperiment',
-        component: () => import('@/views/experiment/studentExperiment'),
-        meta: { title: '学生实验管理', icon: 'xueshengshiyan' }
+        path: 'experiment-correct',
+        name: 'ExperimentCorrect',
+        hidden: true,
+        component: () => import('@/views/experiment/experimentCorrect'),
+        meta: { title: '批改实验' }
       }
     ]
   },

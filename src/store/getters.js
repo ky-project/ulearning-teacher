@@ -18,7 +18,9 @@ const getters = {
   // 实验相关
   experiment: state => state.experiment.experiment,
   experimentMode: state => state.experiment.mode,
-  // quantity: state => state.exam.exam.examinationParameters.quantity
+  // 实验结果相关
+  experimentResult: state => state.experimentResult.experimentResult,
+  experimentResultMode: state => state.experimentResult.mode,
   // 通告相关
   notice: state => state.notice.notice,
   noticeMode: state => state.notice.mode

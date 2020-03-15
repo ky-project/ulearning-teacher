@@ -24,6 +24,14 @@ export default {
   name: 'Tinymce',
   components: { editorImage },
   props: {
+    readonly: {
+      type: Number,
+      default: 0
+    },
+    statusbar: {
+      type: Boolean,
+      default: true
+    },
     id: {
       type: String,
       default: function() {
@@ -117,6 +125,8 @@ export default {
     initTinymce() {
       const _this = this
       window.tinymce.init({
+        statusbar: this.statusbar,
+        readonly: this.readonly,
         selector: `#${this.tinymceId}`,
         language: this.languageTypeList['zh'],
         height: this.height,

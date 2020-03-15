@@ -64,7 +64,7 @@ export default {
       this.$message.warning(`最多提交${this.limit}个文件`)
     },
     handleChange(file, fileList) {
-      console.log('fileList', fileList)
+      // console.log('fileList', fileList)
       this.$emit('update:file-list', fileList)
     },
     setFileIcon(ext) {

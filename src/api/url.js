@@ -62,4 +62,8 @@ export const ADD_ATTACHMENT_URL2 = '/teacher/teachingTaskNotice/saveAttachments'
 export const ADD_NOTICE_URL = '/teacher/teachingTaskNotice/save' // 添加通告
 export const UPDATE_NOTICE_URL = '/teacher/teachingTaskNotice/update' // 修改通告
 export const DELETE_NOTICE_URL = '/teacher/teachingTaskNotice/delete' // 删除通告
+// 实验结果管理
+export const GET_EXPERIMENT_RESULT_PAGE_URL = '/teacher/experimentResult/pageList' // 分页查询实验结果
+export const DOWNLOAD_EXPERIMENT_RESULT_URL = '/teacher/experimentResult/downloadAttachment' // 下载附件
+export const CORRECT_EXPERIMENT_RESULT_URL = '/teacher/experimentResult/correctResult' // 批改实验结果
 

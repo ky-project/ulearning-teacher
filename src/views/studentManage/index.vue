@@ -149,6 +149,7 @@ export default {
         this.currentTeachingTaskId = this.listQuery.teachingTaskId // 同步当前教学任务
         axiosGet(GET_TEACHING_TASK_PAGE_URL, { params: this.listQuery })
           .then(response => {
+            console.log('学生', response)
             const { content, total } = response.data
             this.list = content
             this.total = total
