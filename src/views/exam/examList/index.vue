@@ -234,7 +234,7 @@ import { filterObj } from '@/utils/index.js'
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 // import { isEmail, isPhone } from '@/utils/validate'
-import { GET_EXAM_PAGE_URL, UPDATE_EXAM_URL } from '@/api/url'
+import { GET_EXAM_PAGE_URL, UPDATE_EXAM_URL, DELETE_EXAM_URL } from '@/api/url'
 import { axiosGet, axiosPost } from '@/utils/axios'
 
 export default {
@@ -479,7 +479,7 @@ export default {
             this.getList()
           })
       }
-    }
+    },
     /* updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -496,16 +496,28 @@ export default {
             })
         }
       })
+    },*/
+    deleteExam(data) {
+      return new Promise((resolve, reject) => {
+        axiosGet(DELETE_EXAM_URL, { params: data })
+          .then(() => {
+            resolve()
+          })
+          .catch(error => {
+            this.$message.error(error.message || '出错')
+            reject(error)
+          })
+      })
     },
     handleDelete(row, index) {
-      this.$confirm('确定永久删除该学生, 是否继续?', '提示', {
+      this.$confirm('确定永久删除该试卷, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         // 发送请求
-        deleteStudent({ id: row.id })
-          .then(response => {
+        this.deleteExam({ id: row.id })
+          .then(() => {
             this.$message({
               type: 'success',
               message: '删除成功!'
@@ -513,7 +525,7 @@ export default {
             this.getList()
           })
       })
-    } */
+    }
   }
 }
 </script>

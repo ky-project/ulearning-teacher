@@ -75,11 +75,6 @@
           <span>{{ optionMap[row.questionType] }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="试题类型" min-width="120" align="center">
-        <template slot-scope="{row}">
-          <span>{{ optionMap[row.questionType] }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="试题选项" min-width="120" align="center">
         <template slot-scope="{row}">
           <span>{{ row.questionOption || '--' }}</span>
@@ -151,6 +146,16 @@
             size="mini"
           />
         </el-form-item>
+        <el-form-item label="试题难度" prop="questionKnowledge">
+          <el-select v-model="temp.questionDifficulty" size="mini">
+            <el-option
+              v-for="item in difficultyMap"
+              :key="item.key"
+              :label="item.label"
+              :value="item.key"
+            />
+          </el-select>
+        </el-form-item>
         <SelectQuestoinType
           :type.sync="temp.questionType"
           :options.sync="temp.rawOption"
@@ -194,6 +199,7 @@ import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import SelectQuestoinType from './components/SelectQuestoinType'
 import { axiosGet, axiosPost, axios2 } from '@/utils/axios'
+import { difficultyMap } from './config'
 import {
   GET_ALL_TEACHING_TASK_URL,
   GET_QUESTION_PAGE_URL,
@@ -215,6 +221,7 @@ export default {
       listLoading: true,
       teachingTaskList: [],
       oldTeachingTaskId: '',
+      difficultyMap: difficultyMap,
       typeList: [
         { label: '选择题', value: 1 },
         { label: '判断题', value: 2 },
@@ -237,7 +244,8 @@ export default {
         questionKnowledge: '',
         questionKey: '',
         rawOption: [],
-        questionOption: ''
+        questionOption: '',
+        questionDifficulty: ''
       },
       optionMap: { 1: '选择题', 2: '判断题', 3: '多选题', 4: '填空题' },
       previewImg: '', // 预览图片
@@ -425,7 +433,8 @@ export default {
         questionType: '',
         questionText: '',
         questionKnowledge: '',
-        questionKey: ''
+        questionKey: '',
+        questionDifficulty: ''
       }
       this.previewImg = ''
     },
