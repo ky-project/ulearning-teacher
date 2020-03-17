@@ -3,6 +3,7 @@
     <type-item
       :value="type"
       :prop="typeProp"
+      :disabled="disabled"
       @change="changeType"
       @add="addOption"
     />
@@ -61,6 +62,10 @@ export default {
     answer: {
       type: [Array, String, Number],
       required: true
+    },
+    disabled: {
+      type: Boolean,
+      required: false
     }
   },
   data() {
@@ -110,7 +115,6 @@ export default {
     },
     // 添加选项
     addOption() {
-      console.log('addOption')
       if (this.options.length === 6) {
         this.$message.warning('最多添加6个选项')
         return false
@@ -118,6 +122,8 @@ export default {
       const options = [...this.options]
       options.push({ label: this.keys[this.options.length], value: '' })
       this.$emit('update:options', options)
+      /* const newOption = { label: this.keys[this.options.length], value: '' }
+      this.$emit('add:options', newOption) */
     },
     // 清空选项
     clearOptions() {

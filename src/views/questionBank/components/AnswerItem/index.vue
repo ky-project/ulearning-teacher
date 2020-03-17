@@ -26,11 +26,25 @@
           value="正确"
         />
       </el-select>
-      <!-- 多选题, 单选题 -->
+      <!-- 单选题 -->
+      <el-select
+        v-else-if="type === 1"
+        :value="value"
+        size="mini"
+        @change="(newValue)=>{$emit('update',newValue)}"
+      >
+        <el-option
+          v-for="item in options"
+          :key="item"
+          :label="item"
+          :value="item"
+        />
+      </el-select>
+      <!-- 多选题 -->
       <el-select
         v-else
         :value="value"
-        :multiple="type === 3"
+        multiple
         size="mini"
         @change="(newValue)=>{$emit('update',newValue)}"
       >

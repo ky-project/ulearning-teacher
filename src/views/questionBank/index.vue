@@ -60,7 +60,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="试题内容" align="center" min-width="120">
+      <el-table-column label="试题内容" show-overflow-tooltip align="center" min-width="120">
         <template slot-scope="{row}">
           <span>{{ row.questionText }}</span>
         </template>
@@ -75,12 +75,12 @@
           <span>{{ optionMap[row.questionType] }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="试题选项" min-width="120" align="center">
+      <el-table-column label="试题选项" show-overflow-tooltip min-width="120" align="center">
         <template slot-scope="{row}">
           <span>{{ row.questionOption || '--' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="试题答案" min-width="120" align="center">
+      <el-table-column label="试题答案" show-overflow-tooltip min-width="120" align="center">
         <template slot-scope="{row}">
           <span>{{ row.questionKey }}</span>
         </template>
@@ -117,71 +117,76 @@
     />
     <!-- 弹窗 -->
     <el-dialog class="question-bank__dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        label-position="left"
-        label-width="80px"
-      >
-        <el-form-item label="教学任务" prop="teachingTaskId">
-          <el-select v-model="temp.teachingTaskId" size="mini" :disabled="dialogStatus === 'update'">
-            <el-option
-              v-for="item in teachingTaskList"
-              :key="item.id"
-              :label="item.teachingTaskAlias"
-              :value="item.id"
+      <div class="form-wrap">
+        <el-form
+          ref="dataForm"
+          :rules="rules"
+          :model="temp"
+          label-position="left"
+          label-width="80px"
+        >
+          <el-form-item label="教学任务" prop="teachingTaskId">
+            <el-select v-model="temp.teachingTaskId" size="mini" :disabled="dialogStatus === 'update'">
+              <el-option
+                v-for="item in teachingTaskList"
+                :key="item.id"
+                :label="item.teachingTaskAlias"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="试题内容" prop="questionText">
+            <el-input
+              v-model="temp.questionText"
+              size="mini"
             />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="试题内容" prop="questionText">
-          <el-input
-            v-model="temp.questionText"
-            size="mini"
+          </el-form-item>
+          <el-form-item label="知识模块" prop="questionKnowledge">
+            <el-input
+              v-model="temp.questionKnowledge"
+              size="mini"
+            />
+          </el-form-item>
+          <el-form-item label="试题难度" prop="questionKnowledge">
+            <el-select v-model="temp.questionDifficulty" size="mini">
+              <el-option
+                v-for="item in difficultyMap"
+                :key="item.key"
+                :label="item.label"
+                :value="item.key"
+              />
+            </el-select>
+          </el-form-item>
+          <SelectQuestoinType
+            :disabled="dialogStatus === 'update'"
+            :type.sync="temp.questionType"
+            :options="temp.rawOption"
+            :answer.sync="temp.questionKey"
+            :option-rule="rules.value"
+            option-prop="rawOption"
+            type-prop="questionType"
+            answer-prop="questionKey"
+            @update:options="updateOptions"
           />
-        </el-form-item>
-        <el-form-item label="知识模块" prop="questionKnowledge">
-          <el-input
-            v-model="temp.questionKnowledge"
-            size="mini"
-          />
-        </el-form-item>
-        <el-form-item label="试题难度" prop="questionKnowledge">
-          <el-select v-model="temp.questionDifficulty" size="mini">
-            <el-option
-              v-for="item in difficultyMap"
-              :key="item.key"
-              :label="item.label"
-              :value="item.key"
-            />
-          </el-select>
-        </el-form-item>
-        <SelectQuestoinType
-          :type.sync="temp.questionType"
-          :options.sync="temp.rawOption"
-          :answer.sync="temp.questionKey"
-          option-prop="rawOption"
-          :option-rule="rules.value"
-          type-prop="questionType"
-          answer-prop="questionKey"
-        />
-        <el-form-item label="试题图片">
-          <el-upload
-            class="avatar-uploader"
-            action=""
-            :show-file-list="false"
-            :before-upload="beforeAvatarUpload"
-          >
-            <img v-if="previewImgUrl" :src="previewImgUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon" />
-            <i
-              v-if="previewImgUrl"
-              class="el-icon-close avatar-uploader-delete"
-              @click.stop="deleteImgUrl"
-            />
-          </el-upload>
-        </el-form-item>
-      </el-form>
+          <el-form-item label="试题图片">
+            <el-upload
+              class="avatar-uploader"
+              action=""
+              :show-file-list="false"
+              :before-upload="beforeAvatarUpload"
+            >
+              <img v-if="previewImgUrl" :src="previewImgUrl" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon" />
+              <i
+                v-if="previewImgUrl"
+                class="el-icon-close avatar-uploader-delete"
+                @click.stop="deleteImgUrl"
+              />
+            </el-upload>
+          </el-form-item>
+        </el-form>
+      </div>
+
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           取消
@@ -245,6 +250,7 @@ export default {
         questionKnowledge: '',
         questionKey: '',
         rawOption: [],
+        // rawKey: [],
         questionOption: '',
         questionDifficulty: ''
       },
@@ -275,9 +281,24 @@ export default {
       })
   },
   methods: {
+    // 添加选项
+    /* addOptions(newOption) {
+      this.$nextTick(() => {
+        this.temp.rawOption.push(newOption)
+      })
+    }, */
+    updateOptions(newRawOption) {
+      // this.temp.rawOption = Object.assign({}, newRawOption)
+      this.$set(this.temp, 'rawOption', newRawOption)
+      // .rawOption = newRawOption
+    },
     // 更新试题
     updateQuestion() {
       return new Promise((resolve, reject) => {
+        this.formatOptions()
+        if (this.temp.questionKey instanceof Array) {
+          this.temp.questionKey = this.temp.questionKey.join('|#|')
+        }
         axiosPost(UPDATE_QUESTION_URL, this.temp)
           .then(() => {
             resolve()
@@ -533,7 +554,6 @@ export default {
     setPagination(currentPage, pageSize) {
       this.getList()
     },
-
     // 删除试题
     handleDelete(row) {
       this.deleteQuestion(row.id)
@@ -544,9 +564,57 @@ export default {
     },
     // 修改试题点击事件
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
+      /* temp格式
+      temp: {
+        id: '',
+        teachingTaskId: '',
+        questionUrl: '',
+        questionType: '',
+        questionText: '',
+        questionKnowledge: '',
+        questionKey: '',
+        rawOption: [],
+        questionOption: '',
+        questionDifficulty: ''
+      },
+       */
+      /* row格式
+      id: (...) x
+      questionDifficulty: (...) x
+      questionKey: (...) x
+      questionKnowledge: (...) x
+      questionOption: (...) x
+      questionText: (...) x
+      questionType: (...) x
+      questionUrl: (...) x
+       */
+      /* this.temp = Object.assign({}, row) // copy obj
       this.temp.rawOption = this.reverseFormatOptions()
       this.temp.teachingTaskId = this.oldTeachingTaskId
+      this.previewImgUrl = this.temp.questionUrl
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      }) */
+      const tempObj = filterObj(row, [
+        'id',
+        'questionDifficulty',
+        'questionKey',
+        'questionKnowledge',
+        'questionOption',
+        'questionText',
+        'questionType',
+        'questionUrl'
+      ])
+      Object.assign(this.temp, tempObj)
+      this.temp.rawOption = this.reverseFormatOptions()
+      if (this.temp.questionType === 3) {
+        this.temp.questionKey = this.temp.questionKey.split('|#|')
+      }
+      console.log('key', this.temp.questionKey)
+      this.temp.teachingTaskId = this.oldTeachingTaskId
+      // this.temp = Object.assign({}, this.temp, row)
       this.previewImgUrl = this.temp.questionUrl
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -568,6 +636,10 @@ export default {
     }
   }
   &__dialog {
+    .form-wrap {
+      height: 350px;
+      overflow-y: scroll;
+    }
     ::v-deep .el-input {
       width: calc(100% - 50px);
     }

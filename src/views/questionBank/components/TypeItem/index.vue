@@ -3,6 +3,7 @@
     <el-form-item label="试题类型" :prop="prop">
       <el-select
         :value="value"
+        :disabled="disabled"
         size="mini"
         @change="(newValue)=>{$emit('change',newValue)}"
       >
@@ -36,6 +37,10 @@ export default {
     value: {
       type: [Number, String],
       required: true
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

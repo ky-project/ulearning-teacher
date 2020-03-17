@@ -59,7 +59,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="标题" align="center" width="120">
+      <el-table-column label="标题" align="center" show-overflow-tooltip width="120">
         <template slot-scope="{row}">
           <span>{{ row.noticeTitle }}</span>
         </template>
