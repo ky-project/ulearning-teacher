@@ -476,6 +476,7 @@ export default {
         this.listLoading = true
         axiosGet(GET_QUESTION_PAGE_URL, { params: this.listQuery })
           .then(response => {
+            console.log('试题', response.data)
             this.oldTeachingTaskId = this.listQuery.teachingTaskId // 同步teachingTaskId
             const { content, total } = response.data
             this.list = content
