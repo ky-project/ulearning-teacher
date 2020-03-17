@@ -198,6 +198,7 @@
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import SelectQuestoinType from './components/SelectQuestoinType'
+import { filterObj } from '@/utils/index.js'
 import { axiosGet, axiosPost, axios2 } from '@/utils/axios'
 import { difficultyMap } from './config'
 import {
@@ -358,6 +359,19 @@ export default {
     // 添加试题请求
     addQuestion(data) {
       return new Promise((resolve, reject) => {
+        /* axios2({
+          method: 'POST',
+          url: ADD_QUESTION_URL,
+          data,
+          headers: { 'Content-Type': 'application/json' }
+        }).then(response => {
+          resolve()
+        })
+          .catch(error => {
+            this.$message.error(error.message || '出错')
+            reject(error)
+          }) */
+        console.log('题目', data)
         axiosPost(ADD_QUESTION_URL, data)
           .then(response => {
             resolve()
@@ -397,7 +411,20 @@ export default {
             this.addQuestionImg((this.previewImg))
               .then(imgUrl => {
                 this.temp.questionUrl = imgUrl
-                this.addQuestion(this.temp)
+                const data = filterObj(this.temp, [
+                  'questionDifficulty',
+                  'questionKey',
+                  'questionKnowledge',
+                  'questionOption',
+                  'questionText',
+                  'questionType',
+                  'questionUrl',
+                  'teachingTaskId'
+                ])
+                if (data.questionKey instanceof Array) {
+                  data.questionKey = data.questionKey.join('|#|')
+                }
+                this.addQuestion(data)
                   .then(response => {
                     this.$message.success('试题添加成功')
                     this.dialogFormVisible = false
@@ -406,10 +433,24 @@ export default {
               })
           } else {
             // 发送请求
-            this.addQuestion(this.temp)
+            const data = filterObj(this.temp, [
+              'questionDifficulty',
+              'questionKey',
+              'questionKnowledge',
+              'questionOption',
+              'questionText',
+              'questionType',
+              'questionUrl',
+              'teachingTaskId'
+            ])
+            if (data.questionKey instanceof Array) {
+              data.questionKey = data.questionKey.join('|#|')
+            }
+            this.addQuestion(data)
               .then(response => {
                 this.$message.success('试题添加成功')
                 this.dialogFormVisible = false
+                this.getList()
               })
           }
         }
