@@ -160,13 +160,12 @@
           <SelectQuestoinType
             :disabled="dialogStatus === 'update'"
             :type.sync="temp.questionType"
-            :options="temp.rawOption"
+            :options.sync="temp.rawOption"
             :answer.sync="temp.questionKey"
             :option-rule="rules.value"
             option-prop="rawOption"
             type-prop="questionType"
             answer-prop="questionKey"
-            @update:options="updateOptions"
           />
           <el-form-item label="试题图片">
             <el-upload
@@ -287,11 +286,11 @@ export default {
         this.temp.rawOption.push(newOption)
       })
     }, */
-    updateOptions(newRawOption) {
+    /* updateOptions(newRawOption) {
       // this.temp.rawOption = Object.assign({}, newRawOption)
       this.$set(this.temp, 'rawOption', newRawOption)
       // .rawOption = newRawOption
-    },
+    }, */
     // 更新试题
     updateQuestion() {
       return new Promise((resolve, reject) => {
@@ -359,8 +358,10 @@ export default {
     },
     // 格式化选项 [{label: A, value: 2}] => A=2|#|B=3
     formatOptions() {
-      const tempArr = this.temp.rawOption.map(option => { return `${option.label}=${option.value}` })
-      this.temp.questionOption = tempArr.join('|#|')
+      if (this.temp.rawOption instanceof Array) {
+        const tempArr = this.temp.rawOption.map(option => { return `${option.label}=${option.value}` })
+        this.temp.questionOption = tempArr.join('|#|')
+      }
       // console.log(this.temp.questionOption)
     },
     // 逆格式化选项 A=2|#|B=3 => [{label: A, value: 2}]
@@ -609,7 +610,7 @@ export default {
       ])
       Object.assign(this.temp, tempObj)
       this.temp.rawOption = this.reverseFormatOptions()
-      if (this.temp.questionType === 3) {
+      if (this.temp.questionType === 3 || this.temp.questionType === 4) {
         this.temp.questionKey = this.temp.questionKey.split('|#|')
       }
       console.log('key', this.temp.questionKey)

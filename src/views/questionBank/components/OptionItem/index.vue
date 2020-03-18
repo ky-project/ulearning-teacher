@@ -8,7 +8,7 @@
       />
       <svg-icon
         icon-class="jian"
-        class-name="answer-item__delete"
+        class-name="option-item__delete"
         @click="$emit('delete')"
       />
     </el-form-item>
@@ -59,7 +59,7 @@ export default {
 
 </script>
 <style lang='scss' scoped>
-.answer-item {
+.option-item {
   &__delete {
     color: #409EFF;
     font-size: 22px;

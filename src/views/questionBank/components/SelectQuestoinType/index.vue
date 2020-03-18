@@ -5,7 +5,7 @@
       :prop="typeProp"
       :disabled="disabled"
       @change="changeType"
-      @add="addOption"
+      @add="addHandler"
     />
     <option-item
       v-for="(option,index) in options"
@@ -22,6 +22,7 @@
       :type="type"
       :options="answerOptions"
       :prop="answerProp"
+      @change="(answer) => $emit('update:answer', answer)"
       @update="(newValue) => {$emit('update:answer', newValue)}"
     />
   </div>
@@ -113,23 +114,43 @@ export default {
         item.label = this.keys[index]
       })
     },
-    // 添加选项
-    addOption() {
-      if (this.options.length === 6) {
-        this.$message.warning('最多添加6个选项')
-        return false
+    // 添加选项/答案
+    addHandler(questionType) {
+      if (questionType === 1 || questionType === 3) {
+        if (this.options.length === 6) {
+          this.$message.warning('最多添加6个选项')
+          return false
+        }
+        const options = [...this.options]
+        options.push({ label: this.keys[this.options.length], value: '' })
+        this.$emit('update:options', options)
+      } else if (questionType === 4) {
+        if (this.answer instanceof Array && this.answer.length === 4) {
+          this.$message.warning('最多添加4个填空')
+          return false
+        }
+        this.answer = this.answer || [] // 初始化answer
+        const answer = [...this.answer]
+        answer.push('')
+        this.$emit('update:answer', answer)
       }
-      const options = [...this.options]
-      options.push({ label: this.keys[this.options.length], value: '' })
-      this.$emit('update:options', options)
+
       /* const newOption = { label: this.keys[this.options.length], value: '' }
       this.$emit('add:options', newOption) */
     },
     // 清空选项
-    clearOptions() {
+    /* clearOptions(type) {
       this.$emit('update:options', [])
-      this.$emit('update:answer', '')
-    },
+      if (type === 4) {
+        this.$emit('update:answer', [''])
+      } else {
+        this.$emit('update:answer', '')
+      }
+    }, */
+    /* // 创建默认答案项
+    createDefaultAnswer() {
+      this.$emit('update:answer', [''])
+    }, */
     // 创建默认选项
     createDefaultOptions() {
       const options = [
@@ -144,8 +165,6 @@ export default {
     // 删除选项
     deleteOption(index) {
       const options = [...this.options]
-      // const key = options[index].label
-      // console.log(key)
       options.splice(index, 1)
       this.resort(options)
       if (this.type === 1 || this.type === 3) {
@@ -159,12 +178,18 @@ export default {
       options[index].value = value
       this.$emit('update:options', options)
     },
+
     // 修改题型
     changeType(value) {
       if (value === 1 || value === 3) {
         this.createDefaultOptions()
-      } else {
-        this.clearOptions()
+        this.$emit('update:answer', '')
+      } else if (value === 2) {
+        this.$emit('update:answer', '')
+        this.$emit('update:options', [])
+      } else if (value === 4) {
+        this.$emit('update:answer', [''])
+        this.$emit('update:options', [])
       }
       this.$emit('update:type', value)
     }

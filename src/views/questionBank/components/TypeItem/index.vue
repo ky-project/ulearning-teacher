@@ -18,7 +18,7 @@
         v-if="showAdd"
         icon-class="jia"
         class-name="answer-item__add"
-        @click="$emit('add')"
+        @click="$emit('add', value)"
       />
     </el-form-item>
   </div>
@@ -56,7 +56,7 @@ export default {
 
   computed: {
     showAdd() {
-      if (this.value === 1 || this.value === 3) {
+      if (this.value === 1 || this.value === 3 || this.value === 4) {
         return true
       } else {
         return false
