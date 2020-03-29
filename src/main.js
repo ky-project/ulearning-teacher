@@ -50,3 +50,13 @@ Vue.directive('focus', {
     el.focus()
   }
 })
+
+/* Vue.directive('spin', {
+  update: functioin(el, binding) {
+    const {value} = binding;
+    if(value){
+
+    }
+  }
+})
+ */

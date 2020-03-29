@@ -150,7 +150,7 @@
           <el-form-item label="试题难度" prop="questionKnowledge">
             <el-select v-model="temp.questionDifficulty" size="mini">
               <el-option
-                v-for="item in difficultyMap"
+                v-for="item in selectDifficultyMap"
                 :key="item.key"
                 :label="item.label"
                 :value="item.key"
@@ -272,7 +272,13 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    selectDifficultyMap() {
+      const tempMap = JSON.parse(JSON.stringify(difficultyMap))
+      tempMap.splice(0, 1)
+      return tempMap
+    }
+  },
   created() {
     this.getTeachingTaskList()
       .then(() => {
@@ -500,6 +506,7 @@ export default {
         questionDifficulty: ''
       }
       this.previewImg = ''
+      this.previewImgUrl = ''
     },
     // 添加
     handleCreate() {

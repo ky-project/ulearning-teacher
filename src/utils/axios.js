@@ -11,7 +11,7 @@ const key = 'Bearer '
 // 自动转换data格式
 const service = axios.create({
   baseURL: baseApi,
-  timeout: 5000,
+  timeout: 15000,
   transformRequest: [
     function dataStringify(data) {
       return stringify(data)

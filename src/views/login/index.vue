@@ -123,7 +123,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.login({ ...this.loginForm, uuid: this.code.uuid })
+          this.login({ ...this.loginForm, uuid: this.code.uuid, loginType: 2 })
             .then(() => {
               this.loading = false
               this.$router.push({ path: '/' })

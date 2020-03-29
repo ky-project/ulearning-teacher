@@ -23,6 +23,6 @@ const getters = {
   experimentResultMode: state => state.experimentResult.mode,
   // 通告相关
   notice: state => state.notice.notice,
-  noticeMode: state => state.notice.mode
+  noticeMode: state => state.notice.mode,
 }
 export default getters

@@ -43,6 +43,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 .card {
+  position: relative;
   width: 400px;
   border-radius: 5px;
   background-color: #fff;
@@ -68,7 +69,7 @@ export default {
     padding: 20px 20px 0;
   }
   &__footer {
-
+    padding: 20px;
   }
 }
 </style>

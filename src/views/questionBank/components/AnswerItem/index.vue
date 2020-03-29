@@ -3,7 +3,7 @@
     <template v-if="type === 4">
       <el-form-item
         v-for="(answer,index) in value"
-        :key="index + new Date().getTime()"
+        :key="index"
         :label="`第 ${index + 1} 空`"
       >
         <div>
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-
+// import { GetId } from '@/utils/index.js'
 export default {
   name: 'AnswerItem',
   props: {
@@ -106,6 +106,9 @@ export default {
     }
   },
   methods: {
+    /* getId() {
+      return GetId()
+    }, */
     // 修改答案内容
     changeAnswer(index, value) {
       const answer = [...this.value]

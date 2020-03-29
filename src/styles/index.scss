@@ -53,14 +53,16 @@ div:focus {
   display: flex;
 }
 
-.flex,
-.justify-between {
+.flex.justify-between {
   justify-content: space-between;
 }
 
-.flex,
-.wrap {
+.flex.wrap {
   flex-wrap: wrap
+}
+
+.flex.justify-end {
+  justify-content: flex-end;
 }
 
 .clearfix {
@@ -85,4 +87,18 @@ div:focus {
 // main-container global css
 .app-container {
   padding: 20px;
+}
+
+// 动画
+.spin {
+  animation: rotate 1s linear 0s infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

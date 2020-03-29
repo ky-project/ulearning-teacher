@@ -1,8 +1,8 @@
 <template>
   <div class="exam-quantity">
-    <card title="设置题型及数量" class="condition" width="100%">
+    <card title="设置题型及数量" class="condition" width="100%" min-body-height="150px">
       <template v-slot:body>
-        <div class="line flex justify-between">
+        <div class="line flex justify-between wrap">
           <quantity-picker
             v-for="item in quantity"
             :key="item.questionType"
@@ -11,6 +11,9 @@
             @update-grade="setGrade"
           />
         </div>
+
+      </template>
+      <template v-slot:footer>
         <div class="next">
           <el-button
             type="primary"
@@ -131,9 +134,12 @@ export default {
 <style lang='scss' scoped>
 .exam-quantity {
   .next {
-    margin-top: 20px;
+    /* width: 100%;
+    position: absolute;
+    bottom: 20px;
+    left: 0; */
+    padding-top: 20px;
     border-top: 1px dashed #ccc;
-    padding: 20px 0 0 0;
     text-align: center;
   }
 }

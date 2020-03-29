@@ -1,31 +1,39 @@
 <template>
-  <div>
-    <div id="main" :style="{ height: '400px'}" />
+  <div id="level_chart" class="level-chart">
+    hello
   </div>
 </template>
 
 <script>
 import echarts from 'echarts'
+
 export default {
-  name: 'Test',
+  name: '',
 
-  components: { },
-  props: {
-
-  },
+  components: {},
+  props: [''],
   data() {
     return {
-      // fileList: []
-      fileList: []
+
     }
   },
+
+  computed: {},
+
+  watch: {},
+
+  beforeMount() {},
+
   mounted() {
-    var myChart = echarts.init(document.getElementById('main'))
+    var myChart = echarts.init(document.getElementById('level_chart'))
     myChart.setOption({
       xAxis: {
         data: ['不及格', '及格', '良好', '优秀']
       },
       yAxis: {
+        nameTextStyle: {
+          fontSize: 0
+        }
       },
       barMaxWidth: 100,
       series: [{
@@ -38,9 +46,13 @@ export default {
         }
       }]
     })
-  }
+  },
+
+  methods: {}
+
 }
 
 </script>
-<style lang='scss' scoped>
+<style lang='' scoped>
+
 </style>

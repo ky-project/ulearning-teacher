@@ -138,13 +138,27 @@ export const constantRoutes = [
         path: 'exam-monitor',
         name: 'ExamMonitor',
         component: () => import('@/views/exam/examMonitor'),
-        meta: { title: '监控学生测试', icon: 'jiankong' }
+        meta: { title: '监控测试列表', icon: 'jiankong' }
+      },
+      {
+        path: 'exam-detail',
+        name: 'ExamDetail',
+        hidden: true,
+        component: () => import('@/views/exam/examDetail'),
+        meta: { title: '监控学生测试' }
       },
       {
         path: 'exam-statistic',
         name: 'ExamStatistic',
         component: () => import('@/views/exam/examStatistic'),
         meta: { title: '统计学生成绩', icon: 'tongji' }
+      },
+      {
+        path: 'exam-chart',
+        name: 'ExamChart',
+        hidden: true,
+        component: () => import('@/views/exam/examChart'),
+        meta: { title: '学生成绩图表' }
       },
       {
         path: 'exam-initial',

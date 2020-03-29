@@ -57,6 +57,7 @@ export const GET_EXAM_PAGE_URL = '/teacher/examinationTask/pageList' // 分页�
 export const ADD_EXAM_URL = '/teacher/examinationTask/save' // 添加测试任务
 export const UPDATE_EXAM_URL = '/teacher/examinationTask/update' // 添加测试任务
 export const DELETE_EXAM_URL = '/teacher/examinationTask/delete' // 删除测试任务
+export const GET_EXAM_LIST_URL = '/teacher/examinationTask/getArrByTeachingTaskId' // 根据教学任务id查询测试任务数组
 // 通告管理
 export const GET_NOTICE_PAGE_URL = '/teacher/teachingTaskNotice/pageList' // 分页查询通告
 export const ADD_ATTACHMENT_URL2 = '/teacher/teachingTaskNotice/saveAttachments' // 添加附件
@@ -67,4 +68,8 @@ export const DELETE_NOTICE_URL = '/teacher/teachingTaskNotice/delete' // 删除�
 export const GET_EXPERIMENT_RESULT_PAGE_URL = '/teacher/experimentResult/pageList' // 分页查询实验结果
 export const DOWNLOAD_EXPERIMENT_RESULT_URL = '/teacher/experimentResult/downloadAttachment' // 下载附件
 export const CORRECT_EXPERIMENT_RESULT_URL = '/teacher/experimentResult/correctResult' // 批改实验结果
-
+// 测试结果统计
+export const GET_STUDENT_EXAM_PAGE = '/teacher/studentExaminationTask/pageList' // 分页查询学生测试
+export const GET_STUDENT_EXAM_RESULT_PAGE = '/teacher/studentExaminationTask/pageStudentExaminationResultList' // 分页查询学生测试结果统计信息
+export const GET_STUDENT_EXAM_STATISTIC_URL = '/teacher/studentExaminationTask/getStudentExaminationStatistics' // 分页查询学生测试统计
+export const GET_EXAM_DETAIL_URL = '/teacher/studentExaminationTask/getExaminationResultByExaminingId' // 根据学生测试id查询答题情况

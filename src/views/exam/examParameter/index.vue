@@ -3,13 +3,13 @@
     <el-header v-if="mode === 'add'" class="exam-parameter__header">
       <Step :active="1" :back="() => { $router.push('/exam/exam-initial')}" />
     </el-header>
-    <el-container class="exam-parameter__main">
-      <el-main>
+    <el-container class="exam-parameter__container flex">
+      <el-main class="exam-parameter__container__main">
         <ExamRange />
         <ExamDifficulty />
         <ExamQuantity />
       </el-main>
-      <el-aside width="300px" class="exam-parameter__aside">
+      <el-aside width="300px" class="exam-parameter__container__aside">
         <KnowledgeBar />
       </el-aside>
     </el-container>
@@ -69,24 +69,20 @@ export default {
   &__header {
     padding: 0
   }
-  &__main {
-    // width: calc(100% - 200px);
-    height: calc(100vh - 110px);
-    overflow-y: auto;
+  &__container {
     background: #eee;
-    .el-main {
-      overflow: unset;
+    &__main {
+      flex: 1;
+      margin-right: 20px;
+      padding-right: 0;
     }
-    .el-aside {
+    &__aside {
+      width: 200px;
+      padding-right: 20px;
+      padding-top: 20px;
+      background-color: #eee;
       overflow: unset;
     }
   }
-  &__aside {
-    // width: 200px;
-    padding-right: 20px;
-    padding-top: 20px;
-    background-color: #eee;
-  }
-
 }
 </style>

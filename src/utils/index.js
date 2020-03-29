@@ -168,3 +168,10 @@ export function noneDuplicate(array) {
   }
   return temp
 }
+
+// 获取唯一id
+let id = 0
+
+export function GetId() {
+  return ++id
+}

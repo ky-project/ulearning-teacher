@@ -1,6 +1,6 @@
 <template>
   <div class="exam-range">
-    <card title="选择考核范围" class="range" width="100%">
+    <card title="选择考核范围" class="range" width="100%" height="200px">
       <template v-slot:btn>
         <el-button type="text" :style="{padding: 0}" @click="()=>{clearKnowledge()}">清空</el-button>
       </template>
@@ -73,26 +73,26 @@ export default {
 </script>
 <style lang='scss' scoped>
 .exam-range {
-    position: relative;
-    .empty {
-      display: block;
-      position: absolute;
-      top: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: #aaa;
-      font-size: 14px;
-    }
-    .el-tag {
-      margin-right: 5px;
-      margin-bottom: 5px;
-    }
-    .scroll-wrapper {
-      height: 150px;
-    }
-    //
-    ::v-deep .el-scrollbar__wrap {
-      overflow-x: hidden
-    }
+  position: relative;
+  .empty {
+    display: block;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #aaa;
+    font-size: 14px;
   }
+  .el-tag {
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  .scroll-wrapper {
+    height: 150px;
+  }
+  //
+  ::v-deep .el-scrollbar__wrap {
+    overflow-x: hidden
+  }
+}
 </style>
