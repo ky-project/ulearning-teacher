@@ -11,7 +11,7 @@
         <el-option
           v-for="item in teachingTask"
           :key="item.id"
-          :label="item.teachingTaskAlias"
+          :label="item.showName"
           :value="item.id"
         />
       </el-select>
