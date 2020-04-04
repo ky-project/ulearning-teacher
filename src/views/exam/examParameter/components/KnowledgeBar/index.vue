@@ -51,7 +51,7 @@ export default {
       this.getTeachingTaskAlias({ id: teachingTaskId })
         .then(response => {
           console.log('response', response)
-          this.teachingTaskAlias = response.data.teachingTaskAlias
+          this.teachingTaskAlias = '[' + response.data.term + ']' + response.data.teachingTaskAlias
         })
       this.getKnowledge({ teachingTaskId })
         .then(response => {
