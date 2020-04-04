@@ -3,20 +3,6 @@
     <!-- 查询 -->
     <div class="filter-container">
       <el-select
-        v-model="listQuery.teachingTaskId"
-        placeholder="教学任务"
-        style="width: 225px;"
-        class="filter-item"
-        @change="changeHandler"
-      >
-        <el-option
-          v-for="item in teachingTaskList"
-          :key="item.id"
-          :label="item.showName"
-          :value="item.id"
-        />
-      </el-select>
-      <el-select
         v-model="listQuery.examinationTaskId"
         placeholder="测试任务"
         style="width: 200px;"
@@ -152,15 +138,25 @@ export default {
       isDisabled: false // 是否禁用查询
     }
   },
-  created() {
-    this.getTeachingTaskList()
-      .then(() => {
-        this.changeHandler(this.listQuery.teachingTaskId)
+  watch: {
+    '$store.getters.teachingTaskId': {
+      handler(value) {
+        this.listQuery.teachingTaskId = value
+        this.changeHandler(value)
           .then(() => {
             this.getList()
           })
           .catch(() => {})
+      },
+      immediate: true
+    }
+  },
+  created() {
+    this.changeHandler(this.listQuery.teachingTaskId)
+      .then(() => {
+        this.getList()
       })
+      .catch(() => {})
   },
   methods: {
     // 下载文件
@@ -190,23 +186,6 @@ export default {
           })
           .catch((error) => {
             this.listLoading = false
-            this.$message.error(error.message || '出错')
-            reject(error)
-          })
-      })
-    },
-    // 获取教学任务列表
-    getTeachingTaskList() {
-      return new Promise((resolve, reject) => {
-        axiosGet(GET_ALL_TEACHING_TASK_URL)
-          .then(response => {
-            this.teachingTaskList = response.data
-            if (this.teachingTaskList.length) {
-              this.listQuery.teachingTaskId = this.teachingTaskList[0].id
-            }
-            resolve()
-          })
-          .catch((error) => {
             this.$message.error(error.message || '出错')
             reject(error)
           })

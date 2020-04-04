@@ -47,7 +47,7 @@
     <div class="sub-nav">
       <file-nav :data="navList" @update="handleUpdate" />
       <div class="filter fr">
-        <el-select
+        <!-- <el-select
           v-if="zone"
           v-model="teachingTaskId"
           placeholder="课程"
@@ -78,7 +78,7 @@
             :label="item.showName"
             :value="item.id"
           />
-        </el-select>
+        </el-select> -->
       </div>
     </div>
     <!-- 文件区 -->
@@ -232,17 +232,27 @@ export default {
     }
   },
   watch: {
-    teachingTaskId() {
+    /* teachingTaskId() {
       if (this.fileParentId) {
         this.initialFileList()
       }
+    } */
+    '$store.getters.teachingTaskId': {
+      handler(value) {
+        this.teachingTaskId = value
+        if (this.fileParentId) {
+          this.initialFileList()
+        }
+      },
+      immediate: true
     }
   },
   created() {
-    if (this.teachingTask.length) {
+    /* if (this.teachingTask.length) {
       this.teachingTaskId = this.teachingTask[0].id
       this.initialFileList()
-    }
+    } */
+    this.initialFileList()
   },
   methods: {
     // 查询分享区根节点id

@@ -2,19 +2,6 @@
   <div class="app-container question-bank">
     <!-- 查询 -->
     <div class="filter-container">
-      <el-select
-        v-model="listQuery.teachingTaskId"
-        placeholder="教学任务"
-        style="width: 200px;"
-        class="filter-item"
-      >
-        <el-option
-          v-for="item in teachingTaskList"
-          :key="item.id"
-          :label="item.showName"
-          :value="item.id"
-        />
-      </el-select>
       <el-input
         v-model="listQuery.questionKnowledge"
         placeholder="知识模块"
@@ -279,24 +266,18 @@ export default {
       return tempMap
     }
   },
+  watch: {
+    '$store.getters.teachingTaskId': {
+      handler(value) {
+        this.listQuery.teachingTaskId = value
+      },
+      immediate: true
+    }
+  },
   created() {
-    this.getTeachingTaskList()
-      .then(() => {
-        this.getList()
-      })
+    this.getList()
   },
   methods: {
-    // 添加选项
-    /* addOptions(newOption) {
-      this.$nextTick(() => {
-        this.temp.rawOption.push(newOption)
-      })
-    }, */
-    /* updateOptions(newRawOption) {
-      // this.temp.rawOption = Object.assign({}, newRawOption)
-      this.$set(this.temp, 'rawOption', newRawOption)
-      // .rawOption = newRawOption
-    }, */
     // 更新试题
     updateQuestion() {
       return new Promise((resolve, reject) => {
@@ -522,23 +503,6 @@ export default {
       this.listQuery.teachingTaskId = this.teachingTaskList.length && this.teachingTaskList[0].id
       this.listQuery.questionType = ''
       this.listQuery.questionKnowledge = ''
-    },
-    // 获取教学任务列表
-    getTeachingTaskList() {
-      return new Promise((resolve, reject) => {
-        axiosGet(GET_ALL_TEACHING_TASK_URL)
-          .then(response => {
-            this.teachingTaskList = response.data
-            if (this.teachingTaskList.length) {
-              this.listQuery.teachingTaskId = this.teachingTaskList[0].id
-            }
-            resolve()
-          })
-          .catch(error => {
-            this.$message.error(error.message || '出错了!')
-            reject()
-          })
-      })
     },
     // 获取表格数据
     getList() {

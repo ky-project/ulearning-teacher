@@ -5,6 +5,20 @@
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
+      <el-select
+        :value="teachingTaskId"
+        placeholder="教学任务"
+        style="width: 225px;"
+        class="filter-item"
+        @change="(teachingTaskId) => {setTeachingTaskId(teachingTaskId)}"
+      >
+        <el-option
+          v-for="item in teachingTask"
+          :key="item.id"
+          :label="item.showName"
+          :value="item.id"
+        />
+      </el-select>
       <div class="avatar" @click.stop="uploadHeadImg">
         <img :src="userInfo.teaPhoto ? userInfo.teaPhoto : teaPhoto" alt="">
       </div>
@@ -32,7 +46,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import SvgIcon from '@/components/SvgIcon'
@@ -51,12 +65,17 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'userInfo'
+      'userInfo',
+      'teachingTask',
+      'teachingTaskId'
     ])
   },
   methods: {
     ...mapActions({
       'uploadAvatar': 'user/uploadAvatar'
+    }),
+    ...mapMutations({
+      'setTeachingTaskId': 'user/SET_TEACHING_TASK_ID'
     }),
     // 打开图片上传
     uploadHeadImg: function() {
@@ -112,6 +131,9 @@ export default {
     height: 100%;
     line-height: 50px;
     display: flex;
+    .el-select {
+      margin-right: 10px;
+    }
     &:focus {
       outline: none;
     }

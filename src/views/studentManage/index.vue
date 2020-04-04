@@ -2,19 +2,6 @@
   <div class="app-container">
     <!-- 查询 -->
     <div class="filter-container">
-      <el-select
-        v-model="listQuery.teachingTaskId"
-        placeholder="教学任务"
-        style="width: 225px;"
-        class="filter-item"
-      >
-        <el-option
-          v-for="item in teachingTaskList"
-          :key="item.id"
-          :label="'[' + item.term + ']' + item.teachingTaskAlias"
-          :value="item.id"
-        />
-      </el-select>
       <el-input v-model="listQuery.stuName" placeholder="姓名" style="width: 200px;" class="filter-item" />
       <el-input v-model="listQuery.stuNumber" placeholder="学号" style="width: 200px;" class="filter-item" />
       <el-button
@@ -119,30 +106,18 @@ export default {
       teachingTaskList: []
     }
   },
+  watch: {
+    '$store.getters.teachingTaskId': {
+      handler(value) {
+        this.listQuery.teachingTaskId = value
+      },
+      immediate: true
+    }
+  },
   created() {
-    this.getTeachingTaskList()
-      .then(() => {
-        this.getList()
-      })
+    this.getList()
   },
   methods: {
-    // 获取教学任务列表
-    getTeachingTaskList() {
-      return new Promise((resolve, reject) => {
-        axiosGet(GET_ALL_TEACHING_TASK_URL)
-          .then(response => {
-            this.teachingTaskList = response.data
-            if (this.teachingTaskList.length) {
-              this.listQuery.teachingTaskId = this.teachingTaskList[0].id
-            }
-            resolve()
-          })
-          .catch(error => {
-            this.$message.error(error.message || '出错了!')
-            reject()
-          })
-      })
-    },
     getList() {
       if (this.listQuery.teachingTaskId) {
         this.listLoading = true

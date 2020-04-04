@@ -47,7 +47,7 @@
     <div class="sub-nav">
       <file-nav :data="navList" @update="handleUpdate" />
       <div class="filter fr">
-        <el-select
+        <!-- <el-select
           v-if="zone"
           v-model="teachingTaskId"
           placeholder="课程"
@@ -62,8 +62,8 @@
             :label="item.teachingTaskAlias"
             :value="item.id"
           />
-        </el-select>
-        <el-select
+        </el-select> -->
+        <!-- <el-select
           v-else
           v-model="teachingTaskId"
           placeholder="教学任务"
@@ -78,7 +78,7 @@
             :label="item.showName"
             :value="item.id"
           />
-        </el-select>
+        </el-select> -->
       </div>
     </div>
     <!-- 文件区 -->
@@ -170,7 +170,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 import {
   GET_ROOT_FOLDER_URL, // 查询文件资料根节点
   GET_DOCUMENTATION_LIST_URL, // 查询文件资料列表
@@ -216,7 +216,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['teachingTask']),
+    // ...mapGetters(['teachingTask']),
     tableHeight() {
       return window.innerHeight - 126
     },
@@ -233,17 +233,29 @@ export default {
     }
   },
   watch: {
-    teachingTaskId() {
+    /* teachingTaskId() {
       if (this.fileParentId) {
         this.initialFileList()
       }
+    } */
+    '$store.getters.teachingTaskId': {
+
+      handler(value) {
+        // this.listQuery.teachingTaskId = value
+        this.teachingTaskId = value
+        if (this.fileParentId) {
+          this.initialFileList()
+        }
+      },
+      immediate: true
     }
   },
   created() {
-    if (this.teachingTask.length) {
+    /* if (this.teachingTask.length) {
       this.teachingTaskId = this.teachingTask[0].id
       this.initialFileList()
-    }
+    } */
+    this.initialFileList()
   },
 
   beforeMount() {},

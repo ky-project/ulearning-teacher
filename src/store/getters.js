@@ -7,6 +7,7 @@ const getters = {
   userInfo: state => state.user.userInfo,
   role: state => state.user.role,
   teachingTask: state => state.user.teachingTask,
+  teachingTaskId: state => state.user.teachingTaskId,
   // 测试相关
   exam: state => state.exam.exam,
   mode: state => state.exam.mode,
@@ -23,6 +24,6 @@ const getters = {
   experimentResultMode: state => state.experimentResult.mode,
   // 通告相关
   notice: state => state.notice.notice,
-  noticeMode: state => state.notice.mode,
+  noticeMode: state => state.notice.mode
 }
 export default getters

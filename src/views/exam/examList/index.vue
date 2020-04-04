@@ -2,19 +2,6 @@
   <div class="app-container">
     <!-- 查询 -->
     <div class="filter-container">
-      <el-select
-        v-model="listQuery.teachingTaskId"
-        placeholder="教学任务"
-        style="width: 200px;"
-        class="filter-item"
-      >
-        <el-option
-          v-for="item in teachingTask"
-          :key="item.id"
-          :label="item.showName"
-          :value="item.id"
-        />
-      </el-select>
       <el-input
         v-model="listQuery.examinationName"
         placeholder="试题名称"
@@ -329,10 +316,15 @@ export default {
   computed: {
     ...mapGetters(['teachingTask'])
   },
-  created() {
-    if (this.teachingTask.length) {
-      this.listQuery.teachingTaskId = this.teachingTask[0].id
+  watch: {
+    '$store.getters.teachingTaskId': {
+      handler(value) {
+        this.listQuery.teachingTaskId = value
+      },
+      immediate: true
     }
+  },
+  created() {
     this.getList()
   },
   methods: {

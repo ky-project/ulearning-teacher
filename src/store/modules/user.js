@@ -15,7 +15,8 @@ const getDefaultState = () => {
   return {
     userInfo: '',
     role: '',
-    teachingTask: []
+    teachingTask: [],
+    teachingTaskId: ''
   }
 }
 
@@ -25,7 +26,7 @@ const mutations = {
   SET_USER_INFO: (state, userInfo) => {
     state.userInfo = userInfo
   },
-  RESET_STATE: state => {
+  RESET_STATE: (state) => {
     Object.assign(state, getDefaultState())
   },
   SET_TOKEN: (state, token) => {
@@ -42,6 +43,9 @@ const mutations = {
   },
   SET_TEACHING_TASK: (state, teachingTask) => {
     state.teachingTask = teachingTask
+  },
+  SET_TEACHING_TASK_ID: (state, teachingTaskId) => {
+    state.teachingTaskId = teachingTaskId
   }
 }
 
@@ -81,6 +85,10 @@ const actions = {
           const teachingTask = response.data
           console.log('teachingTask', teachingTask)
           commit('SET_TEACHING_TASK', teachingTask)
+          // 初始化
+          if (teachingTask.length) {
+            commit('SET_TEACHING_TASK_ID', teachingTask[0].id)
+          }
           resolve()
         })
         .catch(error => {

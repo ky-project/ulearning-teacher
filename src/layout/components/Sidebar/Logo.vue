@@ -77,6 +77,7 @@ export default {
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;
     }
+
     & .sidebar-subTitle {
       display: inline-block;
       vertical-align: -7px;
