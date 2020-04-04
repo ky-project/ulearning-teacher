@@ -137,6 +137,7 @@ export default {
     '$store.getters.teachingTaskId': {
       handler(value) {
         this.listQuery.teachingTaskId = value
+        this.getList()
       },
       immediate: true
     }

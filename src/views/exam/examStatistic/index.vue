@@ -172,7 +172,12 @@ export default {
     },
     // 分页查询学生测试
     getList() {
-      if (!this.listQuery.examinationTaskId) return
+      if (!this.listQuery.examinationTaskId) {
+        this.currentExamnationTaskId = ''
+        this.list = []
+        this.total = 0
+        return
+      }
       return new Promise((resolve, reject) => {
         this.listLoading = true
         axiosGet(GET_STUDENT_EXAM_RESULT_PAGE, { params: this.listQuery })
