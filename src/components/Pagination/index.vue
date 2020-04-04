@@ -18,6 +18,7 @@
       :current-page.sync="currentPage"
       :total="total"
       :layout="layout"
+      :small="small"
       v-bind="$attrs"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -70,6 +71,10 @@ export default {
       default: true
     },
     hidden: {
+      type: Boolean,
+      default: false
+    },
+    small: {
       type: Boolean,
       default: false
     }

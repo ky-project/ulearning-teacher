@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       title: 'U-Learning',
-      subTitle: '教师',
+      subTitle: '教师端',
       logo: logo
     }
   }

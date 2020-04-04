@@ -51,6 +51,7 @@
           name="code"
           type="text"
           tabindex="3"
+          @keyup.enter.native="handleLogin"
         />
         <span class="seperator">|</span>
         <img :src="code.img" alt="" @click="getcode">
@@ -83,8 +84,8 @@ export default {
         uuid: ''
       },
       loginForm: {
-        username: '16620216',
-        password: '123456',
+        username: '',
+        password: '',
         code: ''
       },
       loginRules: {
