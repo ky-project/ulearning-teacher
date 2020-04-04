@@ -13,7 +13,7 @@
     <div class="exam-detail-main">
       <el-scrollbar :style="{height: '100%'}">
         <div class="exam-detail-main-inner">
-          <h3 class="header">{{ '单元测试一' }}</h3>
+          <h3 class="header">{{ examinationName }}</h3>
           <h4 class="title">{{ questionSort + '、' + typeMap[questionType] }}</h4>
           <p class="question-title">
             {{ `${orderNumber}. ${currentQuestion.questionText}` }}
@@ -40,16 +40,12 @@
             </div>
             <div class="question-message-item">
               <label>【难度】</label>
-              <span>{{ currentQuestion.questionDifficulty }}</span>
+              <span>{{ difficultyMap[currentQuestion.questionDifficulty] }}</span>
             </div>
             <div class="question-message-item">
               <label>【答案】</label>
               <!-- <span>{{ currentQuestion.questionKey.split('|#|').join(',') }}</span> -->
-              <span>{{ currentQuestion.questionKey }}</span>
-            </div>
-            <div class="question-message-item">
-              <label>【得分】</label>
-              <span>{{ currentQuestion.studentScore }} 分</span>
+              <span>{{ currentQuestion.questionKey ? currentQuestion.questionKey.split('|#|').join(',') : '' }}</span>
             </div>
           </div>
           <div class="btns flex justify-end">
@@ -125,7 +121,7 @@ import ChoiceQuestion from '@/views/exam/components/ChoiceQuestion'
 import { axiosGet } from '@/utils/axios'
 import { GET_EXAM_DETAIL_URL } from '@/api/url'
 import HeaderTag from '@/components/HeaderTag'
-import { typeMap } from './../config.js'
+import { typeMap, difficultyMap } from './../config.js'
 
 export default {
   name: 'ExamDetail',
@@ -141,16 +137,18 @@ export default {
       orderNumber: 1,
       questionType: '',
       typeMap: typeMap,
+      difficultyMap: difficultyMap,
       questionSort: '一', // 大题序列
       result: '', // 临时存储单选，多选，判断结果
       questionAnswerDtoList: [],
+      examinationName: '', // 测试名称
       // 时间相关
       hour: 0,
       minute: 0,
       second: 0,
       // 更新相关
       timerId: '',
-      time: 10,
+      time: 300,
       // 加载
       isLoading: false
     }
@@ -277,12 +275,13 @@ export default {
         } else {
           this.time--
           if (this.time === 0) {
+            console.log('被调用了')
             // 重新初始化
             await this.getData()
             this.initialTime()
             this.setQuestionAnswerDtoList(this.courseQuestion)
             // 设置计数器
-            this.time = 10
+            this.time = 300
           }
         }
       }, 1000)
@@ -415,10 +414,20 @@ export default {
         axiosGet(GET_EXAM_DETAIL_URL, { params: { examiningId: this.$route.query.examiningId }})
           .then(response => {
             console.log('response', response)
-            const { courseQuestion, examiningRemainTime } = response.data
-            this.courseQuestion = courseQuestion // 设置题目
-            this.examiningRemainTime = examiningRemainTime // 设置剩余时间
-            this.isLoading = false
+            const { courseQuestion, examiningRemainTime, examinationName, examingState } = response.data
+            if (examingState === 1) {
+              this.courseQuestion = courseQuestion // 设置题目
+              this.examiningRemainTime = examiningRemainTime // 设置剩余时间
+              this.examinationName = examinationName
+              this.isLoading = false
+            } else {
+              // 关闭定时器
+              clearInterval(this.timerId)
+              // 提示弹窗
+              this.$message.warning('检测结束，正在跳转...')
+              // 跳转
+              this.$router.push('/exam/exam-monitor')
+            }
             resolve()
           })
           .catch(error => {

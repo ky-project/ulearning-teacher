@@ -34,12 +34,13 @@ module.exports = {
   transpileDependencies: ['vue-echarts', 'resize-detector', 'vuex-persist'],
   devServer: {
     port: port,
-    open: true,
+    open: false,
     overlay: {
       warnings: false,
       errors: true
     },
     proxy: {
+      // 'baseUrl/auth/vCode'
       [baseApi]: {
         target: baseUrl,
         pathRewrite: { ['^' + baseApi]: '' }

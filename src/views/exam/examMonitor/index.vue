@@ -55,19 +55,24 @@
           <span>{{ row.stuNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" min-width="120" align="center">
+      <el-table-column label="姓名" min-width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.stuName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="剩余时间" min-width="120" align="center">
+      <el-table-column label="性别" min-width="80" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.examiningRemainTime }}</span>
+          <span>{{ row.stuGender }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="测试状态" min-width="120" align="center">
+      <el-table-column label="开始时间" min-width="120" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.examiningState === 1 ? '进行中' : '已完成' }}</span>
+          <span>{{ row.examiningLoginTime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column show-overflow-tooltip label="ip" min-width="120" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.examiningHostIp }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
@@ -114,7 +119,8 @@ export default {
         currentPage: 1,
         pageSize: 5,
         teachingTaskId: '',
-        examinationTaskId: ''
+        examinationTaskId: '',
+        examiningState: 1
       },
       teachingTaskList: [],
       examList: [],

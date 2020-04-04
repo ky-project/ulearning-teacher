@@ -73,3 +73,5 @@ export const GET_STUDENT_EXAM_PAGE = '/teacher/studentExaminationTask/pageList' 
 export const GET_STUDENT_EXAM_RESULT_PAGE = '/teacher/studentExaminationTask/pageStudentExaminationResultList' // 分页查询学生测试结果统计信息
 export const GET_STUDENT_EXAM_STATISTIC_URL = '/teacher/studentExaminationTask/getStudentExaminationStatistics' // 分页查询学生测试统计
 export const GET_EXAM_DETAIL_URL = '/teacher/studentExaminationTask/getExaminationResultByExaminingId' // 根据学生测试id查询答题情况
+export const EXPORT_EXAM_RESULT = '/teacher/studentExaminationTask/export' // 导出学生测试结果统计
+

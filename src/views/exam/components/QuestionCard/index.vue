@@ -83,12 +83,12 @@ export default {
     padding: 5px 0 0 5px;
   }
   &-item {
-    width: 30px;
-    height: 30px;
-    margin-right: 5px;
-    margin-bottom: 5px;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    margin-bottom: 10px;
     float: left;
-    line-height: 30px;
+    line-height: 40px;
     text-align: center;
     font-size: 14px;
     color: #666;

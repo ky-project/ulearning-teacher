@@ -43,8 +43,7 @@
         v-waves
         class="filter-item fr"
         type="primary"
-
-        @click="handleFilter"
+        @click="handleExport"
       >
         <svg-icon icon-class="daochu" />
         导出
@@ -96,7 +95,7 @@
       </el-table-column>
       <el-table-column label="正确率" min-width="120" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.accuracy }}</span>
+          <span>{{ (row.accuracy * 100).toFixed(2) + '%' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="提交时间" min-width="150" align="center">
@@ -125,8 +124,8 @@ import {
   GET_ALL_TEACHING_TASK_URL,
   DELETE_SELECTED_STUDENT_URL,
   GET_EXAM_LIST_URL,
-  GET_STUDENT_EXAM_PAGE,
-  GET_STUDENT_EXAM_RESULT_PAGE
+  GET_STUDENT_EXAM_RESULT_PAGE,
+  EXPORT_EXAM_RESULT
 } from '@/api/url'
 
 export default {
@@ -164,6 +163,17 @@ export default {
       })
   },
   methods: {
+    // 下载文件
+    handleExport() {
+      var a = document.createElement('a')
+      a.download = ''
+      a.style.display = 'none'
+      const fileurl = process.env.VUE_APP_BASE_API + EXPORT_EXAM_RESULT + '?examinationTaskId=' + this.currentExamnationTaskId
+      a.href = fileurl
+      document.body.appendChild(a)
+      a.click() // 触发点击
+      document.body.removeChild(a) // 然后移除
+    },
     // 分页查询学生测试
     getList() {
       if (!this.listQuery.examinationTaskId) return

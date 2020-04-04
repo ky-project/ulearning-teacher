@@ -13,3 +13,13 @@ export const stateMap = {
   3: '进行中',
   4: '已结束'
 }
+
+// 试题难度
+export const difficultyMap = {
+  0: '无级别',
+  1: '容易',
+  2: '较易',
+  3: '一般',
+  4: '较难',
+  5: '困难'
+}

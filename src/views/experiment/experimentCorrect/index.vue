@@ -10,7 +10,7 @@
     </div>
     <div class="experiment-result-container flex">
       <div class="left">
-        <card :width="'100%'" :min-body-height="'280px'" title="实验结果">
+        <card width="100%" :min-body-height="'calc(100vh - 280px)'" title="实验结果">
           <template v-slot:btn>
             学生姓名：{{ experimentResult.stuName }}
           </template>
@@ -31,12 +31,21 @@
         </card>
       </div>
       <div class="right">
-        <card :width="'300px'" :min-body-height="'calc(100vh - 280px)'" title="评语">
+        <card width="100%" :min-body-height="'calc(100vh - 320px)'" title="综合评价">
+          <template v-slot:btn>
+            <span>实验展示</span>
+            <el-switch
+              :value="experimentResult.experimentShared"
+              active-color="#13ce66"
+              inactive-color="#eee"
+              @change="(experimentShared) => setExperimentResult({experimentShared})"
+            />
+          </template>
           <template v-slot:body>
             <tinymce
               :value="experimentResult.experimentAdvice"
               width=""
-              height="280px"
+              height="300px"
               :toolbar="toolbar"
               menubar=""
               :statusbar="false"
@@ -44,7 +53,8 @@
             />
           </template>
           <template v-slot:footer>
-            <div class="score">
+            <div class="score flex">
+              <label for="">评分</label>
               <el-input-number
                 :value="experimentResult.experimentScore"
                 placeholder="评分"
@@ -52,7 +62,7 @@
                 :min="0"
                 :step="0.5"
                 :step-strictly="true"
-                :style="{width:'100%'}"
+                :style="{width: '100%'}"
                 @input="(experimentScore) => setExperimentResult({experimentScore})"
               />
             </div>
@@ -142,6 +152,7 @@ export default {
     padding: 20px;
     flex-wrap: nowrap;
     .left {
+      flex-grow: 1;
       margin-right: 20px;
       .attachment {
         width: 100%;
@@ -150,9 +161,17 @@ export default {
       }
     }
     .right {
-      // flex-grow: 1;
+      width: 340px;
       .score {
-        padding: 10px 20px;
+        padding-left: 50px;
+        position: relative;
+        label {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+        // padding: 10px 20px;
       }
     }
   }

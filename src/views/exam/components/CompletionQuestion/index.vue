@@ -83,6 +83,9 @@ export default {
       &:focus {
         outline: none;
       }
+      &:disabled {
+        background-color: #fff;
+      }
     }
   }
 }

@@ -5,7 +5,7 @@ import router from '@/router'
 import store from '@/store'
 import { getToken, getRefreshToken } from '@/utils/auth'
 
-const baseApi = process.env.VUE_APP_BASE_API
+const baseApi = process.env.VUE_APP_BASE_API // '/auth/vCode'
 const key = 'Bearer '
 
 // 自动转换data格式

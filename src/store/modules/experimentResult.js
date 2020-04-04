@@ -11,9 +11,9 @@ function getDefaultExperimentResult() {
     experimentId: 0,
     experimentResult: '',
     experimentScore: 0,
-    experimentShared: true,
+    experimentShared: false,
     id: 0,
-    isCorrected: true,
+    isCorrected: false,
     memo: '',
     stuId: 0,
     stuName: '',
@@ -62,94 +62,6 @@ const actions = {
         })
     })
   }
-  /* // 添加实验
-  addExperiment({ commit, state }, attachment) {
-    return new Promise((resolve, reject) => {
-      const {
-        experimentAttachment,
-        experimentAttachmentName,
-        experimentContent,
-        experimentTitle,
-        experimentOrder,
-        teachingTaskId
-      } = state.experimentResult
-      const data = {
-        experimentAttachment,
-        experimentAttachmentName,
-        experimentContent,
-        experimentOrder,
-        experimentTitle,
-        teachingTaskId
-      }
-      axiosPost(ADD_EXPERIMENT_RESULT_URL, data)
-        .then(response => {
-          Message.success('实验添加成功')
-          resolve()
-        })
-        .catch(error => {
-          Message.error(error.message || '出错')
-          reject(error)
-        })
-    })
-  },
-  // 更新实验
-  updateExperiment({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      const {
-        experimentAttachment,
-        experimentAttachmentName,
-        experimentContent,
-        experimentTitle,
-        id,
-        teachingTaskId
-      } = state.experimentResult
-      const data = {
-        experimentAttachment,
-        experimentAttachmentName,
-        experimentContent,
-        experimentTitle,
-        id,
-        teachingTaskId
-      }
-      axiosPost(UPDATE_EXPERIMENT_RESULT_URL, data)
-        .then(response => {
-          Message.success('实验更新成功')
-          resolve()
-        })
-        .catch(error => {
-          Message.error(error.message || '出错')
-          reject(error)
-        })
-    })
-  },
-  // 获取附件url 和 附件名
-  getAttachmentUrl({ commit }, attachment) {
-    return new Promise((resolve, reject) => {
-      const formData = new FormData()
-      formData.append('attachment', attachment)
-      axios2({
-        method: 'POST',
-        url: ADD_ATTACHMENT_URL,
-        data: formData,
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-        .then(response => {
-          const {
-            experimentAttachment,
-            experimentAttachmentName
-          } = response.data
-          commit('SET_EXPERIMENT_RESULT', {
-            experimentAttachment,
-            experimentAttachmentName
-          })
-          resolve()
-        })
-        .catch(error => {
-          Message.error(error.message || '出错')
-          reject(error)
-        })
-    })
-  } */
 }
 
 export default {

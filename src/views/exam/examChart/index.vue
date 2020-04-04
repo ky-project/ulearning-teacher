@@ -114,6 +114,11 @@ export default {
             name: numberMap[item.resultType]
           })
         })
+        // 剔除在考人数
+        const index = numberList.findIndex(item => item.name === '在考')
+        if (index !== -1) {
+          numberList.splice(index, 1)
+        }
         this.initNumberChart(numberList)
       })
   },

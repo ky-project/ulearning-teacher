@@ -130,6 +130,7 @@ export default {
     &.active {
       border: 2px solid #4d555d;
     }
+
   }
 }
 </style>
