@@ -6,12 +6,14 @@
         v-model="listQuery.examinationName"
         placeholder="试题名称"
         style="width: 200px;"
+        size="small"
         class="filter-item"
       />
       <el-select
         v-model="listQuery.examinationState"
         placeholder="测试状态"
         style="width: 200px;"
+        size="small"
         class="filter-item"
       >
         <el-option
@@ -21,11 +23,13 @@
           :value="item.value"
         />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" @click="handleReset">
+      <el-button v-waves class="filter-item" size="small" round type="primary" @click="handleReset">
         重置
       </el-button>
       <el-button
         v-waves
+        size="small"
+        round
         class="filter-item"
         type="primary"
         icon="el-icon-search"
@@ -35,6 +39,8 @@
       </el-button>
       <el-button
         class="filter-item fr"
+        size="small"
+        round
         style="margin-left: 10px;"
         type="primary"
         @click="generateExam"
@@ -49,6 +55,7 @@
       :data="list"
       border
       fit
+      size="small"
       highlight-current-row
       style="width: 100%;"
     >
@@ -139,6 +146,7 @@
             :style="{color: '#409EFF'}"
             type="text"
             size="mini"
+            title="修改"
             @click="() => {handleChange(row)}"
           >
             <svg-icon v-if="row.state" icon-class="baocun" />
@@ -148,6 +156,7 @@
             :style="{color: '#F56C6C'}"
             size="mini"
             type="text"
+            title="删除"
             @click="handleDelete(row,$index)"
           >
             <i class="el-icon-delete" />
@@ -156,6 +165,7 @@
             :style="{color: '#E6A23C'}"
             size="mini"
             type="text"
+            title="修改组卷参数"
             @click="parameterUpdate(row)"
           >
             <svg-icon icon-class="canshu" />
@@ -167,6 +177,7 @@
     <pagination
       v-show="total>0"
       :total="total"
+      :page-sizes="[8, 16, 32, 64]"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
@@ -254,7 +265,7 @@ export default {
       listLoading: true,
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         teachingTaskId: '',
         examinationName: '',
         examinationState: ''

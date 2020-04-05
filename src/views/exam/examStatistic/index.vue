@@ -6,6 +6,7 @@
         v-model="listQuery.examinationTaskId"
         placeholder="测试任务"
         style="width: 200px;"
+        size="small"
         class="filter-item"
       >
         <el-option
@@ -19,6 +20,8 @@
         v-waves
         class="filter-item"
         type="primary"
+        size="small"
+        round
         icon="el-icon-search"
         :disabled="isDisabled"
         @click="handleFilter"
@@ -29,6 +32,8 @@
         v-waves
         class="filter-item fr"
         type="primary"
+        size="small"
+        round
         @click="handleExport"
       >
         <svg-icon icon-class="daochu" />
@@ -38,6 +43,8 @@
         v-waves
         class="filter-item fr"
         type="primary"
+        size="small"
+        round
         @click="() => {$router.push('/exam/exam-chart?examinationTaskId=' + currentExamnationTaskId)}"
       >
         <svg-icon icon-class="tongji2" />
@@ -51,9 +58,17 @@
       :data="list"
       border
       fit
+      size="small"
       highlight-current-row
       style="width: 100%;"
     >
+      <el-table-column
+        label="序号"
+        type="index"
+        align="center"
+        width="50"
+        :index="indexMethod"
+      />
       <el-table-column label="学号" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.stuNumber }}</span>
@@ -94,6 +109,7 @@
     <pagination
       v-show="total>0"
       :total="total"
+      :page-sizes="[8, 16, 32, 64]"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
@@ -128,7 +144,7 @@ export default {
       currentExamnationTaskId: '',
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         teachingTaskId: '',
         examinationTaskId: ''
       },
@@ -277,6 +293,9 @@ export default {
             this.getList()
           })
       })
+    },
+    indexMethod(index) {
+      return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
     }
   }
 }

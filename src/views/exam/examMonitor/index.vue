@@ -6,6 +6,7 @@
         v-model="listQuery.examinationTaskId"
         placeholder="测试任务"
         style="width: 200px;"
+        size="small"
         class="filter-item"
       >
         <el-option
@@ -17,6 +18,8 @@
       </el-select>
       <el-button
         v-waves
+        size="small"
+        round
         class="filter-item"
         type="primary"
         icon="el-icon-search"
@@ -33,9 +36,17 @@
       :data="list"
       border
       fit
+      size="small"
       highlight-current-row
       style="width: 100%;"
     >
+      <el-table-column
+        label="序号"
+        type="index"
+        align="center"
+        width="50"
+        :index="indexMethod"
+      />
       <el-table-column label="学号" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.stuNumber }}</span>
@@ -71,6 +82,7 @@
     <pagination
       v-show="total>0"
       :total="total"
+      :page-sizes="[8, 16, 32, 64]"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
@@ -103,7 +115,7 @@ export default {
       currentExamnationTaskId: '',
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         teachingTaskId: '',
         examinationTaskId: '',
         examiningState: 1
@@ -135,8 +147,8 @@ export default {
   methods: {
     // 监控
     mointor(row) {
-      const { stuName, stuNumber, id } = row
-      this.$router.push(`/exam/exam-detail?examiningId=${id}&stuName=${stuName}&stuNumber=${stuNumber}&stuGender=${'男'}`)
+      const { stuName, stuNumber, id, stuGender } = row
+      this.$router.push(`/exam/exam-detail?examiningId=${id}&stuName=${stuName}&stuNumber=${stuNumber}&stuGender=${stuGender}`)
     },
     // 分页查询学生测试
     getList() {
@@ -212,6 +224,9 @@ export default {
     },
     setPagination(currentPage, pageSize) {
       this.getList()
+    },
+    indexMethod(index) {
+      return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
     }
   }
 }

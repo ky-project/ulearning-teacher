@@ -4,12 +4,14 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.questionKnowledge"
+        size="small"
         placeholder="知识模块"
         style="width: 200px;"
         class="filter-item"
       />
       <el-select
         v-model="listQuery.questionType"
+        size="small"
         placeholder="题型"
         style="width: 200px;"
         class="filter-item"
@@ -21,11 +23,13 @@
           :value="item.value"
         />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" @click="handleReset">
+      <el-button v-waves class="filter-item" size="small" round type="primary" @click="handleReset">
         重置
       </el-button>
       <el-button
         v-waves
+        round
+        size="small"
         class="filter-item"
         type="primary"
         icon="el-icon-search"
@@ -33,7 +37,7 @@
       >
         查询
       </el-button>
-      <el-button class="filter-item fr" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button class="filter-item fr" size="small" round style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
         添加
       </el-button>
     </div>
@@ -44,9 +48,17 @@
       :data="list"
       border
       fit
+      size="small"
       highlight-current-row
       style="width: 100%;"
     >
+      <el-table-column
+        label="序号"
+        type="index"
+        align="center"
+        width="50"
+        :index="indexMethod"
+      />
       <el-table-column label="试题内容" show-overflow-tooltip align="center" min-width="120">
         <template slot-scope="{row}">
           <span>{{ row.questionText }}</span>
@@ -78,6 +90,7 @@
             :style="{color: '#409EFF'}"
             size="mini"
             type="text"
+            title="修改"
             @click="handleUpdate(row)"
           >
             <i class="el-icon-edit" />
@@ -86,6 +99,7 @@
             :style="{color: '#F56C6C'}"
             size="mini"
             type="text"
+            title="删除"
             @click="handleDelete(row)"
           >
             <i class="el-icon-delete" />
@@ -97,6 +111,7 @@
     <pagination
       v-show="total>0"
       :total="total"
+      :page-sizes="[8, 16, 32, 64]"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
@@ -222,7 +237,7 @@ export default {
       ],
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         teachingTaskId: '',
         questionType: '',
         questionKnowledge: ''
@@ -594,6 +609,9 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+    },
+    indexMethod(index) {
+      return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
     }
   }
 }

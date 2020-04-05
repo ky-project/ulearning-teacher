@@ -2,12 +2,14 @@
   <div class="app-container">
     <!-- 查询 -->
     <div class="filter-container">
-      <el-input v-model="listQuery.stuName" placeholder="姓名" style="width: 200px;" class="filter-item" />
-      <el-input v-model="listQuery.stuNumber" placeholder="学号" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.stuName" size="small" placeholder="姓名" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.stuNumber" size="small" placeholder="学号" style="width: 200px;" class="filter-item" />
       <el-button
         v-waves
         class="filter-item"
         type="primary"
+        round
+        size="small"
         icon="el-icon-search"
         @click="handleFilter"
       >
@@ -21,9 +23,17 @@
       :data="list"
       border
       fit
+      size="small"
       highlight-current-row
       style="width: 100%;"
     >
+      <el-table-column
+        label="序号"
+        type="index"
+        align="center"
+        width="50"
+        :index="indexMethod"
+      />
       <el-table-column label="学号" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.stuNumber }}</span>
@@ -60,6 +70,7 @@
             :style="{color: '#F56C6C'}"
             size="mini"
             type="text"
+            title="移除"
             @click="handleDelete(row,$index)"
           >
             <i class="el-icon-delete" />
@@ -71,6 +82,7 @@
     <pagination
       v-show="total>0"
       :total="total"
+      :page-sizes="[8, 16, 32, 64]"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
@@ -98,7 +110,7 @@ export default {
       currentTeachingTaskId: '',
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         teachingTaskId: '',
         stuName: '',
         stuNumber: ''
@@ -158,6 +170,9 @@ export default {
             this.getList()
           })
       })
+    },
+    indexMethod(index) {
+      return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
     }
   }
 }

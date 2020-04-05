@@ -414,8 +414,8 @@ export default {
         axiosGet(GET_EXAM_DETAIL_URL, { params: { examiningId: this.$route.query.examiningId }})
           .then(response => {
             console.log('response', response)
-            const { courseQuestion, examiningRemainTime, examinationName, examingState } = response.data
-            if (examingState === 1) {
+            const { courseQuestion, examiningRemainTime, examinationName, examiningState } = response.data
+            if (examiningState === 1) {
               this.courseQuestion = courseQuestion // 设置题目
               this.examiningRemainTime = examiningRemainTime // 设置剩余时间
               this.examinationName = examinationName
