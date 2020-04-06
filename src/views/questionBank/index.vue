@@ -284,7 +284,7 @@ export default {
     '$store.getters.teachingTaskId': {
       handler(value) {
         this.listQuery.teachingTaskId = value
-        this.getList()
+        // this.getList()
       },
       immediate: true
     }
@@ -584,6 +584,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       }) */
+      console.log('row', row)
       const tempObj = filterObj(row, [
         'id',
         'questionDifficulty',
@@ -600,6 +601,7 @@ export default {
         this.temp.questionKey = this.temp.questionKey.split('|#|')
       }
       console.log('key', this.temp.questionKey)
+      // TODO:
       this.temp.teachingTaskId = this.oldTeachingTaskId
       // this.temp = Object.assign({}, this.temp, row)
       this.previewImgUrl = this.temp.questionUrl
