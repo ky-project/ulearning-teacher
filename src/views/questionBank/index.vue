@@ -115,7 +115,7 @@
           <el-form-item label="教学任务" prop="teachingTaskId">
             <el-select v-model="temp.teachingTaskId" size="mini" :disabled="dialogStatus === 'update'">
               <el-option
-                v-for="item in teachingTaskList"
+                v-for="item in $store.getters.teachingTask"
                 :key="item.id"
                 :label="item.teachingTaskAlias"
                 :value="item.id"
@@ -193,7 +193,6 @@ import { filterObj } from '@/utils/index.js'
 import { axiosGet, axiosPost, axios2 } from '@/utils/axios'
 import { difficultyMap } from './config'
 import {
-  GET_ALL_TEACHING_TASK_URL,
   GET_QUESTION_PAGE_URL,
   ADD_QUESTION_URL,
   ADD_QUESTION_IMG_URL,
