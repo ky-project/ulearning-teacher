@@ -6,18 +6,21 @@
         v-model="listQuery.stuName"
         placeholder="姓名"
         style="width: 200px;"
+        size="small"
         class="filter-item"
       />
       <el-input
         v-model="listQuery.stuNumber"
         placeholder="学号"
         style="width: 200px;"
+        size="small"
         class="filter-item"
       />
       <el-select
         v-model="listQuery.isCorrected"
         placeholder="是否批改"
         style="width: 200px;"
+        size="small"
         class="filter-item"
       >
         <el-option label="已批改" :value="true" />
@@ -27,6 +30,8 @@
         v-waves
         class="filter-item"
         type="primary"
+        size="small"
+        round
         icon="el-icon-search"
         @click="handleFilter"
       >
@@ -39,11 +44,19 @@
       v-loading="listLoading"
       class="experiment-result-table"
       :data="list"
+      size="small"
       border
       fit
       highlight-current-row
       style="width: 100%;"
     >
+      <el-table-column
+        label="序号"
+        type="index"
+        align="center"
+        width="50"
+        :index="indexMethod"
+      />
       <el-table-column label="姓名" min-width="120" align="center">
         <template slot-scope="{row}">
           <span>{{ row.stuName }}</span>
@@ -70,9 +83,10 @@
           <el-button
             v-if="row.isCorrected"
             type="text"
+            title="修改"
             @click="correctHandler(row)"
           ><i class="el-icon-edit" /></el-button>
-          <el-button v-else type="text" @click="correctHandler(row)"><svg-icon icon-class="pigai" /></el-button>
+          <el-button v-else type="text" title="批改" @click="correctHandler(row)"><svg-icon icon-class="pigai" /></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -162,6 +176,9 @@ export default {
     handleFilter() {
       this.listQuery.currentPage = 1
       this.getList()
+    },
+    indexMethod(index) {
+      return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
     }
   }
 }

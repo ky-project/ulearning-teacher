@@ -10,6 +10,7 @@
         placeholder="教学任务"
         style="width: 225px;"
         class="filter-item"
+        size="small"
         @change="(teachingTaskId) => {setTeachingTaskId(teachingTaskId)}"
       >
         <el-option

@@ -91,3 +91,18 @@ export default {
     width: 100%;
   }
 </style>
+<style lang="scss">
+  tbody {
+    .cell {
+      font-size: 13px;
+    }
+  }
+
+  thead {
+    .cell {
+      font-weight: bold;
+      color: #707070;
+      font-size: 14px;
+    }
+  }
+</style>

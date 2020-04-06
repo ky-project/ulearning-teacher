@@ -6,12 +6,14 @@
         v-model="listQuery.noticeTitle"
         placeholder="标题"
         style="width: 200px;"
+        size="small"
         class="filter-item"
       />
       <el-date-picker
         v-model="listQuery.noticePostTime"
         type="date"
         style="width: 200px;"
+        size="small"
         placeholder="选择日期"
         class="filter-item"
         format="yyyy-MM-dd"
@@ -21,6 +23,8 @@
         v-waves
         class="filter-item"
         type="primary"
+        size="small"
+        round
         icon="el-icon-search"
         @click="handleFilter"
       >
@@ -29,6 +33,8 @@
       <el-button
         class="filter-item fr"
         style="margin-left: 10px;"
+        size="small"
+        round
         type="primary"
         icon="el-icon-plus"
         @click="handleCreate"
@@ -43,9 +49,17 @@
       :data="list"
       border
       fit
+      size="small"
       highlight-current-row
       style="width: 100%;"
     >
+      <el-table-column
+        label="序号"
+        type="index"
+        align="center"
+        width="50"
+        :index="indexMethod"
+      />
       <el-table-column label="标题" align="center" show-overflow-tooltip width="120">
         <template slot-scope="{row}">
           <span>{{ row.noticeTitle }}</span>
@@ -77,6 +91,7 @@
             :style="{color: '#409EFF'}"
             size="mini"
             type="text"
+            title="修改"
             @click="handleUpdate(row)"
           >
             <i class="el-icon-edit" />
@@ -85,6 +100,7 @@
             :style="{color: '#F56C6C'}"
             size="mini"
             type="text"
+            title="删除"
             @click="handleDelete(row)"
           >
             <i class="el-icon-delete" />
@@ -96,6 +112,7 @@
     <pagination
       v-show="total>0"
       :total="total"
+      :page-sizes="[8, 16, 32, 64]"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
@@ -123,7 +140,7 @@ export default {
       listLoading: true,
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         noticeTitle: '',
         noticePostTime: '',
         teachingTaskId: ''
@@ -211,6 +228,9 @@ export default {
     },
     setPagination(currentPage, pageSize) {
       this.getList()
+    },
+    indexMethod(index) {
+      return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
     }
   }
 }
