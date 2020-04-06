@@ -207,7 +207,7 @@ export default {
           })
           .catch((error) => {
             this.listLoading = false
-            this.$message.error(error.message || '出错')
+            // this.$message.error(error.message || '出错')
             reject(error)
           })
       })
@@ -220,7 +220,7 @@ export default {
             resolve(response)
           })
           .catch((error) => {
-            this.$message.error(error.message || '出错')
+            // this.$message.error(error.message || '出错')
             reject(error)
           })
       })
@@ -263,7 +263,7 @@ export default {
               resolve()
             })
             .catch((error) => {
-              this.$message.error(error.message || '出错')
+              // this.$message.error(error.message || '出错')
             })
         }
       })

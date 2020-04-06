@@ -305,7 +305,7 @@ export default {
             resolve()
           })
           .catch(error => {
-            this.$message.error(error.message || '出错')
+            // this.$message.error(error.message || '出错')
             reject(error)
           })
       })
@@ -323,7 +323,7 @@ export default {
             resolve()
           })
           .catch(error => {
-            this.$message.error(error.message || '出错')
+            // this.$message.error(error.message || '出错')
             reject(error)
           })
       })
@@ -392,7 +392,7 @@ export default {
           resolve()
         })
           .catch(error => {
-            this.$message.error(error.message || '出错')
+            // this.$message.error(error.message || '出错')
             reject(error)
           }) */
         console.log('题目', data)
@@ -401,7 +401,7 @@ export default {
             resolve()
           })
           .catch(error => {
-            this.$message.error(error.message || '出错')
+            // this.$message.error(error.message || '出错')
             reject(error)
           })
       })
@@ -419,7 +419,7 @@ export default {
         }).then(response => {
           resolve(response.data.questionUrl)
         }).catch(error => {
-          this.$message.error(error.message || '出错')
+          // this.$message.error(error.message || '出错')
           reject(error)
         })
       })

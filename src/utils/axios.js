@@ -86,7 +86,7 @@ function interceptor(service) {
             type: 'error'
           })
         // eslint-disable-next-line eqeqeq
-        } else if (code == 401) {
+        } else if (code == 401 || code == 403) {
           Message({
             message: message,
             type: 'error'

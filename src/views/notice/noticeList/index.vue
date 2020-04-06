@@ -183,7 +183,7 @@ export default {
             resolve()
           })
           .catch(error => {
-            this.$message.error(error.message || '出错了!')
+            // this.$message.error(error.message || '出错了!')
             reject(error)
           })
       })
@@ -218,7 +218,7 @@ export default {
           this.listLoading = false
         })
         .catch(error => {
-          this.$message.error(error.message || '出错')
+          // this.$message.error(error.message || '出错')
           this.listLoading = false
         })
     },

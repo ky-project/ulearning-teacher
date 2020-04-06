@@ -115,7 +115,7 @@ export default {
       // 异步加载tinymce
       load(tinymceCDN, (err) => {
         if (err) {
-          this.$message.error(err.message)
+          // this.$message.error(err.message)
           return
         }
         this.initTinymce()

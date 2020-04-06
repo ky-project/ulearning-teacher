@@ -432,7 +432,7 @@ export default {
           })
           .catch(error => {
             this.isLoading = false
-            this.$message.error(error.message || '出错了!')
+            // this.$message.error(error.message || '出错了!')
             reject()
           })
       })

@@ -290,7 +290,7 @@ export default {
             resolve()
           })
           .catch(error => {
-            this.$message.error(error.message || '出错')
+            // this.$message.error(error.message || '出错')
             reject(error)
           })
       })
@@ -303,7 +303,7 @@ export default {
             resolve()
           })
           .catch(error => {
-            this.$message.error(error.message || '出错')
+            // this.$message.error(error.message || '出错')
             reject(error)
           })
       })
@@ -350,7 +350,7 @@ export default {
             resolve()
           })
           .catch(error => {
-            this.$message.error(error.message || '出错')
+            // this.$message.error(error.message || '出错')
             reject(error)
           })
       })
@@ -443,7 +443,7 @@ export default {
             resolve(response.data)
           })
           .catch(error => {
-            this.$message.error(error.message || '出错')
+            // this.$message.error(error.message || '出错')
             reject(error)
           })
       })
@@ -490,7 +490,7 @@ export default {
               resolve(response)
             })
             .catch(error => {
-              this.$message.error(error.message || '出错')
+              // this.$message.error(error.message || '出错')
               this.loading = false
               reject(error)
             })
@@ -502,7 +502,7 @@ export default {
               resolve(response)
             })
             .catch(error => {
-              this.$message.error(error.message || '出错')
+              // this.$message.error(error.message || '出错')
               this.loading = false
               reject(error)
             })
@@ -529,7 +529,7 @@ export default {
               resolve()
             })
             .catch(error => {
-              this.$message.error(error.message || '出错')
+              // this.$message.error(error.message || '出错')
               this.loading = false
               reject(error)
             })
@@ -543,7 +543,7 @@ export default {
               resolve()
             })
             .catch(error => {
-              this.$message.error(error.message || '出错')
+              // this.$message.error(error.message || '出错')
               this.loading = false
               reject(error)
             })
@@ -581,7 +581,7 @@ export default {
           this.getFileList()
         })
         .catch(error => {
-          this.$message.error(error.message || '出错')
+          // this.$message.error(error.message || '出错')
         })
     },
     // 删除文件/文件夹
@@ -605,7 +605,7 @@ export default {
     },
     // 上传失败
     onError(msg) {
-      this.$message.error(msg)
+      // this.$message.error(msg)
       this.loading = false
     }
   }

@@ -130,7 +130,7 @@ export default {
           this.data = response.data
         })
         .catch(error => {
-          this.$message.error(error && error.message || '出错')
+          // this.$message.error(error && error.message || '出错')
         })
 
       /* this.data = {

@@ -129,7 +129,7 @@ export default {
               this.loading = false
               this.$router.push({ path: '/' })
             }).catch((error) => {
-              this.$message.error(error.message || '出错')
+              // this.$message.error(error.message || '出错')
               this.getcode()
               this.loading = false
             })
