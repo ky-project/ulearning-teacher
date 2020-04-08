@@ -126,7 +126,7 @@
               @click="downloadFile(setFileName(scope.row), scope.row.id)"
             />
             <svg-icon
-              v-if="!zone"
+              v-if="!zone || scope.row.canDeleteSharedFile"
               icon-class="shanchu"
               class-name="item-icon"
               @click="deleteFolder(scope.row.id)"
