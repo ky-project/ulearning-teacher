@@ -31,6 +31,17 @@
       >
         添加
       </el-button>
+      <el-button
+        class="filter-item fr"
+        style="margin-left: 10px;"
+        size="small"
+        round
+        type="primary"
+        icon="el-icon-plus"
+        @click="handleCopyBeforeExperiment"
+      >
+        拷贝历年实验
+      </el-button>
     </div>
     <!-- 表格 -->
     <el-table
@@ -150,6 +161,51 @@
       class="fr"
       @pagination="setPagination"
     />
+    <el-dialog title="拷贝历年实验"
+               width="400px"
+               :visible.sync="dialogFormVisible">
+      <div class="form-wrap">
+        <el-form
+          ref="dataForm"
+          :rules="rules"
+          :model="copyExperimentForm"
+          label-position="left"
+          label-width="80px"
+        >
+          <el-form-item label="教学任务" prop="teachingTaskId">
+            <el-select v-model="copyExperimentForm.teachingTaskIdTmp"
+                       size="mini"
+                       @change="changeTeachingTaskId">
+              <el-option
+                v-for="item in beforeTeachingTask"
+                :key="item.id"
+                :label="item.showName"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="实验" prop="experimentId">
+            <el-select v-model="copyExperimentForm.experimentId" size="mini">
+              <el-option
+                v-for="item in beforeTeachingTaskExperiment"
+                :key="item.key"
+                :label="item.label"
+                :value="item.key"
+              />
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="copyBeforeExperiment">
+          确定
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -157,7 +213,13 @@
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import { axiosGet, axiosPost } from '@/utils/axios'
-import { GET_EXPERIMENT_PAGE_URL, UPDATE_EXPERIMENT_URL, DELETE_EXPERIMENT_URL, UPDATE_SHARED_URL } from '@/api/url'
+import { GET_EXPERIMENT_PAGE_URL,
+  UPDATE_EXPERIMENT_URL,
+  DELETE_EXPERIMENT_URL,
+  UPDATE_SHARED_URL,
+  GET_BEFORE_TEACHING_TASK_URL,
+  GET_ALL_URL,
+  COPY_EXPERIMENT_URL } from '@/api/url'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'ExperimentList',
@@ -180,6 +242,18 @@ export default {
         pageSize: 8,
         teachingTaskId: '',
         experimentTitle: ''
+      },
+      dialogFormVisible: false,
+      rules: {
+        teachingTaskIdTmp: [{ required: true, message: '请选择教学任务', trigger: 'change' }],
+        experimentId: [{ required: true, message: '请选择实验', trigger: 'change' }]
+      },
+      beforeTeachingTask: [],
+      beforeTeachingTaskExperiment: [],
+      copyExperimentForm: {
+        teachingTaskIdTmp: '',
+        teachingTaskId: '',
+        experimentId: ''
       }
     }
   },
@@ -187,6 +261,7 @@ export default {
     '$store.getters.teachingTaskId': {
       handler(value) {
         this.listQuery.teachingTaskId = value
+        this.resetForm()
         this.getList()
       },
       immediate: true
@@ -367,6 +442,62 @@ export default {
             // this.$message.error(error.message || '出错')
             reject(error)
           })
+      })
+    },
+    handleCopyBeforeExperiment(){
+      axiosGet(GET_BEFORE_TEACHING_TASK_URL, {params: {id: this.currentTeachingTaskId}})
+        .then(response => {
+          this.beforeTeachingTask = response.data
+          if(this.beforeTeachingTask.length){
+            this.copyExperimentForm.teachingTaskIdTmp = this.beforeTeachingTask[0].id
+            axiosGet(GET_ALL_URL, {params: {teachingTaskId: this.copyExperimentForm.teachingTaskIdTmp}})
+              .then(response => {
+                this.beforeTeachingTaskExperiment = response.data
+                if(this.beforeTeachingTaskExperiment.length){
+                  this.copyExperimentForm.experimentId = this.beforeTeachingTaskExperiment[0].key
+                }
+              })
+              .catch(error => {
+                reject(error)
+              })
+          }
+          this.dialogFormVisible = true
+        })
+        .catch(error => {
+          reject(error)
+        })
+    },
+    changeTeachingTaskId(){
+      axiosGet(GET_ALL_URL, {params: {teachingTaskId: this.copyExperimentForm.teachingTaskIdTmp}})
+        .then(response => {
+          this.beforeTeachingTaskExperiment = response.data
+          if(this.beforeTeachingTaskExperiment.length){
+            this.copyExperimentForm.experimentId = this.beforeTeachingTaskExperiment[0].key
+          }
+        })
+        .catch(error => {
+          reject(error)
+        })
+    },
+    resetForm(){
+      this.copyExperimentForm.teachingTaskIdTmp = ''
+      this.copyExperimentForm.teachingTaskId = ''
+      this.copyExperimentForm.experimentId = ''
+    },
+    copyBeforeExperiment(){
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.copyExperimentForm.teachingTaskId = this.currentTeachingTaskId
+          axiosPost(COPY_EXPERIMENT_URL, this.copyExperimentForm)
+            .then(response => {
+              this.$message.success('复制成功')
+              this.dialogFormVisible = false
+              this.getList()
+            })
+            .catch( error => {
+              reject(error)
+            })
+        }
       })
     }
   }

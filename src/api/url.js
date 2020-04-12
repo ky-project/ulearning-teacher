@@ -10,6 +10,7 @@ export const ROLE_INFO_URL = '/auth/roleInfo' // 获取个人角色信息
 // 教学任务管理
 export const GET_ALL_TEACHING_TASK_URL = '/teacher/teachingTask/getAll' // 获取教师所有的教学任务
 export const GET_TEACHING_TASK_BY_ID_URL = '/teacher/teachingTask/getById' // 根据id查询教学任务
+export const GET_BEFORE_TEACHING_TASK_URL = '/teacher/teachingTask/getBeforeTeachingTask' // 根据id查询教学任务
 // 学生选课管理
 export const GET_TEACHING_TASK_PAGE_URL = '/teacher/studentTeachingTask/pageList' // 分页查询选课学生信息
 export const DELETE_SELECTED_STUDENT_URL = '/teacher/studentTeachingTask/remove' // 移除选课学生信息
@@ -53,6 +54,8 @@ export const ADD_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/save' // 添�
 export const UPDATE_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/update' // 更新实验
 export const DELETE_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/delete' // 删除实验
 export const UPDATE_SHARED_URL = '/teacher/teachingTaskExperiment/updateShared' // 删除实验
+export const GET_ALL_URL = '/teacher/teachingTaskExperiment/getAll' // 删除实验
+export const COPY_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/copyExperiment' // 复制实验
 // 测试管理
 export const GET_EXAM_PAGE_URL = '/teacher/examinationTask/pageList' // 分页查询测试任务
 export const ADD_EXAM_URL = '/teacher/examinationTask/save' // 添加测试任务
