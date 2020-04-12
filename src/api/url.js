@@ -52,6 +52,7 @@ export const ADD_ATTACHMENT_URL = '/teacher/teachingTaskExperiment/uploadAttachm
 export const ADD_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/save' // 添加实验
 export const UPDATE_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/update' // 更新实验
 export const DELETE_EXPERIMENT_URL = '/teacher/teachingTaskExperiment/delete' // 删除实验
+export const UPDATE_SHARED_URL = '/teacher/teachingTaskExperiment/updateShared' // 删除实验
 // 测试管理
 export const GET_EXAM_PAGE_URL = '/teacher/examinationTask/pageList' // 分页查询测试任务
 export const ADD_EXAM_URL = '/teacher/examinationTask/save' // 添加测试任务

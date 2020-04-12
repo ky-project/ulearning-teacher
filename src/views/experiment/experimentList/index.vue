@@ -71,6 +71,16 @@
           <span>{{ row.experimentTitle }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="是否共享" min-width="30" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.experimentShared ? '是' : '否' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建者" min-width="30" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.createBy}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="更新时间" min-width="50" align="center">
         <template slot-scope="{row}">
           <span>{{ row.updateTime }}</span>
@@ -115,6 +125,18 @@
           >
             <svg-icon icon-class="jieguo" class-name="icon" />
           </el-button>
+          <el-button
+            :style="{color: '#67C23A'}"
+            size="mini"
+            type="text"
+            :title="row.experimentShared ? '取消分享' : '分享'"
+            @click="share(row)"
+          >
+            <svg-icon
+              :icon-class="row.experimentShared ? 'quxiaogongxiang' : 'gongxiang'"
+              class-name="item-icon"
+            />
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -135,7 +157,7 @@
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import { axiosGet, axiosPost } from '@/utils/axios'
-import { GET_EXPERIMENT_PAGE_URL, UPDATE_EXPERIMENT_URL, DELETE_EXPERIMENT_URL } from '@/api/url'
+import { GET_EXPERIMENT_PAGE_URL, UPDATE_EXPERIMENT_URL, DELETE_EXPERIMENT_URL, UPDATE_SHARED_URL } from '@/api/url'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'ExperimentList',
@@ -310,6 +332,42 @@ export default {
     },
     indexMethod(index) {
       return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
+    },
+    share(item){
+      const data = {
+        experimentShared: !item.experimentShared,
+        id: item.id
+      }
+      if(item.experimentShared){
+        this.$confirm('确定重复分享该实验, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // 发送请求
+          this.updateShared(data)
+            .then(() => {
+              this.getList()
+            })
+        })
+      } else{
+        this.updateShared(data)
+          .then(() => {
+            this.getList()
+          })
+      }
+    },
+    updateShared(data){
+      return new Promise((resolve, reject) => {
+        axiosPost(UPDATE_SHARED_URL, data)
+          .then(response => {
+            resolve()
+          })
+          .catch(error => {
+            // this.$message.error(error.message || '出错')
+            reject(error)
+          })
+      })
     }
   }
 }
