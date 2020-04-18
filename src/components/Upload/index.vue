@@ -87,6 +87,7 @@ export default {
         axios2({
           method: 'POST',
           url: this.url,
+          timeout: 600000,
           data: formData,
           headers: { 'Content-Type': 'multipart/form-data' }
         }).then(() => {
