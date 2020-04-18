@@ -44,7 +44,7 @@ export const DELETE_RESOURCE_URL2 = '/teacher/courseResource/delete' // 删除�
 export const BATCHDELETE_RESOURCE_URL2 = '/teacher/courseResource/batchDelete' // 批量删除教学资源
 export const UPDATE_RESOURCE_URL2 = '/teacher/courseResource/update' // 更新教学资源
 export const UPLOAD_RESOURCE_URL2 = '/teacher/courseResource/saveFile' // 上传文件
-export const DOWNLOAD_DOCUMENTAION_URL2 = '/teacher/courseResource/download' // 下载教学资源
+export const DOWNLOAD_RESOURCE_URL2 = '/teacher/courseResource/download' // 下载教学资源
 export const SHARE_RESOURCE_URL2 = '/teacher/courseResource/updateShared' // 分享教学资源
 export const BATCHSHARE_RESOURCE_URL2 = '/teacher/courseResource/batchUpdateShared' // 批量分享教学资源
 // 实验管理
