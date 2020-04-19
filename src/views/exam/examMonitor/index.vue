@@ -16,6 +16,22 @@
           :value="item.key"
         />
       </el-select>
+      <el-select
+        v-model="listQuery.examiningState"
+        placeholder="测试状态"
+        style="width: 200px;"
+        size="small"
+        class="filter-item"
+      >
+        <el-option
+          label="进行中"
+          :value="1"
+        />
+        <el-option
+          label="已完成"
+          :value="2"
+        />
+      </el-select>
       <el-button
         v-waves
         size="small"
@@ -67,6 +83,11 @@
           <span>{{ row.examiningLoginTime }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="测试状态" min-width="120" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.examiningState === 1 ? '进行中' : '已完成' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column show-overflow-tooltip label="ip" min-width="120" align="center">
         <template slot-scope="{row}">
           <span>{{ row.examiningHostIp }}</span>
@@ -96,7 +117,6 @@ import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import { axiosGet } from '@/utils/axios'
 import {
-  GET_ALL_TEACHING_TASK_URL,
   GET_EXAM_LIST_URL,
   GET_STUDENT_EXAM_PAGE
 } from '@/api/url'
