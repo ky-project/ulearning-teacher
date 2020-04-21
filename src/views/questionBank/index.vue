@@ -37,7 +37,7 @@
       >
         查询
       </el-button>
-      <el-button class="filter-item fr" size="small" round style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button class="filter-item fr" size="small" round style="margin-left: 10px;" type="success" icon="el-icon-plus" @click="handleCreate">
         添加
       </el-button>
     </div>
@@ -84,25 +84,23 @@
           <span>{{ row.questionKey }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="90" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button
-            :style="{color: '#409EFF'}"
             size="mini"
-            type="text"
-            title="修改"
+            type="primary"
+            round
             @click="handleUpdate(row)"
           >
-            <i class="el-icon-edit" />
+            修改
           </el-button>
           <el-button
-            :style="{color: '#F56C6C'}"
             size="mini"
-            type="text"
-            title="删除"
+            type="danger"
+            round
             @click="handleDelete(row)"
           >
-            <i class="el-icon-delete" />
+            删除
           </el-button>
         </template>
       </el-table-column>

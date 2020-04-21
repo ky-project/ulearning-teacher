@@ -25,7 +25,7 @@
         style="margin-left: 10px;"
         size="small"
         round
-        type="primary"
+        type="success"
         icon="el-icon-plus"
         @click="handleCreate"
       >
@@ -36,7 +36,7 @@
         style="margin-left: 10px;"
         size="small"
         round
-        type="primary"
+        type="success"
         icon="el-icon-plus"
         @click="handleCopyBeforeExperiment"
       >
@@ -82,71 +82,63 @@
           <span>{{ row.experimentTitle }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否共享" min-width="30" align="center">
+      <el-table-column label="是否共享" min-width="40" align="center">
         <template slot-scope="{row}">
           <span>{{ row.experimentShared ? '是' : '否' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建者" min-width="30" align="center">
+      <el-table-column label="创建者" min-width="40" align="center">
         <template slot-scope="{row}">
           <span>{{ row.createBy}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" min-width="50" align="center">
+      <el-table-column label="更新时间" min-width="60" align="center">
         <template slot-scope="{row}">
           <span>{{ row.updateTime }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="175" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button
-            :style="{color: '#409EFF'}"
             size="mini"
-            type="text"
-            title="修改"
+            type="primary"
+            round
             @click="handleUpdate(row)"
           >
-            <i class="el-icon-edit" />
+            修改
           </el-button>
           <el-button
-            :style="{color: '#F56C6C'}"
             size="mini"
-            type="text"
-            title="删除"
+            type="danger"
+            round
             @click="handleDelete(row)"
           >
-            <i class="el-icon-delete" />
+            删除
           </el-button>
           <el-button
-            :style="{color: '#E6A23C'}"
             size="mini"
-            type="text"
-            title="排序"
+            type="primary"
+            round
             @click="handleSort(row)"
           >
-            <svg-icon icon-class="xulie" class-name="icon" />
+            排序
           </el-button>
           <el-button
-            :style="{color: '#67C23A'}"
             size="mini"
-            type="text"
-            title="查看实验结果"
+            type="info"
+            round
             @click="handleResult(row)"
           >
-            <svg-icon icon-class="jieguo" class-name="icon" />
+            查看实验结果
           </el-button>
           <el-button
-            :style="{color: '#67C23A'}"
             size="mini"
-            type="text"
-            :title="row.experimentShared ? '取消分享' : '分享'"
+            :type="row.experimentShared ? 'warning' : 'primary'"
+            round
             @click="share(row)"
           >
-            <svg-icon
-              :icon-class="row.experimentShared ? 'quxiaogongxiang' : 'gongxiang'"
-              class-name="item-icon"
-            />
+            {{ row.experimentShared ? '取消分享' : '分享' }}
           </el-button>
         </template>
       </el-table-column>

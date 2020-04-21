@@ -67,13 +67,12 @@
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button
-            :style="{color: '#F56C6C'}"
             size="mini"
-            type="text"
-            title="移除"
+            type="danger"
+            round
             @click="handleDelete(row,$index)"
           >
-            <i class="el-icon-delete" />
+            移除
           </el-button>
         </template>
       </el-table-column>

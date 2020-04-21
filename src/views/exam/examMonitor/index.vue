@@ -8,6 +8,7 @@
         style="width: 200px;"
         size="small"
         class="filter-item"
+        @change="handleFilter"
       >
         <el-option
           v-for="item in examList"
@@ -95,7 +96,14 @@
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <svg-icon icon-class="jiankong" :style="{color: '#409EFF', cursor: 'pointer'}" @click="mointor(row)" />
+          <el-button
+            size="mini"
+            type="info"
+            round
+            @click="mointor(row)"
+          >
+            监控
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
