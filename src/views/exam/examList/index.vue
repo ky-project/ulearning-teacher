@@ -42,7 +42,7 @@
         size="small"
         round
         style="margin-left: 10px;"
-        type="primary"
+        type="success"
         @click="generateExam"
       >
         组卷
@@ -140,35 +140,31 @@
           <span>{{ row.updateTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="160" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button
-            :style="{color: '#409EFF'}"
-            type="text"
+            :type="row.state ? 'success' : 'primary' "
+            round
             size="mini"
-            title="修改"
             @click="() => {handleChange(row)}"
           >
-            <svg-icon v-if="row.state" icon-class="baocun" />
-            <i v-else class="el-icon-edit" />
+            {{ row.state ? '保存' : '修改' }}
           </el-button>
           <el-button
-            :style="{color: '#F56C6C'}"
             size="mini"
-            type="text"
-            title="删除"
+            type="danger"
+            round
             @click="handleDelete(row,$index)"
           >
-            <i class="el-icon-delete" />
+            删除
           </el-button>
           <el-button
-            :style="{color: '#E6A23C'}"
             size="mini"
-            type="text"
-            title="修改组卷参数"
+            type="primary"
+            round
             @click="parameterUpdate(row)"
           >
-            <svg-icon icon-class="canshu" />
+            修改组卷参数
           </el-button>
         </template>
       </el-table-column>

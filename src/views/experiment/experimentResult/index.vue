@@ -78,15 +78,25 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="50" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button
             v-if="row.isCorrected"
-            type="text"
-            title="修改"
+            size="mini"
+            type="primary"
+            round
             @click="correctHandler(row)"
-          ><i class="el-icon-edit" /></el-button>
-          <el-button v-else type="text" title="批改" @click="correctHandler(row)"><svg-icon icon-class="pigai" /></el-button>
+          >
+            修改
+          </el-button>
+          <el-button
+            v-else
+            size="mini"
+            type="success"
+            round
+            @click="correctHandler(row)">
+            批改
+          </el-button>
         </template>
       </el-table-column>
     </el-table>

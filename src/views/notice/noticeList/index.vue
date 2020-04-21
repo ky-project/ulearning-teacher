@@ -35,7 +35,7 @@
         style="margin-left: 10px;"
         size="small"
         round
-        type="primary"
+        type="success"
         icon="el-icon-plus"
         @click="handleCreate"
       >
@@ -85,25 +85,23 @@
           <span>{{ row.noticeContent }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="90" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button
-            :style="{color: '#409EFF'}"
             size="mini"
-            type="text"
-            title="修改"
+            type="primary"
+            round
             @click="handleUpdate(row)"
           >
-            <i class="el-icon-edit" />
+            修改
           </el-button>
           <el-button
-            :style="{color: '#F56C6C'}"
             size="mini"
-            type="text"
-            title="删除"
+            type="danger"
+            round
             @click="handleDelete(row)"
           >
-            <i class="el-icon-delete" />
+            删除
           </el-button>
         </template>
       </el-table-column>
