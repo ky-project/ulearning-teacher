@@ -82,23 +82,23 @@
           <span>{{ row.experimentTitle }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否共享" min-width="40" align="center">
+      <el-table-column label="是否共享" min-width="60" align="center">
         <template slot-scope="{row}">
           <span>{{ row.experimentShared ? '是' : '否' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建者" min-width="40" align="center">
+      <el-table-column label="创建者" min-width="90" align="center">
         <template slot-scope="{row}">
           <span>{{ row.createBy}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" min-width="60" align="center">
+      <el-table-column label="更新时间" min-width="90" align="center">
         <template slot-scope="{row}">
           <span>{{ row.updateTime }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" min-width="175" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="390" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button
             size="mini"
@@ -155,11 +155,13 @@
     />
     <el-dialog title="拷贝历年实验"
                width="400px"
+               v-el-drag-dialog
                :visible.sync="dialogFormVisible">
       <div class="form-wrap">
         <el-form
           ref="dataForm"
           :rules="rules"
+          size="small"
           :model="copyExperimentForm"
           label-position="left"
           label-width="80px"
@@ -190,10 +192,10 @@
       </div>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
+        <el-button size="small" round @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="copyBeforeExperiment">
+        <el-button size="small" round type="primary" @click="copyBeforeExperiment">
           确定
         </el-button>
       </div>
@@ -213,10 +215,12 @@ import { GET_EXPERIMENT_PAGE_URL,
   GET_ALL_URL,
   COPY_EXPERIMENT_URL } from '@/api/url'
 import { mapGetters, mapMutations } from 'vuex'
+import elDragDialog from '@/directive/el-drag-dialog'
+
 export default {
   name: 'ExperimentList',
   components: { Pagination },
-  directives: { waves },
+  directives: { waves, elDragDialog },
   computed: {
     ...mapGetters(['teachingTask', 'experiment'])
   },

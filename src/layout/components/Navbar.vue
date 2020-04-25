@@ -4,7 +4,7 @@
 
     <breadcrumb class="breadcrumb-container" />
 
-    <div class="right-menu">
+    <div class="right-menu" :style="device==='mobile' ? 'float:left; width: 155px;' : ''">
       <el-select
         :value="teachingTaskId"
         placeholder="教学任务"
@@ -69,7 +69,10 @@ export default {
       'userInfo',
       'teachingTask',
       'teachingTaskId'
-    ])
+    ]),
+    device() {
+      return this.$store.state.app.device
+    }
   },
   methods: {
     ...mapActions({

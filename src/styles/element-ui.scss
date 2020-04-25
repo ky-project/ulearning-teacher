@@ -51,3 +51,17 @@
 .el-popup-parent--hidden .fixed-header {
   padding-right: 0 !important;
 }
+
+.el-button--success {
+  background-color: #30b075c2;
+  border-color: #30b075c2;
+}
+
+.el-button--info {
+  background-color: #3a71a8ad;
+  border-color: #3a71a8ad;
+}
+
+.el-button+.el-button {
+  margin-left: 0;
+}

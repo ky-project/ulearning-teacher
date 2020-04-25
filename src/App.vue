@@ -16,4 +16,7 @@ export default {
   .el-select-dropdown .el-scrollbar {
     padding-bottom: 17px;
   }
+  body .el-table th.gutter{
+    display: table-cell!important;
+  }
 </style>

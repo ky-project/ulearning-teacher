@@ -2,7 +2,7 @@
   <div class="notice-content__page">
     <div class="notice-content__header flex justify-between">
       <el-button type="text" @click="back"><svg-icon icon-class="zuo" />返回</el-button>
-      <el-button type="primary" class="submit" :loading="isLoading" @click="submit">
+      <el-button round type="primary" class="submit" :loading="isLoading" @click="submit">
         <svg-icon v-if="!isLoading" icon-class="tijiao" />
         <span>提交</span>
       </el-button>
@@ -10,7 +10,7 @@
     <div class="notice-content__container">
       <div class="notice-content__title">
         <div class="line">
-          <label for="">教学任务：</label>
+          <label for="">教学任务（请选择）：</label>
           <el-select
             :value="notice.teachingTaskId"
             placeholder="教学任务"

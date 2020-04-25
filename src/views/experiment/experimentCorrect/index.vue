@@ -3,7 +3,7 @@
     <div class="experiment-result-header flex justify-between">
       <el-button class="back" type="text" @click="back">{{ '< 返回' }}</el-button>
       <h4 class="title">{{ experimentResult.experimentTitle }}</h4>
-      <el-button class="submit" type="primary" :loading="loading" @click="submit">
+      <el-button round class="submit" type="primary" :loading="loading" @click="submit">
         <svg-icon v-if="!loading" icon-class="tijiao" class="icon--sumbit" />
         提交
       </el-button>

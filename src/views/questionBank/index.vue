@@ -84,7 +84,7 @@
           <span>{{ row.questionKey }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="90" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="140" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button
             size="mini"
@@ -116,12 +116,17 @@
       @pagination="setPagination"
     />
     <!-- 弹窗 -->
-    <el-dialog class="question-bank__dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog
+      :title="textMap[dialogStatus]"
+      class="question-bank__dialog"
+      v-el-drag-dialog
+      :visible.sync="dialogFormVisible">
       <div class="form-wrap">
         <el-form
           ref="dataForm"
           :rules="rules"
           :model="temp"
+          size="small"
           label-position="left"
           label-width="80px"
         >
@@ -212,11 +217,12 @@ import {
   DELETE_QUESTION_URL,
   UPDATE_QUESTION_URL
 } from '@/api/url'
+import elDragDialog from '@/directive/el-drag-dialog'
 
 export default {
   name: 'QuestionBank',
   components: { Pagination, SelectQuestoinType },
-  directives: { waves },
+  directives: { waves, elDragDialog },
   data() {
     return {
       list: null,
@@ -582,7 +588,6 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       }) */
-      console.log('row', row)
       const tempObj = filterObj(row, [
         'id',
         'questionDifficulty',
@@ -598,7 +603,6 @@ export default {
       if (this.temp.questionType === 3 || this.temp.questionType === 4) {
         this.temp.questionKey = this.temp.questionKey.split('|#|')
       }
-      console.log('key', this.temp.questionKey)
       // TODO:
       this.temp.teachingTaskId = this.oldTeachingTaskId
       // this.temp = Object.assign({}, this.temp, row)

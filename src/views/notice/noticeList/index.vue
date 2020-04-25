@@ -85,7 +85,7 @@
           <span>{{ row.noticeContent }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="90" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button
             size="mini"

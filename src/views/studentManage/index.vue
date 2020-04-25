@@ -64,7 +64,7 @@
           <span>{{ row.stuEmail }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button
             size="mini"

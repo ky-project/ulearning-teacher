@@ -20,6 +20,7 @@
         v-waves
         class="filter-item"
         type="primary"
+        style="margin-left: 10px;"
         size="small"
         round
         icon="el-icon-search"
@@ -32,6 +33,7 @@
         v-waves
         class="filter-item fr"
         type="primary"
+        style="margin-left: 10px;"
         size="small"
         round
         @click="handleExport"
