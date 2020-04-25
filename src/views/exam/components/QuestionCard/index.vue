@@ -13,7 +13,7 @@
             v-for="(child,index) in item.items"
             :key="child.id"
             :class="['question-card-item',{active: child.id === questionId}]"
-            :style="{backgroundColor: child.bgc || ''}"
+            :style="[{backgroundColor: child.id === questionId ? '' : child.studentAnswer ? 'rgba(94, 229, 69, 1)' : child.bgc}]"
             @click="itemClickHandler(child.id, index)"
           >
             {{ index + 1 }}

@@ -138,7 +138,7 @@
             round
             @click="share(row)"
           >
-            {{ row.experimentShared ? '取消分享' : '分享' }}
+            {{ row.experimentShared ? '已分享' : '分享' }}
           </el-button>
         </template>
       </el-table-column>

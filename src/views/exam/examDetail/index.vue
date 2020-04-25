@@ -189,7 +189,7 @@ export default {
                 bgc = 'red'
               }
               obj.items.push({ id: item.id, bgc }) */
-              obj.items.push({ id: item.id })
+              obj.items.push({ id: item.id, studentAnswer: item.studentAnswer })
             })
             data.push(obj)
           }
