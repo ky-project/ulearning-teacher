@@ -7,6 +7,7 @@ import { getToken, getRefreshToken } from '@/utils/auth'
 
 const baseApi = process.env.VUE_APP_BASE_API // '/auth/vCode'
 const key = 'Bearer '
+let showErrorMessage = true
 
 // 自动转换data格式
 const service = axios.create({
@@ -24,6 +25,19 @@ const service2 = axios.create({
   baseURL: baseApi,
   timeout: 5000
 })
+
+function showError(message) {
+  if (showErrorMessage) {
+    showErrorMessage = false
+    Message({
+      message: message,
+      type: 'error'
+    })
+    this.setTimeout(() => {
+      showErrorMessage = true
+    }, 1000)
+  }
+}
 
 // 拦截处理
 function interceptor(service) {
@@ -47,11 +61,7 @@ function interceptor(service) {
       const res = response.data
 
       if (res.code !== 200) {
-        Message({
-          message: res.message || 'Error',
-          type: 'error',
-          duration: 5 * 1000
-        })
+        showError(res.message)
 
         // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
         if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
@@ -81,16 +91,10 @@ function interceptor(service) {
         const { code, message } = error.response.data
         // eslint-disable-next-line eqeqeq
         if (code == 400) {
-          Message({
-            message: message,
-            type: 'error'
-          })
+          showError(message)
         // eslint-disable-next-line eqeqeq
         } else if (code == 401 || code == 403) {
-          Message({
-            message: message,
-            type: 'error'
-          })
+          showError(message)
           // 1. 退出
           store.dispatch('user/logout').then(response => {
           // 2. 返回登录界面

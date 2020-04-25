@@ -148,7 +148,7 @@ export default {
       second: 0,
       // 更新相关
       timerId: '',
-      time: 300,
+      time: 0,
       // 加载
       isLoading: false
     }
@@ -269,27 +269,29 @@ export default {
         this.questionType = this.activeName
       }
       // 设置更新时间开启定时器
-      this.timerId = setInterval(async() => {
-        if (this.isLoading) {
-          return
-        } else {
-          this.time--
-          if (this.time === 0) {
-            console.log('被调用了')
+      if (this.examiningRemainTime > 0) {
+        this.time = 300
+        this.timerId = setInterval(async() => {
+          if (this.isLoading) {
+            return
+          } else {
+            this.time--
+            if (this.time === 0) {
             // 重新初始化
-            await this.getData()
-            this.initialTime()
-            this.setQuestionAnswerDtoList(this.courseQuestion)
-            // 设置计数器
-            this.time = 300
+              await this.getData()
+              this.initialTime()
+              this.setQuestionAnswerDtoList(this.courseQuestion)
+              // 设置计数器
+              this.time = 300
+            }
           }
-        }
-      }, 1000)
+        }, 1000)
+      }
     },
     // 初始化时间
     initialTime() {
       let count = 0
-      let m = this.examiningRemainTime
+      let m = this.examiningRemainTime < 0 ? 0 : this.examiningRemainTime
       const arr = [0, 0, 0]
       while (m !== 0 && count <= 2) {
         arr[count] = m % 60
@@ -414,26 +416,26 @@ export default {
         axiosGet(GET_EXAM_DETAIL_URL, { params: { examiningId: this.$route.query.examiningId }})
           .then(response => {
             console.log('response', response)
-            const { courseQuestion, examiningRemainTime, examinationName, examiningState } = response.data
-            if (examiningState === 1) {
-              this.courseQuestion = courseQuestion // 设置题目
-              this.examiningRemainTime = examiningRemainTime // 设置剩余时间
-              this.examinationName = examinationName
-              this.isLoading = false
-            } else {
+            // const { courseQuestion, examiningRemainTime, examinationName, examiningState } = response.data
+            const { courseQuestion, examiningRemainTime, examinationName } = response.data
+            // if (examiningState === 1) {
+            this.courseQuestion = courseQuestion // 设置题目
+            this.examiningRemainTime = examiningRemainTime // 设置剩余时间
+            this.examinationName = examinationName
+            this.isLoading = false
+            /* } else {
               // 关闭定时器
               clearInterval(this.timerId)
               // 提示弹窗
               this.$message.warning('检测结束，正在跳转...')
               // 跳转
               this.$router.push('/exam/exam-monitor')
-            }
+            } */
             resolve()
           })
           .catch(error => {
             this.isLoading = false
-            // this.$message.error(error.message || '出错了!')
-            reject()
+            reject(error)
           })
       })
     }
