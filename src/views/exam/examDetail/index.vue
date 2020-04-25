@@ -415,7 +415,6 @@ export default {
         this.isLoading = true
         axiosGet(GET_EXAM_DETAIL_URL, { params: { examiningId: this.$route.query.examiningId }})
           .then(response => {
-            console.log('response', response)
             // const { courseQuestion, examiningRemainTime, examinationName, examiningState } = response.data
             const { courseQuestion, examiningRemainTime, examinationName } = response.data
             // if (examiningState === 1) {
