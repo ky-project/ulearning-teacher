@@ -83,7 +83,7 @@ const actions = {
       axiosGet(GET_ALL_TEACHING_TASK_URL)
         .then((response) => {
           const teachingTask = response.data
-          console.log('teachingTask', teachingTask)
+          // console.log('teachingTask', teachingTask)
           commit('SET_TEACHING_TASK', teachingTask)
           // 初始化
           if (teachingTask.length) {

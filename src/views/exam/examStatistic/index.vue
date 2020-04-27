@@ -284,8 +284,8 @@ export default {
         type: 'warning'
       }).then(() => {
         // 发送请求
-        console.log('stuId', row.id)
-        console.log('teachingTaskId', this.currentTeachingTaskId)
+        // console.log('stuId', row.id)
+        // console.log('teachingTaskId', this.currentTeachingTaskId)
         axiosPost(DELETE_SELECTED_STUDENT_URL, { stuId: row.id, teachingTaskId: this.currentTeachingTaskId })
           .then(response => {
             this.$message({

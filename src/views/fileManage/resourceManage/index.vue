@@ -431,7 +431,7 @@ export default {
       return new Promise((resolve, reject) => {
         axiosPost(UPDATE_RESOURCE_URL2, data)
           .then(response => {
-            console.log(response)
+            // console.log(response)
             resolve(response.data)
           })
           .catch(error => {
@@ -448,7 +448,7 @@ export default {
     },
     // 右键事件
     rightClick(row, column, event) {
-      console.log('当前行', row)
+      // console.log('当前行', row)
       this.currentRowData = row
     },
     // 导航点击事件

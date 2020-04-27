@@ -274,7 +274,7 @@ export default {
     }),
     // 结果事件
     handleResult(row) {
-      console.log('实验id', row.id)
+      // console.log('实验id', row.id)
       this.$router.push('/experiment-manage/experiment-result?experimentId=' + row.id)
     },
     // 排序事件
