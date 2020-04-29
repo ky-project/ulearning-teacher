@@ -57,7 +57,6 @@ const actions = {
           resolve(response)
         })
         .catch(error => {
-          Message.error(error.message || '出错')
           reject(error)
         })
     })

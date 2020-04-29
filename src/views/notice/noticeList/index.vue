@@ -181,7 +181,6 @@ export default {
             resolve()
           })
           .catch(error => {
-            // this.$message.error(error.message || '出错了!')
             reject(error)
           })
       })
@@ -215,8 +214,7 @@ export default {
           this.total = total
           this.listLoading = false
         })
-        .catch(error => {
-          // this.$message.error(error.message || '出错')
+        .catch(() => {
           this.listLoading = false
         })
     },

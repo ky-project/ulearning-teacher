@@ -89,7 +89,7 @@
       </el-table-column>
       <el-table-column label="创建者" min-width="90" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.createBy}}</span>
+          <span>{{ row.createBy }}</span>
         </template>
       </el-table-column>
       <el-table-column label="更新时间" min-width="90" align="center">
@@ -153,10 +153,12 @@
       class="fr"
       @pagination="setPagination"
     />
-    <el-dialog title="拷贝历年实验"
-               width="400px"
-               v-el-drag-dialog
-               :visible.sync="dialogFormVisible">
+    <el-dialog
+      v-el-drag-dialog
+      title="拷贝历年实验"
+      width="400px"
+      :visible.sync="dialogFormVisible"
+    >
       <div class="form-wrap">
         <el-form
           ref="dataForm"
@@ -167,9 +169,11 @@
           label-width="80px"
         >
           <el-form-item label="教学任务" prop="teachingTaskId">
-            <el-select v-model="copyExperimentForm.teachingTaskIdTmp"
-                       size="mini"
-                       @change="changeTeachingTaskId">
+            <el-select
+              v-model="copyExperimentForm.teachingTaskIdTmp"
+              size="mini"
+              @change="changeTeachingTaskId"
+            >
               <el-option
                 v-for="item in beforeTeachingTask"
                 :key="item.id"
@@ -301,12 +305,11 @@ export default {
               row.state = false
             })
         })
-        .catch(error => {
+        .catch(() => {
           this.getList()
             .then(() => {
               row.state = false
             })
-          // this.$message.error(error.message || '出错')
         })
     },
     handleCreate() {
@@ -329,42 +332,12 @@ export default {
             this.listLoading = false
             resolve()
           })
-          .catch(error => {
-            // this.$message.error(error.message || '出错')
+          .catch(() => {
             this.listLoading = false
           })
       })
     },
-    // 获取教学任务列表
-    /* getTeachingTaskList() {
-      return new Promise((resolve, reject) => {
-        axiosGet(GET_ALL_TEACHING_TASK_URL)
-          .then(response => {
-            this.teachingTaskList = response.data
-            if (this.teachingTaskList.length) {
-              this.listQuery.teachingTaskId = this.teachingTaskList[0].id
-            }
-            resolve()
-          })
-          .catch(error => {
-            // this.$message.error(error.message || '出错了!')
-            reject()
-          })
-      })
-    },
-    getList() {
-      if (this.listQuery.teachingTaskId) {
-        this.listLoading = true
-        this.currentTeachingTaskId = this.listQuery.teachingTaskId // 同步当前教学任务
-        axiosGet(GET_TEACHING_TASK_PAGE_URL, { params: this.listQuery })
-          .then(response => {
-            const { content, total } = response.data
-            this.list = content
-            this.total = total
-            this.listLoading = false
-          })
-      }
-    },*/
+
     handleFilter() {
       this.listQuery.currentPage = 1
       this.getList()
@@ -387,9 +360,6 @@ export default {
             })
             this.getList()
           })
-          .catch(error => {
-            // this.$message.error(error.message || '出错')
-          })
       })
     },
     handleUpdate(row) {
@@ -404,12 +374,12 @@ export default {
     indexMethod(index) {
       return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
     },
-    share(item){
+    share(item) {
       const data = {
         experimentShared: !item.experimentShared,
         id: item.id
       }
-      if(item.experimentShared){
+      if (item.experimentShared) {
         this.$confirm('确定重复分享该实验, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -421,14 +391,14 @@ export default {
               this.getList()
             })
         })
-      } else{
+      } else {
         this.updateShared(data)
           .then(() => {
             this.getList()
           })
       }
     },
-    updateShared(data){
+    updateShared(data) {
       return new Promise((resolve, reject) => {
         axiosPost(UPDATE_SHARED_URL, data)
           .then(response => {
@@ -440,47 +410,47 @@ export default {
           })
       })
     },
-    handleCopyBeforeExperiment(){
-      axiosGet(GET_BEFORE_TEACHING_TASK_URL, {params: {id: this.currentTeachingTaskId}})
+    handleCopyBeforeExperiment() {
+      axiosGet(GET_BEFORE_TEACHING_TASK_URL, { params: { id: this.currentTeachingTaskId }})
         .then(response => {
           this.beforeTeachingTask = response.data
-          if(this.beforeTeachingTask.length){
+          if (this.beforeTeachingTask.length) {
             this.copyExperimentForm.teachingTaskIdTmp = this.beforeTeachingTask[0].id
-            axiosGet(GET_ALL_URL, {params: {teachingTaskId: this.copyExperimentForm.teachingTaskIdTmp}})
+            axiosGet(GET_ALL_URL, { params: { teachingTaskId: this.copyExperimentForm.teachingTaskIdTmp }})
               .then(response => {
                 this.beforeTeachingTaskExperiment = response.data
-                if(this.beforeTeachingTaskExperiment.length){
+                if (this.beforeTeachingTaskExperiment.length) {
                   this.copyExperimentForm.experimentId = this.beforeTeachingTaskExperiment[0].key
                 }
               })
-              .catch(error => {
+              /* .catch(error => {
                 reject(error)
-              })
+              }) */
           }
           this.dialogFormVisible = true
         })
-        .catch(error => {
+        /* .catch(error => {
           reject(error)
-        })
+        }) */
     },
-    changeTeachingTaskId(){
-      axiosGet(GET_ALL_URL, {params: {teachingTaskId: this.copyExperimentForm.teachingTaskIdTmp}})
+    changeTeachingTaskId() {
+      axiosGet(GET_ALL_URL, { params: { teachingTaskId: this.copyExperimentForm.teachingTaskIdTmp }})
         .then(response => {
           this.beforeTeachingTaskExperiment = response.data
-          if(this.beforeTeachingTaskExperiment.length){
+          if (this.beforeTeachingTaskExperiment.length) {
             this.copyExperimentForm.experimentId = this.beforeTeachingTaskExperiment[0].key
           }
         })
-        .catch(error => {
+        /* .catch(error => {
           reject(error)
-        })
+        }) */
     },
-    resetForm(){
+    resetForm() {
       this.copyExperimentForm.teachingTaskIdTmp = ''
       this.copyExperimentForm.teachingTaskId = ''
       this.copyExperimentForm.experimentId = ''
     },
-    copyBeforeExperiment(){
+    copyBeforeExperiment() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.copyExperimentForm.teachingTaskId = this.currentTeachingTaskId
@@ -490,9 +460,9 @@ export default {
               this.dialogFormVisible = false
               this.getList()
             })
-            .catch( error => {
+            /* .catch(error => {
               reject(error)
-            })
+            }) */
         }
       })
     }

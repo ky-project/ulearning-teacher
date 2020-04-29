@@ -129,45 +129,6 @@ export default {
         .then(response => {
           this.data = response.data
         })
-        .catch(error => {
-          // this.$message.error(error && error.message || '出错')
-        })
-
-      /* this.data = {
-        'highestScore': 108,
-        'averageScore': 89,
-        'lowestScore': 76,
-        'examinationTotalScore': 120,
-        'totalStudent': 40,
-        'examinationStatusList': [
-          {
-            'resultType': 0, // 未考
-            'stuNumber': 24
-          },
-          {
-            'resultType': 2, // 已考
-            'stuNumber': 16
-          }
-        ],
-        'statisticalResultsList': [
-          {
-            'resultType': 1, // 不及格
-            'stuNumber': 7
-          },
-          {
-            'resultType': 2, // 及格
-            'stuNumber': 9
-          },
-          {
-            'resultType': 3, // 良好
-            'stuNumber': 22
-          },
-          {
-            'resultType': 4, // 优秀
-            'stuNumber': 2
-          }
-        ]
-      } */
     },
     initLevelChart(levelList) {
       var myChart = echarts.init(document.getElementById('level_chart'))

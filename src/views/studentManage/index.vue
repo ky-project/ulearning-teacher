@@ -94,7 +94,7 @@
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import { axiosGet, axiosPost } from '@/utils/axios'
-import { GET_ALL_TEACHING_TASK_URL, GET_TEACHING_TASK_PAGE_URL, DELETE_SELECTED_STUDENT_URL } from '@/api/url'
+import { GET_TEACHING_TASK_PAGE_URL, DELETE_SELECTED_STUDENT_URL } from '@/api/url'
 
 export default {
   name: 'StudentManage',

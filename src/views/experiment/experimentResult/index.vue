@@ -94,7 +94,8 @@
             size="mini"
             type="success"
             round
-            @click="correctHandler(row)">
+            @click="correctHandler(row)"
+          >
             批改
           </el-button>
         </template>
@@ -176,8 +177,7 @@ export default {
             this.listLoading = false
             resolve(response)
           })
-          .catch(error => {
-            // this.$message.error(error.message || '出错')
+          .catch(() => {
             this.listLoading = false
           })
       })

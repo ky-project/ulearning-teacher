@@ -150,11 +150,7 @@ export default {
               this.state = 0
               this.isloading = false
             })
-            .catch((error) => {
-              this.$message({
-                type: 'error',
-                message: error
-              })
+            .catch(() => {
               this.isloading = false
             })
         } else {

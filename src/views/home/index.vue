@@ -4,7 +4,7 @@
       <el-row :gutter="20">
         <el-col :xs="24" :sm="8">
           <el-card class="dashboard__card welcome" shadow="always">
-            <svg-icon icon-class="yonghu" class-name="icon"/>
+            <svg-icon icon-class="yonghu" class-name="icon" />
             <div class="content">
               <p>{{ greet }}, {{ userInfo.teaName }} 老师</p>
               <p :style="{paddingTop: '25px', fontSize: '15px'}">
@@ -15,7 +15,7 @@
         </el-col>
         <el-col :xs="24" :sm="8">
           <el-card class="dashboard__card visited" shadow="always">
-            <svg-icon icon-class="ceshi" class-name="icon"/>
+            <svg-icon icon-class="ceshi" class-name="icon" />
             <div class="content">
               <p>测试任务<span style="font-size: small;">(进行中)</span></p>
               <p :style="{paddingTop: '10px', fontSize: '15px'}"><span>{{ examinationNumber }}</span> 个</p>
@@ -24,7 +24,7 @@
         </el-col>
         <el-col :xs="24" :sm="8">
           <el-card class="dashboard__card document" shadow="always">
-            <svg-icon icon-class="shiyan" class-name="icon"/>
+            <svg-icon icon-class="shiyan" class-name="icon" />
             <div class="content">
               <p>课程实验</p>
               <p :style="{paddingTop: '10px', fontSize: '15px'}"><span>{{ experimentNumber }}</span> 个</p>
@@ -36,7 +36,7 @@
         <el-col :xs="24" :sm="18">
           <el-card class="dashboard__card activity" shadow="always">
             <div slot="header" class="clearfix">
-              <span><svg-icon icon-class="dongtai" class-name="icon"/>学生动态</span>
+              <span><svg-icon icon-class="dongtai" class-name="icon" />学生动态</span>
             </div>
             <div class="content">
               <el-scrollbar style="width:95%; height: 400px">
@@ -45,21 +45,22 @@
                 >
                   <el-timeline-item
                     v-for="(activity, index) in list"
+                    :key="index"
                     type="success"
-                    :key="index">
+                  >
                     <a @click="getActivityContent(activity.activityContent)">
-                      <p><span style="font-size: 14px">{{activity.createTime}}</span>&emsp;{{activity.activityTopic}}
+                      <p><span style="font-size: 14px">{{ activity.createTime }}</span>&emsp;{{ activity.activityTopic }}
                       </p>
                     </a>
-                    <hr style="height:1px;border:none;border-top:1px solid #868686;"/>
+                    <hr style="height:1px;border:none;border-top:1px solid #868686;">
                   </el-timeline-item>
                 </el-timeline>
               </el-scrollbar>
             </div>
             <div class="bottom">
               <pagination
-                :small="pageSmall"
                 v-show="total>0"
+                :small="pageSmall"
                 :total="total"
                 style="height: 25px; padding: 0 0 0 0"
                 :page.sync="listQuery.currentPage"
@@ -74,20 +75,21 @@
         <el-col :xs="24" :sm="6">
           <el-card class="dashboard__card activity" shadow="always">
             <div slot="header" class="clearfix">
-              <span><svg-icon icon-class="jiaoxuerenwu" class-name="icon"/>教学任务</span>
+              <span><svg-icon icon-class="jiaoxuerenwu" class-name="icon" />教学任务</span>
             </div>
             <div class="content">
               <el-scrollbar style="width:95%; height: 400px">
-              <el-timeline
-                style="margin: 5px 10px 5px 5px"
-              >
-                <el-timeline-item
-                  v-for="(teachingTask, index) in teachingTaskList"
-                  type="success"
-                  :key="index">
-                  <p><span style="font-size: 14px">{{teachingTask.term}}</span>&emsp;{{teachingTask.teachingTaskAlias}}</p>
-                </el-timeline-item>
-              </el-timeline>
+                <el-timeline
+                  style="margin: 5px 10px 5px 5px"
+                >
+                  <el-timeline-item
+                    v-for="(teachingTask, index) in teachingTaskList"
+                    :key="index"
+                    type="success"
+                  >
+                    <p><span style="font-size: 14px">{{ teachingTask.term }}</span>&emsp;{{ teachingTask.teachingTaskAlias }}</p>
+                  </el-timeline-item>
+                </el-timeline>
               </el-scrollbar>
             </div>
           </el-card>
@@ -98,9 +100,9 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 import Pagination from '@/components/Pagination'
-import {axiosGet, axiosPost} from '@/utils/axios'
+import { axiosGet } from '@/utils/axios'
 import {
   GET_EXPERIMENT_NUMBER_URL,
   GET_EXAMINATION_NUMBER_URL,
@@ -111,7 +113,7 @@ import {
 export default {
   name: 'Home',
 
-  components: {Pagination},
+  components: { Pagination },
   props: [''],
   data() {
     return {
@@ -157,10 +159,10 @@ export default {
   watch: {},
 
   created() {
-    this.getExperimentNumber();
-    this.getExaminationNumber();
-    this.getActivityList();
-    this.getAllTeahingTask();
+    this.getExperimentNumber()
+    this.getExaminationNumber()
+    this.getActivityList()
+    this.getAllTeahingTask()
   },
 
   beforeMount() {
@@ -176,8 +178,7 @@ export default {
         .then(response => {
           this.experimentNumber = response.data
         })
-        .catch(error => {
-          // this.$message.error(error.message || '出错')
+        .catch(() => {
           this.listLoading = false
         })
     },
@@ -186,25 +187,23 @@ export default {
         .then(response => {
           this.examinationNumber = response.data
         })
-        .catch(error => {
-          // this.$message.error(error.message || '出错')
+        .catch(() => {
           this.listLoading = false
         })
     },
     getActivityList() {
-      axiosGet(PAGE_ACTIVITY_LIST_URL, {params: this.listQuery})
+      axiosGet(PAGE_ACTIVITY_LIST_URL, { params: this.listQuery })
         .then(response => {
-          const {content, total} = response.data
+          const { content, total } = response.data
           this.list = content
           this.total = total
         })
-        .catch(error => {
-          // this.$message.error(error.message || '出错')
+        .catch(() => {
           this.listLoading = false
         })
     },
     setPagination() {
-      this.getActivityList();
+      this.getActivityList()
     },
     getActivityContent(content) {
       this.$alert(content, '详情', {
@@ -212,20 +211,18 @@ export default {
         center: true,
         showConfirmButton: false,
         closeOnClickModal: true
-      });
+      })
     },
-    getAllTeahingTask(){
+    getAllTeahingTask() {
       axiosGet(GET_ALL_TEACHING_TASK_URL, {})
         .then(response => {
           this.teachingTaskList = response.data
         })
-        .catch(error => {
-          // this.$message.error(error.message || '出错')
+        .catch(() => {
           this.listLoading = false
         })
     }
   }
-
 }
 
 </script>

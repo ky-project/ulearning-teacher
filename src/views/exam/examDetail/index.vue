@@ -415,21 +415,11 @@ export default {
         this.isLoading = true
         axiosGet(GET_EXAM_DETAIL_URL, { params: { examiningId: this.$route.query.examiningId }})
           .then(response => {
-            // const { courseQuestion, examiningRemainTime, examinationName, examiningState } = response.data
             const { courseQuestion, examiningRemainTime, examinationName } = response.data
-            // if (examiningState === 1) {
             this.courseQuestion = courseQuestion // 设置题目
             this.examiningRemainTime = examiningRemainTime // 设置剩余时间
             this.examinationName = examinationName
             this.isLoading = false
-            /* } else {
-              // 关闭定时器
-              clearInterval(this.timerId)
-              // 提示弹窗
-              this.$message.warning('检测结束，正在跳转...')
-              // 跳转
-              this.$router.push('/exam/exam-monitor')
-            } */
             resolve()
           })
           .catch(error => {

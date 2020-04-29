@@ -117,15 +117,10 @@ export default {
                   this.$router.push('/login')
                 })
             })
-            .catch(error => {
-              this.$message({
-                type: 'error',
-                message: error
-              })
+            .catch(() => {
               this.isloading = false
             })
         } else {
-          // console.log('error submit!!')
           return false
         }
       })

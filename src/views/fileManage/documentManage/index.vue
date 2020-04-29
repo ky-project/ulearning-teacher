@@ -580,18 +580,12 @@ export default {
           // 获取文件资料列表
           this.getFileList()
         })
-        .catch(error => {
-          // this.$message.error(error.message || '出错')
-        })
     },
     // 删除文件/文件夹
     deleteFolder(fileId) {
       axiosGet(DELETE_DOCUMENTATION_URL, { params: { id: fileId }})
         .then(response => {
           this.getFileList()
-        })
-        .catch(error => {
-          this.$message(error.message || '出错')
         })
     },
     // 上传中

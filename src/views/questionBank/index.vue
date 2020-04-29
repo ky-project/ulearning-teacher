@@ -117,10 +117,11 @@
     />
     <!-- 弹窗 -->
     <el-dialog
+      v-el-drag-dialog
       :title="textMap[dialogStatus]"
       class="question-bank__dialog"
-      v-el-drag-dialog
-      :visible.sync="dialogFormVisible">
+      :visible.sync="dialogFormVisible"
+    >
       <div class="form-wrap">
         <el-form
           ref="dataForm"
@@ -309,7 +310,6 @@ export default {
             resolve()
           })
           .catch(error => {
-            // this.$message.error(error.message || '出错')
             reject(error)
           })
       })
@@ -387,25 +387,11 @@ export default {
     // 添加试题请求
     addQuestion(data) {
       return new Promise((resolve, reject) => {
-        /* axios2({
-          method: 'POST',
-          url: ADD_QUESTION_URL,
-          data,
-          headers: { 'Content-Type': 'application/json' }
-        }).then(response => {
-          resolve()
-        })
-          .catch(error => {
-            // this.$message.error(error.message || '出错')
-            reject(error)
-          }) */
-        // console.log('题目', data)
         axiosPost(ADD_QUESTION_URL, data)
           .then(response => {
             resolve()
           })
           .catch(error => {
-            // this.$message.error(error.message || '出错')
             reject(error)
           })
       })
@@ -423,7 +409,6 @@ export default {
         }).then(response => {
           resolve(response.data.questionUrl)
         }).catch(error => {
-          // this.$message.error(error.message || '出错')
           reject(error)
         })
       })
@@ -555,39 +540,6 @@ export default {
     },
     // 修改试题点击事件
     handleUpdate(row) {
-      /* temp格式
-      temp: {
-        id: '',
-        teachingTaskId: '',
-        questionUrl: '',
-        questionType: '',
-        questionText: '',
-        questionKnowledge: '',
-        questionKey: '',
-        rawOption: [],
-        questionOption: '',
-        questionDifficulty: ''
-      },
-       */
-      /* row格式
-      id: (...) x
-      questionDifficulty: (...) x
-      questionKey: (...) x
-      questionKnowledge: (...) x
-      questionOption: (...) x
-      questionText: (...) x
-      questionType: (...) x
-      questionUrl: (...) x
-       */
-      /* this.temp = Object.assign({}, row) // copy obj
-      this.temp.rawOption = this.reverseFormatOptions()
-      this.temp.teachingTaskId = this.oldTeachingTaskId
-      this.previewImgUrl = this.temp.questionUrl
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      }) */
       const tempObj = filterObj(row, [
         'id',
         'questionDifficulty',

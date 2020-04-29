@@ -572,18 +572,12 @@ export default {
           // 获取教学资源列表
           this.getFileList()
         })
-        .catch(error => {
-          // this.$message.error(error.message || '出错')
-        })
     },
     // 删除文件/文件夹
     deleteFolder(fileId) {
       axiosGet(DELETE_RESOURCE_URL2, { params: { id: fileId }})
         .then(response => {
           this.getFileList()
-        })
-        .catch(error => {
-          this.$message(error.message || '出错')
         })
     },
     // 上传中
