@@ -19,7 +19,6 @@ router.beforeEach(async(to, from, next) => {
   // console.log('hasToken', hasToken)
   // debugger
   if (hasToken) {
-    console.log('有token')
     // 如果已经登录
     if (to.path === '/login') {
       // 如果前往登录页，直接跳转

@@ -399,7 +399,7 @@ export default {
             // this.$message.error(error.message || '出错')
             reject(error)
           }) */
-        console.log('题目', data)
+        // console.log('题目', data)
         axiosPost(ADD_QUESTION_URL, data)
           .then(response => {
             resolve()
@@ -529,7 +529,7 @@ export default {
         this.listLoading = true
         axiosGet(GET_QUESTION_PAGE_URL, { params: this.listQuery })
           .then(response => {
-            console.log('试题', response.data)
+            // console.log('试题', response.data)
             this.oldTeachingTaskId = this.listQuery.teachingTaskId // 同步teachingTaskId
             const { content, total } = response.data
             this.list = content

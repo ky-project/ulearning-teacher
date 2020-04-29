@@ -50,7 +50,7 @@ export default {
     if (teachingTaskId) {
       this.getTeachingTaskAlias({ id: teachingTaskId })
         .then(response => {
-          console.log('response', response)
+          // console.log('response', response)
           this.teachingTaskAlias = '[' + response.data.term + ']' + response.data.teachingTaskAlias
         })
       this.getKnowledge({ teachingTaskId })

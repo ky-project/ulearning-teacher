@@ -127,7 +127,7 @@ export default {
     }),
     getUserBaseInfo() {
       const userInfo = this.userInfo
-      console.log('userInfo', userInfo)
+      // console.log('userInfo', userInfo)
       const condition = ['id', 'teaNumber', 'teaName', 'teaGender', 'teaDept', 'teaTitle', 'teaPhone', 'teaEmail']
       return filterObj(userInfo, condition)
     },

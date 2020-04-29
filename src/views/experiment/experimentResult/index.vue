@@ -174,7 +174,6 @@ export default {
             this.total = data.total
             this.list = data.content
             this.listLoading = false
-            console.log(response)
             resolve(response)
           })
           .catch(error => {

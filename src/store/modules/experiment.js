@@ -27,7 +27,6 @@ const state = {
 
 const mutations = {
   RESET_EXPERIMENT: (state, data, rootState) => {
-    console.log('根状态', rootState)
     state.experiment = getDefaultExperiment()
   },
   SET_EXPERIMENT: (state, data) => {

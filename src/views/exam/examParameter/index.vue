@@ -41,7 +41,7 @@ export default {
 
   created() {
     // this.getKnowledge();
-    console.log('questionDifficulty', this.exam)
+    // console.log('questionDifficulty', this.exam)
   },
 
   beforeMount() {},
