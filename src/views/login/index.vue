@@ -127,7 +127,8 @@ export default {
             .then(() => {
               this.loading = false
               this.$router.push({ path: '/' })
-            }).catch((error) => {
+            }).catch(() => {
+              // console.log('报错', error)
               // this.$message.error(error.message || '出错')
               this.getcode()
               this.loading = false
