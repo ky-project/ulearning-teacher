@@ -125,7 +125,6 @@ import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import { axiosGet, axiosPost } from '@/utils/axios'
 import {
-  GET_ALL_TEACHING_TASK_URL,
   DELETE_SELECTED_STUDENT_URL,
   GET_EXAM_LIST_URL,
   GET_STUDENT_EXAM_RESULT_PAGE,
@@ -161,10 +160,6 @@ export default {
       handler(value) {
         this.listQuery.teachingTaskId = value
         this.changeHandler(value)
-          .then(() => {
-            this.getList()
-          })
-          .catch(() => {})
       },
       immediate: true
     }
@@ -172,11 +167,37 @@ export default {
   created() {
     this.changeHandler(this.listQuery.teachingTaskId)
       .then(() => {
+        this.getPagePars()
         this.getList()
       })
-      .catch(() => {})
   },
   methods: {
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          examinationTaskId: filter.examinationTaskId
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          examinationTaskId: this.listQuery.examinationTaskId
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     // 下载文件
     handleExport() {
       var a = document.createElement('a')
@@ -190,6 +211,7 @@ export default {
     },
     // 分页查询学生测试
     getList() {
+      this.savePagePars()
       if (!this.listQuery.examinationTaskId) {
         this.currentExamnationTaskId = ''
         this.list = []
@@ -263,9 +285,6 @@ export default {
                 this.examListMap[teachingTaskId] = []
               }
               resolve()
-            })
-            .catch((error) => {
-              // this.$message.error(error.message || '出错')
             })
         }
       })

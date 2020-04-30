@@ -159,9 +159,6 @@ export default {
       handler(value) {
         this.listQuery.teachingTaskId = value
         this.changeHandler(value)
-          .then(() => {
-            this.getList()
-          })
       },
       immediate: true
     }
@@ -169,10 +166,39 @@ export default {
   created() {
     this.changeHandler(this.listQuery.teachingTaskId)
       .then(() => {
+        this.getPagePars()
         this.getList()
       })
   },
   methods: {
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          examinationTaskId: filter.examinationTaskId,
+          examiningState: filter.examiningState
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          examinationTaskId: this.listQuery.examinationTaskId,
+          examiningState: this.listQuery.examiningState
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     // 监控
     mointor(row) {
       const { stuName, stuNumber, id, stuGender } = row
@@ -180,6 +206,7 @@ export default {
     },
     // 分页查询学生测试
     getList() {
+      this.savePagePars()
       if (!this.listQuery.examinationTaskId) return
       return new Promise((resolve, reject) => {
         this.listLoading = true

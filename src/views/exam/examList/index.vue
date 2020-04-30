@@ -179,46 +179,6 @@
       class="fr"
       @pagination="setPagination"
     />
-    <!-- 弹窗 -->
-    <!-- <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        label-position="left"
-        label-width="70px"
-      >
-        <el-form-item label="学号" prop="stuNumber">
-          <el-input v-model="temp.stuNumber" />
-        </el-form-item>
-        <el-form-item label="姓名" prop="stuName">
-          <el-input v-model="temp.stuName" />
-        </el-form-item>
-        <el-form-item label="性别" prop="stuGender">
-          <el-select v-model="temp.stuGender" class="filter-item">
-            <el-option label="男" value="男" />
-            <el-option label="女" value="女" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="系部" prop="stuDept">
-          <el-input v-model="temp.stuDept" />
-        </el-form-item>
-        <el-form-item label="电话" prop="stuPhone">
-          <el-input v-model="temp.stuPhone" />
-        </el-form-item>
-        <el-form-item label="邮箱" prop="stuEmail">
-          <el-input v-model="temp.stuEmail" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          确定
-        </el-button>
-      </div>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -236,24 +196,6 @@ export default {
   components: { Pagination },
   directives: { waves },
   data() {
-    /* const checkPhone = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('stuPhone is required'))
-      } else if (!isPhone(value)) {
-        return callback(new Error('手机格式有误!'))
-      } else {
-        return callback()
-      }
-    }
-    const checkEmail = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('stuEmail is required'))
-      } else if (!isEmail(value)) {
-        return callback(new Error('邮箱格式有误!'))
-      } else {
-        return callback()
-      }
-    }*/
     return {
       tableKey: 0,
       list: null,
@@ -294,30 +236,6 @@ export default {
         5: '困难'
       }
 
-      /* temp: {
-        id: '',
-        stuDept: '',
-        stuGender: '',
-        stuName: '',
-        stuNumber: '',
-        stuTitle: '',
-        stuPhone: '',
-        stuEmail: ''
-      },
-      dialogFormVisible: false,
-      dialogStatus: '',
-      textMap: {
-        update: '修改学生信息',
-        create: '添加学生'
-      },
-      rules: {
-        stuDept: [{ required: true, message: '请输入系部', trigger: 'blur' }],
-        stuGender: [{ required: true, message: '请选择性别', trigger: 'change' }],
-        stuName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-        stuNumber: [{ required: true, message: '请输入工号', trigger: 'blur' }],
-        stuPhone: [{ required: true, validator: checkPhone, trigger: 'blur' }],
-        stuEmail: [{ required: true, validator: checkEmail, trigger: 'blur' }]
-      }*/
     }
   },
   computed: {
@@ -327,12 +245,13 @@ export default {
     '$store.getters.teachingTaskId': {
       handler(value) {
         this.listQuery.teachingTaskId = value
-        this.getList()
+        // this.getList()
       },
       immediate: true
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
   },
   methods: {
@@ -341,6 +260,34 @@ export default {
       'setMode': 'exam/SET_MODE',
       'setExam': 'exam/SET_EXAM'
     }),
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          examinationName: filter.examinationName,
+          examinationState: filter.examinationState
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          examinationName: this.listQuery.examinationName,
+          examinationState: this.listQuery.examinationState
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     // 参数修改按钮点击事件
     parameterUpdate(row) {
       this.resetExam()
@@ -375,12 +322,6 @@ export default {
       this.listQuery.teachingTaskId = this.teachingTask.length && this.teachingTask[0].id
       this.listQuery.examinationState = ''
     },
-    /* updatePage(val) {
-      this.listQuery.currentPage = val
-    },
-    updateLimit(val) {
-      this.listQuery.pageSize = val
-    },*/
     getExamPage() {
       return new Promise((resolve, reject) => {
         axiosGet(GET_EXAM_PAGE_URL, { params: this.listQuery })
@@ -394,6 +335,7 @@ export default {
       })
     },
     getList() {
+      this.savePagePars()
       this.listLoading = true
       this.getExamPage()
         .then(response => {
@@ -419,49 +361,7 @@ export default {
       this.listQuery.currentPage = 1
       this.getList()
     },
-    /* resetTemp() {
-      this.temp = {
-        'id': '',
-        'stuDept': '', // 系部
-        'stuEmail': '', // 邮箱
-        'stuGender': '', // 性别
-        'stuName': '', // 姓名
-        'stuNumber': '', // 学号
-        'stuPhone': '' // 电话
-      }
-    },
-    handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    createData() {
-      console.log('添加数据')
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          // 1. 添加学生
-          addStudent(this.temp)
-            .then(response => {
-              this.$message({
-                type: 'success',
-                message: '学生添加成功'
-              })
-              this.getList()
-              this.dialogFormVisible = false
-            })
-        }
-      })
-    },*/
     handleChange(row) {
-      /* this.temp = Object.assign({}, row) // copy obj
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      }) */
       if (!row.state) {
         row.state = 1
         return
@@ -480,23 +380,6 @@ export default {
           })
       }
     },
-    /* updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          console.log('校验成功')
-          // 1. 发送请求
-          updateStudent(this.temp)
-            .then(response => {
-              this.$message({
-                type: 'success',
-                message: '学生信息更新成功'
-              })
-              this.getList()
-              this.dialogFormVisible = false
-            })
-        }
-      })
-    },*/
     deleteExam(data) {
       return new Promise((resolve, reject) => {
         axiosGet(DELETE_EXAM_URL, { params: data })

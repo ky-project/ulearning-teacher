@@ -261,13 +261,12 @@ export default {
     '$store.getters.teachingTaskId': {
       handler(value) {
         this.listQuery.teachingTaskId = value
-        this.resetForm()
-        this.getList()
       },
       immediate: true
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
   },
   methods: {
@@ -276,6 +275,33 @@ export default {
       'resetExperiment': 'experiment/RESET_EXPERIMENT',
       'setExperiment': 'experiment/SET_EXPERIMENT'
     }),
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        console.log('experimentTitle', filter)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          experimentTitle: filter.experimentTitle
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          experimentTitle: this.listQuery.experimentTitle
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     // 结果事件
     handleResult(row) {
       // console.log('实验id', row.id)
@@ -321,6 +347,7 @@ export default {
     },
     // 查询实验信息
     getList() {
+      this.savePagePars()
       new Promise((resolve, reject) => {
         this.listLoading = true
         axiosGet(GET_EXPERIMENT_PAGE_URL, { params: this.listQuery })

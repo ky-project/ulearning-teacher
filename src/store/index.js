@@ -8,6 +8,7 @@ import exam from './modules/exam'
 import experiment from './modules/experiment'
 import notice from './modules/notice'
 import experimentResult from './modules/experimentResult'
+import pagePars from './modules/pagePars'
 import VuexPersistence from 'vuex-persist' // 持久化存储
 
 Vue.use(Vuex)
@@ -23,7 +24,8 @@ const store = new Vuex.Store({
     exam,
     experiment,
     notice,
-    experimentResult
+    experimentResult,
+    pagePars
   },
   getters,
   plugins: [vuexLocal.plugin]

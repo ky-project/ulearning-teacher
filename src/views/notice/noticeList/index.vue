@@ -152,12 +152,12 @@ export default {
     '$store.getters.teachingTaskId': {
       handler(value) {
         this.listQuery.teachingTaskId = value
-        this.getList()
       },
       immediate: true
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
   },
   methods: {
@@ -166,6 +166,34 @@ export default {
       'setMode': 'notice/SET_MODE',
       'resetNotice': 'notice/RESET_NOTICE'
     }),
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          noticePostTime: filter.noticePostTime,
+          noticeTitle: filter.noticeTitle
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          noticePostTime: this.listQuery.noticePostTime,
+          noticeTitle: this.listQuery.noticeTitle
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     handleDelete(row) {
       this.deleteNotice(row.id)
         .then(() => {
@@ -206,6 +234,7 @@ export default {
     },
     // 获取表格数据
     getList() {
+      this.savePagePars()
       this.listLoading = true
       axiosGet(GET_NOTICE_PAGE_URL, { params: this.listQuery })
         .then(response => {

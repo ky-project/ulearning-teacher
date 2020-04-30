@@ -121,17 +121,48 @@ export default {
     '$store.getters.teachingTaskId': {
       handler(value) {
         this.listQuery.teachingTaskId = value
-        this.getList()
       },
       immediate: true
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
   },
   methods: {
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          stuName: filter.stuName,
+          stuNumber: filter.stuNumber
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          stuName: this.listQuery.stuName,
+          stuNumber: this.listQuery.stuNumber
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     getList() {
+      console.log('id', this.listQuery.teachingTaskId)
+      // this.currentTeachingTaskId = this.$store.getters.teachingTaskId
       if (this.listQuery.teachingTaskId) {
+        this.savePagePars()
         this.listLoading = true
         this.currentTeachingTaskId = this.listQuery.teachingTaskId // 同步当前教学任务
         axiosGet(GET_TEACHING_TASK_PAGE_URL, { params: this.listQuery })

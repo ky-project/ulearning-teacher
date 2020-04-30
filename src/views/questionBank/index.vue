@@ -295,9 +295,38 @@ export default {
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
   },
   methods: {
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          questionType: filter.questionType,
+          questionKnowledge: filter.questionKnowledge
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          questionType: this.listQuery.questionType,
+          questionKnowledge: this.listQuery.questionKnowledge
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     // 更新试题
     updateQuestion() {
       return new Promise((resolve, reject) => {
@@ -511,6 +540,7 @@ export default {
     // 获取表格数据
     getList() {
       if (this.listQuery.teachingTaskId) {
+        this.savePagePars()
         this.listLoading = true
         axiosGet(GET_QUESTION_PAGE_URL, { params: this.listQuery })
           .then(response => {
