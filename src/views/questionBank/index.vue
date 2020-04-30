@@ -308,7 +308,8 @@ export default {
           currentPage,
           pageSize,
           questionType: filter.questionType,
-          questionKnowledge: filter.questionKnowledge
+          questionKnowledge: filter.questionKnowledge,
+          teachingTaskId: this.listQuery.teachingTaskId
         }
         return true
       } else {

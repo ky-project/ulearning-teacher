@@ -284,7 +284,8 @@ export default {
         this.listQuery = {
           currentPage,
           pageSize,
-          experimentTitle: filter.experimentTitle
+          experimentTitle: filter.experimentTitle,
+          teachingTaskId: this.listQuery.teachingTaskId
         }
         return true
       } else {

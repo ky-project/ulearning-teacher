@@ -120,12 +120,14 @@ export default {
   watch: {
     '$store.getters.teachingTaskId': {
       handler(value) {
+        console.log('监控了', value)
         this.listQuery.teachingTaskId = value
       },
       immediate: true
     }
   },
   created() {
+    console.log('创建了')
     this.getPagePars()
     this.getList()
   },
@@ -139,7 +141,8 @@ export default {
           currentPage,
           pageSize,
           stuName: filter.stuName,
-          stuNumber: filter.stuNumber
+          stuNumber: filter.stuNumber,
+          teachingTaskId: this.listQuery.teachingTaskId
         }
         return true
       } else {

@@ -175,7 +175,8 @@ export default {
           currentPage,
           pageSize,
           noticePostTime: filter.noticePostTime,
-          noticeTitle: filter.noticeTitle
+          noticeTitle: filter.noticeTitle,
+          teachingTaskId: this.listQuery.teachingTaskId
         }
         return true
       } else {

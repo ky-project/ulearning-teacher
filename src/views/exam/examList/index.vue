@@ -269,7 +269,8 @@ export default {
           currentPage,
           pageSize,
           examinationName: filter.examinationName,
-          examinationState: filter.examinationState
+          examinationState: filter.examinationState,
+          teachingTaskId: this.listQuery.teachingTaskId
         }
         return true
       } else {
