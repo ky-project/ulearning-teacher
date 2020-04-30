@@ -172,6 +172,9 @@ export default {
       })
   },
   methods: {
+    isInExamList(examinationTaskId) {
+      return this.examList.findIndex(examItem => examItem.key === examinationTaskId) > -1
+    },
     getPagePars() {
       const { pagePars } = this.$store.getters
       const path = this.$route.path
@@ -180,7 +183,7 @@ export default {
         this.listQuery = {
           currentPage,
           pageSize,
-          examinationTaskId: filter.examinationTaskId,
+          examinationTaskId: this.isInExamList(filter.examinationTaskId) ? filter.examinationTaskId : '',
           teachingTaskId: this.listQuery.teachingTaskId
         }
         return true
