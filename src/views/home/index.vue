@@ -210,7 +210,8 @@ export default {
         type: 'info',
         center: true,
         showConfirmButton: false,
-        closeOnClickModal: true
+        closeOnClickModal: true,
+        callback: action => {}
       })
     },
     getAllTeahingTask() {

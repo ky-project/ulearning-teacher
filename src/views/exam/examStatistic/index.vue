@@ -317,6 +317,8 @@ export default {
             })
             this.getList()
           })
+      }).catch(() => {
+
       })
     },
     indexMethod(index) {

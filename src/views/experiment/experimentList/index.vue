@@ -388,6 +388,8 @@ export default {
             })
             this.getList()
           })
+      }).catch(() => {
+
       })
     },
     handleUpdate(row) {
@@ -418,6 +420,8 @@ export default {
             .then(() => {
               this.getList()
             })
+        }).catch(() => {
+
         })
       } else {
         this.updateShared(data)
