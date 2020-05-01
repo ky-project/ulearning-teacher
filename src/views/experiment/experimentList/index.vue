@@ -349,7 +349,7 @@ export default {
     // 查询实验信息
     getList() {
       this.savePagePars()
-      new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         this.listLoading = true
         axiosGet(GET_EXPERIMENT_PAGE_URL, { params: this.listQuery })
           .then(response => {
@@ -362,6 +362,7 @@ export default {
           })
           .catch(() => {
             this.listLoading = false
+            reject()
           })
       })
     },
