@@ -44,7 +44,7 @@ function interceptor(service) {
 
   service.interceptors.response.use(
     response => {
-      console.log('请求成功')
+      // console.log('请求成功')
       return response.data
     },
     async error => {

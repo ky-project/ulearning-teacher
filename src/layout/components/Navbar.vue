@@ -4,7 +4,7 @@
 
     <breadcrumb class="breadcrumb-container" />
 
-    <div class="right-menu" :style="device==='mobile' ? 'float:left; width: 155px;' : ''">
+    <div class="right-menu">
       <el-select
         :value="teachingTaskId"
         placeholder="教学任务"

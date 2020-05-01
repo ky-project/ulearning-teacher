@@ -82,7 +82,7 @@
           <span>{{ row.experimentTitle }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否共享" min-width="60" align="center">
+      <el-table-column label="是否分享" min-width="60" align="center">
         <template slot-scope="{row}">
           <span>{{ row.experimentShared ? '是' : '否' }}</span>
         </template>
@@ -280,7 +280,7 @@ export default {
       const path = this.$route.path
       if (pagePars.has(path)) {
         const { currentPage, pageSize, filter } = pagePars.get(path)
-        console.log('experimentTitle', filter)
+        // console.log('experimentTitle', filter)
         this.listQuery = {
           currentPage,
           pageSize,
@@ -409,26 +409,19 @@ export default {
         experimentShared: !item.experimentShared,
         id: item.id
       }
-      if (item.experimentShared) {
-        this.$confirm('确定重复分享该实验, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          // 发送请求
-          this.updateShared(data)
-            .then(() => {
-              this.getList()
-            })
-        }).catch(() => {
-
-        })
-      } else {
+      this.$confirm('确定' + (item.experimentShared ? '重复' : '') + '分享该实验, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 发送请求
         this.updateShared(data)
           .then(() => {
             this.getList()
           })
-      }
+      }).catch(() => {
+
+      })
     },
     updateShared(data) {
       return new Promise((resolve, reject) => {
