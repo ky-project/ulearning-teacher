@@ -2,15 +2,16 @@
   <div class="navbar">
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb class="breadcrumb-container" />
+    <breadcrumb v-if="device === 'desktop'" class="breadcrumb-container" />
+    <div v-else class="path-name">{{ $route.meta.title }}</div>
 
     <div class="right-menu">
       <el-select
         :value="teachingTaskId"
         placeholder="教学任务"
-        style="width: 225px;"
+        :style="teachingTaskSelectStyle"
         class="filter-item"
-        size="small"
+        :size="device === 'desktop' ? 'small' : 'mini'"
         @change="(teachingTaskId) => {setTeachingTaskId(teachingTaskId)}"
       >
         <el-option
@@ -72,6 +73,9 @@ export default {
     ]),
     device() {
       return this.$store.state.app.device
+    },
+    teachingTaskSelectStyle() {
+      return { width: this.device === 'desktop' ? '225px' : '135px' }
     }
   },
   methods: {
@@ -107,12 +111,17 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
+  // display: flex;
   height: 50px;
   overflow: hidden;
   position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
+  .path-name {
+    float: left;
+    line-height: 50px;
+  }
   .hamburger-container {
     line-height: 46px;
     height: 100%;
