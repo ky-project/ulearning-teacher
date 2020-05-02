@@ -159,12 +159,15 @@ export default {
       handler(value) {
         this.listQuery.teachingTaskId = value
         this.changeHandler(value)
+          .then(() => {
+            this.getList()
+          })
       },
-      immediate: true
+      immediate: false
     }
   },
   created() {
-    this.changeHandler(this.listQuery.teachingTaskId)
+    this.changeHandler(this.$store.getters.teachingTaskId)
       .then(() => {
         this.getPagePars()
         this.getList()
@@ -179,11 +182,16 @@ export default {
       const path = this.$route.path
       if (pagePars.has(path)) {
         const { currentPage, pageSize, filter } = pagePars.get(path)
+        const flag = this.isInExamList(filter.examinationTaskId)
+        console.log(filter.examinationTaskId, flag)
+        if (flag) {
+          this.listQuery.examinationTaskId = filter.examinationTaskId
+        }
         this.listQuery = {
           currentPage,
           pageSize,
-          examinationTaskId: this.isInExamList(filter.examinationTaskId) ? filter.examinationTaskId : '',
           examiningState: filter.examiningState,
+          examinationTaskId: filter.examinationTaskId,
           teachingTaskId: this.listQuery.teachingTaskId
         }
         return true
@@ -198,6 +206,7 @@ export default {
         pageSize: this.listQuery.pageSize,
         filter: {
           examinationTaskId: this.listQuery.examinationTaskId,
+          teachingTaskId: this.listQuery.teachingTaskId,
           examiningState: this.listQuery.examiningState
         }
       }

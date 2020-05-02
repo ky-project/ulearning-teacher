@@ -152,11 +152,13 @@ export default {
     '$store.getters.teachingTaskId': {
       handler(value) {
         this.listQuery.teachingTaskId = value
+        this.getList()
       },
-      immediate: true
+      immediate: false
     }
   },
   created() {
+    this.listQuery.teachingTaskId = this.$store.getters.teachingTaskId
     this.getPagePars()
     this.getList()
   },

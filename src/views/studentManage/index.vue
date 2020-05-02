@@ -120,14 +120,14 @@ export default {
   watch: {
     '$store.getters.teachingTaskId': {
       handler(value) {
-        // console.log('监控了', value)
         this.listQuery.teachingTaskId = value
+        this.getList()
       },
-      immediate: true
+      immediate: false
     }
   },
   created() {
-    // console.log('创建了')
+    this.listQuery.teachingTaskId = this.$store.getters.teachingTaskId // 第一次设置teachingTaskId
     this.getPagePars()
     this.getList()
   },

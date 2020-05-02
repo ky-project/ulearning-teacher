@@ -160,12 +160,15 @@ export default {
       handler(value) {
         this.listQuery.teachingTaskId = value
         this.changeHandler(value)
+          .then(() => {
+            this.getList()
+          })
       },
-      immediate: true
+      immediate: false
     }
   },
   created() {
-    this.changeHandler(this.listQuery.teachingTaskId)
+    this.changeHandler(this.$store.getters.teachingTaskId)
       .then(() => {
         this.getPagePars()
         this.getList()
@@ -180,10 +183,13 @@ export default {
       const path = this.$route.path
       if (pagePars.has(path)) {
         const { currentPage, pageSize, filter } = pagePars.get(path)
+        const flag = this.isInExamList(filter.examinationTaskId)
+        if (flag) {
+          this.examinationTaskId = filter.examinationTaskId
+        }
         this.listQuery = {
           currentPage,
           pageSize,
-          examinationTaskId: this.isInExamList(filter.examinationTaskId) ? filter.examinationTaskId : '',
           teachingTaskId: this.listQuery.teachingTaskId
         }
         return true
