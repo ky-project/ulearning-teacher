@@ -36,6 +36,7 @@
         style="margin-left: 10px;"
         size="small"
         round
+        :disabled="isDisabled"
         @click="handleExport"
       >
         <svg-icon icon-class="daochu" />
@@ -47,6 +48,7 @@
         type="primary"
         size="small"
         round
+        :disabled="isDisabled"
         @click="() => {$router.push('/exam/exam-chart?examinationTaskId=' + currentExamnationTaskId)}"
       >
         <svg-icon icon-class="tongji2" />
