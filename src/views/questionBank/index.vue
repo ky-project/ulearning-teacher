@@ -352,6 +352,25 @@ export default {
     },
     // 删除试题
     deleteQuestion(id) {
+      /* this.$confirm('确定退选该学生, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 发送请求
+        // console.log('stuId', row.id)
+        // console.log('teachingTaskId', this.currentTeachingTaskId)
+        axiosPost(DELETE_SELECTED_STUDENT_URL, { stuId: row.id, teachingTaskId: this.currentTeachingTaskId })
+          .then(response => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.getList()
+          })
+      }).catch(() => {
+
+      }) */
       return new Promise((resolve, reject) => {
         axiosGet(DELETE_QUESTION_URL, { params: { id }})
           .then(() => {
@@ -564,11 +583,19 @@ export default {
     },
     // 删除试题
     handleDelete(row) {
-      this.deleteQuestion(row.id)
+      this.$confirm('确定删除该试题, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
         .then(() => {
-          this.$message.success('试题删除成功')
-          this.getList()
+          this.deleteQuestion(row.id)
+            .then(() => {
+              this.$message.success('试题删除成功')
+              this.getList()
+            })
         })
+        .catch(() => {})
     },
     // 修改试题点击事件
     handleUpdate(row) {
