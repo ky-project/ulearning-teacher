@@ -48,7 +48,7 @@ function interceptor(service) {
       return response.data
     },
     async error => {
-      console.log('请求失败', error)
+      // console.log('请求失败', error)
       const { response } = error
       const { code, message } = response.data
       switch (code) {
