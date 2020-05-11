@@ -133,6 +133,11 @@ import {
   EXPORT_EXAM_RESULT
 } from '@/api/url'
 
+// 1. 获取页面查询参数
+// 2. 有且存在于当前教学任务中，显示
+// 3. 有但不存在于当前教学任务中，显示第一个
+// 4. 没有，不显示，并禁用
+
 export default {
   name: 'ExamStatistic',
   components: { Pagination },
@@ -148,7 +153,7 @@ export default {
       listQuery: {
         currentPage: 1,
         pageSize: 8,
-        teachingTaskId: '',
+        teachingTaskId: this.$store.getters.teachingTaskId,
         examinationTaskId: ''
       },
       teachingTaskList: [],
@@ -186,13 +191,16 @@ export default {
       if (pagePars.has(path)) {
         const { currentPage, pageSize, filter } = pagePars.get(path)
         const flag = this.isInExamList(filter.examinationTaskId)
-        if (flag) {
-          this.examinationTaskId = filter.examinationTaskId
-        }
         this.listQuery = {
           currentPage,
-          pageSize,
-          teachingTaskId: this.listQuery.teachingTaskId
+          pageSize
+        }
+        if (flag) {
+          this.listQuery.examinationTaskId = filter.examinationTaskId
+        } else {
+          if (this.examList.length > 0) {
+            this.listQuery.examinationTaskId = this.examList[0].key
+          }
         }
         return true
       } else {
