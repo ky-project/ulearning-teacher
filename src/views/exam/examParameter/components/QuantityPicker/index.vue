@@ -22,7 +22,7 @@
       size="mini"
       @change="updateGrade"
     />
-    <span class="text">分/道</span>
+    <span class="text">{{ suffix }}</span>
   </div>
 </template>
 
@@ -36,6 +36,10 @@ export default {
     value: {
       type: Object,
       required: true // {questionType: 1, amount: 0,grade: 0}
+    },
+    suffix: {
+      type: String,
+      default: '分/道'
     }
   },
   data() {

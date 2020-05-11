@@ -7,6 +7,7 @@
             v-for="item in quantity"
             :key="item.questionType"
             :value="item"
+            :suffix="item.questionType === 4 ? '分/空' : '分/道'"
             @update-amount="setAmount"
             @update-grade="setGrade"
           />
