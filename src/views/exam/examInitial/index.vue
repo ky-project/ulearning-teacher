@@ -1,6 +1,6 @@
 <template>
   <div class="exam-initial">
-    <Step :active="0" :back="() => { $router.push('/exam/exam-list')}" />
+    <Step :active="0" />
     <div class="content">
       <div class="form-wrap">
         <el-form ref="form" :rules="rules" :model="exam" label-width="80px" hide-required-asterisk>
