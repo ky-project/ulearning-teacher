@@ -24,7 +24,7 @@
         class="filter-item"
       >
         <el-option label="已批改" :value="true" />
-        <el-option label="未批改" :value="null" />
+        <el-option label="未批改" :value="false" />
       </el-select>
       <el-button
         v-waves
