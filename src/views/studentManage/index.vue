@@ -49,6 +49,11 @@
           <span>{{ row.stuGender }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="专业班级" min-width="120" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.stuClass }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="系部" min-width="120" align="center">
         <template slot-scope="{row}">
           <span>{{ row.stuDept }}</span>

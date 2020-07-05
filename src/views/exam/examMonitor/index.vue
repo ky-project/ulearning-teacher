@@ -79,12 +79,17 @@
           <span>{{ row.stuGender }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="专业班级" min-width="120" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.stuClass }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="开始时间" min-width="120" align="center">
         <template slot-scope="{row}">
           <span>{{ row.examiningLoginTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="测试状态" min-width="120" align="center">
+      <el-table-column label="测试状态" min-width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.examiningState === 1 ? '进行中' : '已完成' }}</span>
         </template>
