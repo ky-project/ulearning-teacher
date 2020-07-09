@@ -37,6 +37,17 @@
       >
         查询
       </el-button>
+      <el-button
+        class="filter-item fr"
+        style="margin-left: 10px;"
+        size="small"
+        round
+        type="primary"
+        icon="el-icon-plus"
+        @click="handleExperimentResultArchive"
+      >
+        存档
+      </el-button>
     </div>
     <!-- 表格 -->
     <el-table
@@ -112,7 +123,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import waves from '@/directive/waves'
-import { GET_EXPERIMENT_RESULT_PAGE_URL } from '@/api/url'
+import { GET_EXPERIMENT_RESULT_PAGE_URL, DOWNLOAD_RESULT_ARCHIVE } from '@/api/url'
 import { axiosGet } from '@/utils/axios'
 export default {
   name: 'ExperimentResult',
@@ -193,6 +204,15 @@ export default {
     },
     indexMethod(index) {
       return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
+    },
+    handleExperimentResultArchive() {
+      var a = document.createElement('a')
+      a.style.display = 'none'
+      const fileurl = process.env.VUE_APP_BASE_API + DOWNLOAD_RESULT_ARCHIVE + '?experimentId=' + this.listQuery.experimentId
+      a.href = fileurl
+      document.body.appendChild(a)
+      a.click() // 触发点击
+      document.body.removeChild(a) // 然后移除
     }
   }
 }

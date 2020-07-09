@@ -72,6 +72,7 @@ export const DELETE_NOTICE_URL = '/teacher/teachingTaskNotice/delete' // 删除�
 export const GET_EXPERIMENT_RESULT_PAGE_URL = '/teacher/experimentResult/pageList' // 分页查询实验结果
 export const DOWNLOAD_EXPERIMENT_RESULT_URL = '/teacher/experimentResult/downloadAttachment' // 下载附件
 export const CORRECT_EXPERIMENT_RESULT_URL = '/teacher/experimentResult/correctResult' // 批改实验结果
+export const DOWNLOAD_RESULT_ARCHIVE = '/teacher/experimentResult/experimentResultArchive' // 实验结果存档
 // 测试结果统计
 export const GET_STUDENT_EXAM_PAGE = '/teacher/studentExaminationTask/pageList' // 分页查询学生测试
 export const GET_STUDENT_EXAM_RESULT_PAGE = '/teacher/studentExaminationTask/pageStudentExaminationResultList' // 分页查询学生测试结果统计信息
