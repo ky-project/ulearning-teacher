@@ -5,8 +5,7 @@
       <div class="form-wrap">
         <el-form ref="form" :rules="rules" :model="exam" label-width="80px" hide-required-asterisk>
 
-          <el-form-item label="教学任务" prop="teachingTaskId">
-            <!-- <svg-icon icon-class="renwu" /> -->
+          <!-- <el-form-item label="教学任务" prop="teachingTaskId">
             <el-select
               :value="exam.teachingTaskId"
               placeholder="请选择教学任务"
@@ -19,7 +18,7 @@
                 :value="item.id"
               />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="试卷名称" prop="examinationName">
             <!-- <svg-icon icon-class="ceshi" /> -->
             <el-input
@@ -67,14 +66,14 @@ export default {
     }
     return {
       form: {
-        teachingTaskId: '',
+        // teachingTaskId: '',
         examinationName: '',
         examinationDuration: ''
       },
       rules: {
-        'teachingTaskId': [
+        /* 'teachingTaskId': [
           { required: true, message: '请选择教学任务', trigger: 'change' }
-        ],
+        ], */
         'examinationName': [
           { required: true, message: '请输入试卷名称', trigger: 'blur' }
         ],
@@ -91,11 +90,11 @@ export default {
 
   watch: {},
 
-  created() {
+  /* created() {
     if (this.teachingTask.length) {
       this.teachingTaskId = this.teachingTask[0].id
     }
-  },
+  }, */
 
   beforeMount() {},
 

@@ -46,7 +46,7 @@ export default {
     return {
       loading: false,
       form: {
-        teachingTaskId: '',
+        // teachingTaskId: '',
         examinationName: '',
         examinationDuration: ''
       },
@@ -66,11 +66,11 @@ export default {
 
   watch: {},
 
-  created() {
+  /* created() {
     if (this.teachingTask.length) {
       this.teachingTaskId = this.teachingTask[0].id
     }
-  },
+  }, */
 
   beforeMount() {},
 

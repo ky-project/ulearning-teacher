@@ -75,7 +75,7 @@ export default {
       return this.$store.state.app.device
     },
     teachingTaskSelectStyle() {
-      return { width: this.device === 'desktop' ? '225px' : '135px' }
+      return { width: this.device === 'desktop' ? '280px' : '135px' }
     }
   },
   methods: {

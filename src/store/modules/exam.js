@@ -35,8 +35,8 @@ function getDefaultExam() {
       ]
     },
     examinationShowResult: 1,
-    examinationState: 1, // 1：未发布 2：未开始 3：进行中 4：已结束
-    teachingTaskId: ''
+    examinationState: 1 // 1：未发布 2：未开始 3：进行中 4：已结束
+    // teachingTaskId: ''
   }
 }
 
@@ -93,9 +93,9 @@ const mutations = {
 }
 
 const actions = {
-  addExam({ commit, state }) {
+  addExam({ commit, state, rootGetters }) {
     return new Promise((resolve, reject) => {
-      const data = Object.assign({}, state.exam)
+      const data = Object.assign({}, state.exam, { teachingTaskId: rootGetters.teachingTaskId })
       data.examinationParameters = JSON.stringify(data.examinationParameters)
       axiosPost(ADD_EXAM_URL, data)
         .then(response => {

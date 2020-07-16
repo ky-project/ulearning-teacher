@@ -84,7 +84,7 @@ export default {
   created() {
     // 初始化教学任务
     if (this.experimentMode === 'add' && this.teachingTask.length) {
-      this.setExperiment({ teachingTaskId: this.teachingTask[0].id })
+      this.setExperiment({ teachingTaskId: this.$store.getters.teachingTaskId })
     }
     // 初始化附件
     if (this.experimentMode === 'update' && this.experiment.experimentAttachmentName) {

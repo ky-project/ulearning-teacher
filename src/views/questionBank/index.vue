@@ -131,7 +131,7 @@
           label-position="left"
           label-width="80px"
         >
-          <el-form-item label="教学任务" prop="teachingTaskId">
+          <!-- <el-form-item label="教学任务" prop="teachingTaskId">
             <el-select v-model="temp.teachingTaskId" size="mini" :disabled="dialogStatus === 'update'">
               <el-option
                 v-for="item in $store.getters.teachingTask"
@@ -140,7 +140,7 @@
                 :value="item.id"
               />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="试题内容" prop="questionText">
             <el-input
               v-model="temp.questionText"
@@ -231,7 +231,7 @@ export default {
       tableKey: 0,
       listLoading: true,
       teachingTaskList: [],
-      oldTeachingTaskId: '',
+      // oldTeachingTaskId: '',
       difficultyMap: difficultyMap,
       typeList: [
         { label: '选择题', value: 1 },
@@ -248,7 +248,7 @@ export default {
       },
       temp: {
         id: '',
-        teachingTaskId: '',
+        // teachingTaskId: '',
         questionUrl: '',
         questionType: '',
         questionText: '',
@@ -436,6 +436,7 @@ export default {
     },
     // 添加试题请求
     addQuestion(data) {
+      console.log('data', data)
       return new Promise((resolve, reject) => {
         axiosPost(ADD_QUESTION_URL, data)
           .then(response => {
@@ -481,9 +482,10 @@ export default {
                   'questionOption',
                   'questionText',
                   'questionType',
-                  'questionUrl',
-                  'teachingTaskId'
+                  'questionUrl'
+                  // 'teachingTaskId'
                 ])
+                data.teachingTaskId = this.$store.getters.teachingTaskId
                 if (data.questionKey instanceof Array) {
                   data.questionKey = data.questionKey.join('|#|')
                 }
@@ -503,9 +505,10 @@ export default {
               'questionOption',
               'questionText',
               'questionType',
-              'questionUrl',
-              'teachingTaskId'
+              'questionUrl'
+              // 'teachingTaskId'
             ])
+            data.teachingTaskId = this.$store.getters.teachingTaskId
             if (data.questionKey instanceof Array) {
               data.questionKey = data.questionKey.join('|#|')
             }
@@ -532,7 +535,7 @@ export default {
     resetTemp() {
       this.temp = {
         id: '',
-        teachingTaskId: '',
+        // teachingTaskId: '',
         questionUrl: '',
         questionType: '',
         questionText: '',
@@ -566,7 +569,7 @@ export default {
         axiosGet(GET_QUESTION_PAGE_URL, { params: this.listQuery })
           .then(response => {
             // console.log('试题', response.data)
-            this.oldTeachingTaskId = this.listQuery.teachingTaskId // 同步teachingTaskId
+            // this.oldTeachingTaskId = this.listQuery.teachingTaskId // 同步teachingTaskId
             const { content, total } = response.data
             this.list = content
             this.total = total
@@ -614,8 +617,7 @@ export default {
       if (this.temp.questionType === 3 || this.temp.questionType === 4) {
         this.temp.questionKey = this.temp.questionKey.split('|#|')
       }
-      // TODO:
-      this.temp.teachingTaskId = this.oldTeachingTaskId
+      // this.temp.teachingTaskId = this.oldTeachingTaskId
       // this.temp = Object.assign({}, this.temp, row)
       this.previewImgUrl = this.temp.questionUrl
       this.dialogStatus = 'update'

@@ -46,7 +46,7 @@ export default {
   watch: {},
 
   created() {
-    const { teachingTaskId } = this.exam
+    const teachingTaskId = this.$store.getters.teachingTaskId
     if (teachingTaskId) {
       this.getTeachingTaskAlias({ id: teachingTaskId })
         .then(response => {
