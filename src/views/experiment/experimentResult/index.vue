@@ -117,18 +117,33 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页器 -->
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page-sizes="[8, 16, 32, 64]"
+      :page.sync="listQuery.currentPage"
+      :limit.sync="listQuery.pageSize"
+      class="fr"
+      @pagination="setPagination"
+    />
   </div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
 import waves from '@/directive/waves'
+<<<<<<< HEAD
+import Pagination from '@/components/Pagination'
+import { GET_EXPERIMENT_RESULT_PAGE_URL } from '@/api/url'
+=======
 import { GET_EXPERIMENT_RESULT_PAGE_URL, DOWNLOAD_RESULT_ARCHIVE } from '@/api/url'
+>>>>>>> f7d7943d9d654be116df9ed9d396198b729ae35a
 import { axiosGet } from '@/utils/axios'
 export default {
   name: 'ExperimentResult',
   directives: { waves },
-  components: {},
+  components: { Pagination },
   props: [''],
   data() {
     return {
@@ -138,7 +153,7 @@ export default {
       listLoading: false,
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         experimentId: '',
         isCorrected: '', // 是否批改
         stuNumber: '', // 学号
@@ -200,6 +215,9 @@ export default {
     },
     handleFilter() {
       this.listQuery.currentPage = 1
+      this.getList()
+    },
+    setPagination(currentPage, pageSize) {
       this.getList()
     },
     indexMethod(index) {
