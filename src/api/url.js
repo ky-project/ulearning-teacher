@@ -79,6 +79,7 @@ export const GET_STUDENT_EXAM_RESULT_PAGE = '/teacher/studentExaminationTask/pag
 export const GET_STUDENT_EXAM_STATISTIC_URL = '/teacher/studentExaminationTask/getStudentExaminationStatistics' // 分页查询学生测试统计
 export const GET_EXAM_DETAIL_URL = '/teacher/studentExaminationTask/getExaminationResultByExaminingId' // 根据学生测试id查询答题情况
 export const EXPORT_EXAM_RESULT = '/teacher/studentExaminationTask/export' // 导出学生测试结果统计
+export const RESET_EXAMINATION_RESULT = '/teacher/studentExaminationTask/resetExaminationResult' // 重置测试结果
 // 主页接口
 export const GET_EXPERIMENT_NUMBER_URL = '/teacher/index/getExperimentNumber' // 查询实验数量
 export const GET_EXAMINATION_NUMBER_URL = '/teacher/index/getExaminationNumber' // 查询进行中的测试数量

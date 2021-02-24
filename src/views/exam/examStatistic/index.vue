@@ -113,6 +113,18 @@
           <span>{{ row.examiningStateSwitchTime }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+          <el-button
+            size="mini"
+            type="danger"
+            round
+            @click="resetExaminationResult(row)"
+          >
+            重置
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 分页器 -->
     <pagination
@@ -135,7 +147,8 @@ import {
   DELETE_SELECTED_STUDENT_URL,
   GET_EXAM_LIST_URL,
   GET_STUDENT_EXAM_RESULT_PAGE,
-  EXPORT_EXAM_RESULT
+  EXPORT_EXAM_RESULT,
+  RESET_EXAMINATION_RESULT
 } from '@/api/url'
 
 // 1. 获取页面查询参数
@@ -344,6 +357,24 @@ export default {
     },
     indexMethod(index) {
       return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
+    },
+    resetExaminationResult(row) {
+      this.$confirm('确定重置该学生的测试结果, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        axiosGet(RESET_EXAMINATION_RESULT, { params: { examiningId: row.examiningId }})
+          .then(response => {
+            this.$message({
+              type: 'success',
+              message: '重置成功!'
+            })
+            this.getList()
+          })
+      }).catch(() => {
+
+      })
     }
   }
 }
